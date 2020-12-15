@@ -27,9 +27,9 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
-{% url 'controls:index_page' as index_page %}
-{% url 'controls:gossips_page' as gossips_page %}
-{% url 'controls:cheaters_page' as cheaters_page %}
+{% url 'questions:questions_index' as index_page %}
+{% url 'gossips:gossips_index' as gossips_page %}
+{% url 'cheaters:cheaters_index' as cheaters_page %}
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
@@ -37,15 +37,15 @@
         <a class="nav-link" href="#"><i class="fa fa-home"></i> Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item {% if request.path == index_page %} active {% endif %}">
-        <a class="nav-link" href="{% url 'controls:index_page' %}">Questions</a>
+        <a class="nav-link" href="{% url 'questions:questions_index' %}">Questions</a>
       </li>
 
       <li class="nav-item {% if request.path == gossips_page %} active {% endif %}">
-        <a class="nav-link" href="{% url 'controls:gossips_page' %}">Gossips</a>
+        <a class="nav-link" href="{% url 'gossips:gossips_index' %}">Gossips</a>
       </li>
 
       <li class="nav-item {% if request.path == cheaters_page %} active {% endif %}">
-        <a class="nav-link" href="{% url 'controls:cheaters_page' %}">Cheaters</a>
+        <a class="nav-link" href="{% url 'cheaters:cheaters_index' %}">Cheaters</a>
       </li>
 
     </ul>
@@ -168,13 +168,13 @@
       <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
         <h6 class="text-uppercase mb-4 font-weight-bold">Useful links</h6>
         <p>
-          <a href="{% url 'controls:questions_page' %}">Popular Questions</a>
+          <a href="{% url 'questions:questions_index' %}">Popular Questions</a>
         </p>
         <p>
-          <a href="{% url 'controls:gossips_page' %}">Popular Gossips</a>
+          <a href="{% url 'gossips:gossips_index' %}">Popular Gossips</a>
         </p>
         <p>
-          <a href="{% url 'controls:cheaters_page' %}">Popular Cheaters</a>
+          <a href="{% url 'cheaters:cheaters_index' %}">Popular Cheaters</a>
         </p>
       </div>
 
