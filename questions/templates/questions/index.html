@@ -1,20 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
 
-
 <div class="row">
 
   <!-- Feed section starts here -->
   <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
 
+      <div class="mb-3 mt-3">
+        <strong>
+          {% include 'messages.html' %}
+        </strong>
+      </div>
 
     <div class="card mt-4">
+
       <div class="card-body">
         <h6 class="card-title">
 
           <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="https://www.w3schools.com/bootstrap4/sanfran.jpg">
           Bala (Username)  <small class="text-muted">22 mins ago</small>
         </h6>
+
+        <h5>
+          card with supporting text below as a natural lead-in to additional content.
+          This content is a little
+        </h5>
         <p class="card-text">
           This is a wider card with supporting text below as a natural lead-in to additional content.
           This content is a little bit longer... <a href="#">read more</a>
@@ -67,5 +77,9 @@
 </div>
 
 
-
 {% endblock content %}
+{% block pagination %}
+      <div class="mb-2 mt-3">
+          {% include 'pagination.html' %}
+      </div>
+{% endblock pagination %}

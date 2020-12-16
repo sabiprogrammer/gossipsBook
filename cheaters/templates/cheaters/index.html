@@ -66,6 +66,10 @@
     <!-- Aside section ends here -->
 </div>
 
-
-
 {% endblock content %}
+
+{% block pagination %}
+      <div class="mb-2 mt-3">
+          {% include 'pagination.html' %}
+      </div>
+{% endblock pagination %}

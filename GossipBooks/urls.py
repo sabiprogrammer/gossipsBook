@@ -22,6 +22,7 @@ urlpatterns = [
     path('gossips', include('gossips.urls', namespace='gossips')),
     path('questions', include('questions.urls', namespace='questions')),
     path('cheaters', include('cheaters.urls', namespace='cheaters')),
+    path('users/', include('users.urls', namespace='users')),
     path('', include('controls.urls', namespace='controls')),
     path('admin/', admin.site.urls),
 ]

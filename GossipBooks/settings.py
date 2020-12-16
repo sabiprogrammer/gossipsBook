@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'questions.apps.QuestionsConfig',
     'gossips.apps.GossipsConfig',
     'cheaters.apps.CheatersConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [

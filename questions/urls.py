@@ -5,5 +5,5 @@ app_name = 'questions'
 
 urlpatterns = [
     path('', questions_index, name='questions_index'),
-    path('new', questions_new, name='questions_new'),
+    path('/new', questions_new, name='questions_new'),
 ]

@@ -1,0 +1,77 @@
+<nav class="navbar navbar-expand-lg navbar-light">
+  <a class="navbar-brand" href="#">
+      <img src="{% static 'images/GossipsBook.png' %}" alt="">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+{% url 'questions:questions_index' as index_page %}
+{% url 'gossips:gossips_index' as gossips_page %}
+{% url 'cheaters:cheaters_index' as cheaters_page %}
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="#"><i class="fa fa-home"></i> Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item {% if request.path == index_page %} active {% endif %}">
+        <a class="nav-link" href="{% url 'questions:questions_index' %}">Questions</a>
+      </li>
+
+      <li class="nav-item {% if request.path == gossips_page %} active {% endif %}">
+        <a class="nav-link" href="{% url 'gossips:gossips_index' %}">Gossips</a>
+      </li>
+
+      <li class="nav-item {% if request.path == cheaters_page %} active {% endif %}">
+        <a class="nav-link" href="{% url 'cheaters:cheaters_index' %}">Cheaters</a>
+      </li>
+
+    </ul>
+
+
+        <form class="form-inline my-2 my-lg-0 offset-lg-2">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search GossipsBook..." aria-label="Search">
+          <button class="btn btn-outline-light my-2 my-sm-0" type="submit">
+             <i class="fa fa-search"></i> Search
+          </button>
+        </form>
+
+        <ul class="navbar-nav mr-auto ml-3">
+
+        <li class="nav-item dropdown mr-3">
+
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+               <i class="fa fa-plus"></i> Add
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="{% url 'questions:questions_new' %}">Question</a>
+              <a class="dropdown-item" href="#">Gossip</a>
+              <a class="dropdown-item" href="#">Cheater</a>
+            </div>
+          </li>
+
+                  <li class="nav-link mr-0">
+
+                        <img style="height:30px; width:30px;" class="img-fluid rounded-circle" src="https://www.w3schools.com/bootstrap4/sanfran.jpg">
+
+                  </li>
+
+          <li class="nav-item dropdown ml-0">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Profile
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Answers</a>
+              <a class="dropdown-item" href="#">Notification</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{% url 'users:register_user' %}">Register</a>
+              <a class="dropdown-item" href="{% url 'users:login_user' %}">Login</a>
+              <a class="dropdown-item" href="#">Profile Settings</a>
+            </div>
+          </li>
+
+        </ul>
+
+  </div>
+</nav>

@@ -42,8 +42,6 @@ body{
 
 
  /* Pagination CUSTOMIZATION */
-
-
 .page-item.active .page-link{
     background-color: #F77402;
     border: 1px solid #F77402;
@@ -57,3 +55,22 @@ li.page-item{
 .page-link{
     color: #F77402;
 }
+ /* End pagination */
+
+  /* register login page */
+.bg{
+background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url("../images/register_bg.jpg");
+
+  /* Set a specific height */
+  height: 100%;
+  width: 100%;
+
+  /* Position and center the image to scale nicely on all screens */
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  background-position: center center;
+  background-attachment: fixed;
+}
+
+  /* end register login page */

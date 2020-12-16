@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .forms import AddQuestionsForm
 
 
 def questions_index(request):
@@ -7,6 +8,10 @@ def questions_index(request):
 
 
 def questions_new(request):
-    context = {}
-    return render(request, 'index.html', context)
+    if request.method == 'POST':
+        pass
+
+    form = AddQuestionsForm()
+    context = {'form': form}
+    return render(request, 'questions/new.html', context)
 
