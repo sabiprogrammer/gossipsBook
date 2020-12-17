@@ -74,3 +74,29 @@ background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url("
 }
 
   /* end register login page */
+
+    /* signin page */
+
+#signup{
+    width: 50%;
+    background: #fff;
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px black;
+
+}
+@media only screen and (max-width: 678px){
+   #signup{
+    background: #fff;
+    width: 90%;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px #000;
+
+}
+    /* end signin page */
+
+ /* custom checkbox */
+
+
+  /* end custom checkbox */

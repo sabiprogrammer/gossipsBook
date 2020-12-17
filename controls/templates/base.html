@@ -19,17 +19,50 @@
     <title>{% block title%} {% endblock title%} | Gossip Books </title>
 </head>
 <body>
-<!-- Navigation -->
-{% block navigation %}
+        <!-- Navigation -->
+          {% block navigation %}
 
-{% endblock navigation %}
-<!-- End navigation -->
-<div class="container">
+          {% endblock navigation %}
+        <!-- End Navigation -->
 
-    {% block content %}
+    <div class="container">
+        <div class="row">
+              <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                  <div class="mb-3 mt-3">
+                    <strong>
+                      {% include 'messages.html' %}
+                    </strong>
+                  </div>
 
-    {% endblock content%}
-</div>
+                  <div class="mt-5">
+                      {% block startwriting %}
+
+                      {% endblock startwriting%}
+                  </div>
+                  <div class="mt-3">
+                      {% block whichsection%}
+
+                      {% endblock whichsection %}
+                  </div>
+
+
+              <!-- Feed section starts here -->
+                  <div class="card mt-4">
+                        {% block content %}
+                        {% endblock content%}
+                  </div>
+              <!-- Feed section ends here -->
+              </div>
+
+
+              <!-- Aside section starts here -->
+                        {% block aside %}
+
+                        {% endblock aside%}
+
+              <!-- Aside section ends here -->
+        </div>
+    </div>
 
 <!-- Pagination -->
   {% block pagination %}
@@ -39,5 +72,21 @@
 
 <script src="{% static 'js/jquery.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<!-- Custom Javascript/JQuery -->
+
+<script>
+    $(document).ready(function(){
+        $(".data").hide();
+
+        $('#myForm input').on('change', function(){
+            var setValue = $('[type="radio"]:checked').val();
+            $(".data").hide();
+            $("#" + $(this).val()).fadeIn(700);
+        });
+    });
+</script>
+
+<!-- End Custom Javascript/JQuery -->
 </body>
 </html>
