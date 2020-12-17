@@ -5,6 +5,8 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.text import slugify
 
+from answers.models import AnswersModel
+
 
 def upload_location(instance, filename, *args, **kwargs):
     file_path = 'questions/{author_id}/{filename}'.format(author_id=str(instance.author.id), filename=filename)
@@ -21,10 +23,11 @@ class User(models.Model):
     slug = models.SlugField(unique=True)
 
 
-class Questions(models.Model):
+class QuestionsModel(models.Model):
     title = models.CharField(max_length=100, unique=True, help_text='What is the title of your question?', verbose_name='Title')
     content = models.TextField(max_length=3000)
     slug = models.SlugField(unique=True)
+    answers = models.ForeignKey(AnswersModel, on_delete=models.CASCADE, related_name='answers')
     date_published = models.DateTimeField(auto_now_add=True, verbose_name='Date Published')
     date_updated = models.DateTimeField(auto_now=True, verbose_name='Date Updated')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
@@ -48,7 +51,7 @@ class Questions(models.Model):
         verbose_name_plural = 'Questions'
 
 
-@receiver(post_delete, sender=Questions)
+@receiver(post_delete, sender=QuestionsModel)
 def delete_image(sender, instance, *args, **kwargs):
     instance.image.delete(False)
 
@@ -58,5 +61,5 @@ def save_question_slug(sender, instance, *args, **kwargs):
         instance.slug = slugify(instance.title)
 
 
-pre_save.connect(save_question_slug, sender=Questions)
+pre_save.connect(save_question_slug, sender=QuestionsModel)
 

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 
-from .models import Questions
+from .models import QuestionsModel
 
 
 class AddQuestionsForm(forms.ModelForm):
@@ -19,7 +19,7 @@ class AddQuestionsForm(forms.ModelForm):
     }), choices=OPTIONS)
 
     class Meta:
-        model = Questions
+        model = QuestionsModel
         fields = ['title', 'content', 'image', 'tags']
         widgets = {
             'title': forms.TextInput(attrs={

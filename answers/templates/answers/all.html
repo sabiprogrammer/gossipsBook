@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .checkbox{
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+    }
+    .checkbox_input{
+        display: none;
+    }
+    .checkbox_box{
+        width: 1.20em;
+        height: 1.20em;
+        position: relative;
+        border: 2px solid #cccccc;
+        border-radius: 3px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        flex-shrink: 0;
+        transition: background 0.25s, border-color 0.55s;
+    }
+    .checkbox_box::after{
+        content: '\2713';
+        color: white;
+        transform: scale(0);
+        transition: transform 0.55s
+    }
+
+    .checkbox_input:checked + .checkbox_box{
+        background: #F77402;
+        border-color: #F77402;
+    }
+    .checkbox_input:checked + .checkbox_box::after{
+        transform: scale(1.1);
+
+    }
+</style>
+{% for post in posts %}
+
+  {% include 'answers/all_answers.html' %}
+
+{% endfor %}
+
+
+<!-- Modal -->
+<div class="modal fade" id="send_to_category" tabindex="-1" role="dialog" aria-labelledby="send_to_categoryTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">
+           <img style="height:30px; width:30px;" class="img-fluid rounded-circle" src="https://www.w3schools.com/bootstrap4/sanfran.jpg">
+            username
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+
+
+      <div class="modal-body">
+            <div>
+                <h6>Share this question with its reply as</h6>
+                <div class="form-check form-check-inline">
+                  <label class="form-check-label checkbox" for="business1">
+                    <input class="form-check-input checkbox_input" type="radio" name="category" value="business1" id="business1">
+                    <div class="checkbox_box"></div>
+                       Gossips
+                  </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <label class="form-check-label checkbox" for="entertainment1">
+                      <input class="form-check-input checkbox_input" name="category" type="radio" id="entertainment1" value="entertainment1">
+                      <div class="checkbox_box"></div>
+                      Cheaters
+                  </label>
+                </div>
+            </div>
+          <br>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary"><i class="fa fa-send"></i> Share</button>
+                    </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+
+
+{% block navigation %}
+      {% include 'navigation.html' %}
+{% endblock navigation %}
+
+
+{% block aside %}
+      {% include 'aside.html' %}
+{% endblock aside %}
+
+{% block pagination %}
+      <div class="mb-2 mt-3">
+          {% include 'pagination.html' %}
+      </div>
+{% endblock pagination %}
+
+

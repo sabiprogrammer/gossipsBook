@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="container mt-5">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-3 col col-lg-3 justify-content-center">
+            <img style="height:350px; width:350px;" src="{{user.profile.profile_pic.url}}" alt="">
+            <br>
+            <div>
+              {{p_form.profile_pic}}
+            </div>
+          </div>
+          <div class="col-md-1 col-lg-1"></div>
+
+          <br><br>
+
+          <div class="col-xs-12 col-sm-12 col-md-7 col col-lg-7">
+        {% for field in u_form %}
+            {% if field.errors %}
+            <div class="alert alert-danger">
+                {{field.errors | striptags}}
+            </div>
+            {% endif %}
+        {% endfor %}
+
+        {% for field in p_form %}
+            {% if field.errors %}
+            <div class="alert alert-danger">
+                {{field.errors | striptags}}
+            </div>
+            {% endif %}
+        {% endfor %}
+
+            <div class="card">
+              <div class="card-body">
+               <div>
+                  <label>Phone No:   </label>
+                  {{p_form.phone}}
+               </div>
+                <br>
+                <div>
+                  <label>Email Address:   </label>
+                  {{u_form.email}}
+               </div>
+                <br>
+                <div>
+                  <label>Username:   </label>
+                  {{u_form.username}}
+               </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      <br>
+      <button class="btn btn-primary btn-block">Update Profile</button>
+    </form>
+    <br><br>
+</section>
+
+{% endblock content %}

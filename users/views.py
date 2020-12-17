@@ -48,3 +48,8 @@ def user_logout(request):
     logout(request)
     messages.info(request, 'Log Out Successful')
     return redirect('home')
+
+
+def user_profile(request):
+    context = {}
+    return render(request, 'users/profile.html', context)
