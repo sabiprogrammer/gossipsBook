@@ -1,24 +1,51 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from users.models import Interests
 
 
 def index(request):
     context = {}
-    return render(request, 'index.html', context)
+    return render(request, 'questions/index.html', context)
 
 
 def welcome(request):
     if request.method == 'POST':
-        box1 = request.POST.get('box1', False)
-        box2 = request.POST.get('box2', False)
-        box3 = request.POST.get('box3', False)
-        print('box 1: ', box1, 'box2:', box2, 'box3:', box3)
-        messages.success(request, 'Interests Saved! Welcome To Your Feed')
-        return redirect('questions:questions_index')
+        questions = request.POST.get('questions', False)
+        gossips = request.POST.get('gossips', False)
+        cheaters = request.POST.get('cheaters', False)
+        travels = request.POST.get('travels', False)
+        sports = request.POST.get('sports', False)
+        politics = request.POST.get('politics', False)
+
+        try:
+            if questions:
+                interest = Interests.objects.get(title='Questions')
+                request.user.profile.interests.add(interest)
+
+            if gossips:
+                interest = Interests.objects.get(title='Gossips')
+                request.user.profile.interests.add(interest)
+
+            if cheaters:
+                interest = Interests.objects.get(title='Cheaters')
+                request.user.profile.interests.add(interest)
+
+            if travels:
+                interest = Interests.objects.get(title='Travels')
+                request.user.profile.interests.add(interest)
+
+            if sports:
+                interest = Interests.objects.get(title='Sports')
+                request.user.profile.interests.add(interest)
+
+            if politics:
+                interest = Interests.objects.get(title='Politics')
+                request.user.profile.interests.add(interest)
+            messages.success(request, 'Interests Saved! Welcome To Your Feed')
+        except:
+            pass
+        return redirect('controls:index_page')
+
     context = {}
     return render(request, 'welcome.html', context)
 
-
-def cheaters(request):
-    context = {}
-    return render(request, 'cheaters.html', context)

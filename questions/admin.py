@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import QuestionsModel, Tags
+
+admin.site.register(QuestionsModel)
+admin.site.register(Tags)
+

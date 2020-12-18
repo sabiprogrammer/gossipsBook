@@ -1,16 +1,38 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+
 from PIL import Image
 from django.urls import reverse
 
 
+def upload_location(instance, filename, *args, **kwargs):
+    file_path = 'profile/{author_id}/{filename}'.format(author_id=str(instance.user.id), filename=filename)
+    return file_path
+
+
+class Interests(models.Model):
+    title = models.CharField(max_length=55, unique=True)
+    description = models.TextField(max_length=300, blank=True, null=True, help_text='You can optionally provide a '
+                                                                                    'description for this interest')
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name_plural = 'Interests'
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='profile.jpg', upload_to='profile_pics')
-    bio = models.TextField(max_length=655, null=True, blank=True)
-    followers = models.ManyToManyField(User, related_name='followers')
-    following = models.ManyToManyField(User, related_name='following')
+    image = models.ImageField(default='default_profile_pic.png', upload_to=upload_location)
+    bio = models.TextField(max_length=555, null=True, blank=True)
+    interests = models.ManyToManyField(Interests, related_name='interests')
+    followers = models.ManyToManyField(User, related_name='followers', blank=True)
+    following = models.ManyToManyField(User, related_name='following', blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.user.username} profile"
@@ -33,3 +55,21 @@ class Profile(models.Model):
     #
     # def get_update_url(self):
     #     return reverse('post-view', kwargs={'pk': self.pk})
+
+
+def user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+post_save.connect(user_profile, sender=User)
+
+
+@receiver(post_delete, sender=Profile)
+def delete_image(sender, instance, *args, **kwargs):
+    instance.image.delete(False)
+
+# @receiver(post_delete, sender=User)
+# def delete_profile(sender, instance, *args, **kwargs):
+#     print('user: ', user)
+#     user.delete(False)
