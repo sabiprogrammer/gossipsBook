@@ -5,20 +5,21 @@ from .forms import CreateUserForm
 # Create your views here.
 
 
-def register_user(request):
-    if request.method == 'POST':
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.info(request, f'Account created successfully. Please log in')
-            return redirect('login')
-    else:
-        form = CreateUserForm()
-    return render(request, 'users/register.html', {'form': form})
+# def register_user(request):
+#     if request.method == 'POST':
+#         form = CreateUserForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             username = form.cleaned_data.get('username')
+#             messages.info(request, f'Account created successfully. Please log in')
+#             return redirect('login')
+#     else:
+#         form = CreateUserForm()
+#     return render(request, 'users/register.html', {'form': form})
 
 
 def login_user(request):
+    print('i am here')
     form = CreateUserForm()
     if request.method == 'POST':
         # username = request.POST.get('username')
@@ -47,7 +48,7 @@ def login_user(request):
 def user_logout(request):
     logout(request)
     messages.info(request, 'Log Out Successful')
-    return redirect('home')
+    return redirect('/questions')
 
 
 def user_profile(request):
