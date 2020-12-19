@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import AnswersModel
+
+
+@admin.register(AnswersModel)
+class PostAdmin(admin.ModelAdmin):
+    list_display = ['question', 'author', 'shares']

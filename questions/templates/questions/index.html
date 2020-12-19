@@ -1,29 +1,46 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
 {% block content %}
 
 
-<div class="card">
+{% for question in questions %}
+<div class="card mb-4">
       <div class="card-body">
-        <h4 class="card-title d-inline">
-          <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="https://www.w3schools.com/bootstrap4/sanfran.jpg">
-          What is your name?
-                   <h5 class="d-inline"><small class="text-muted">0 mins ago</small> </h5>
-        </h4>
+        <p class="card-title d-inline" style="font-size: 19px;">
+          <img style="height:35px; width:35px; float: left;" class="img-fluid rounded-circle mr-3"
+               src="{{question.author.profile.image.url}}" alt="{{question.author}} profile image">
+
+          <strong>{{question.title|truncatewords:30}}</strong>
+
+                   <h6 class="d-inline">
+                       <small class="text-muted">{{question.date_published|naturaltime}}
+                       </small>
+                   </h6>
+        </p>
       </div>
 
-      <img class="card-img-bottom" style="max-height:420px;" src="https://www.w3schools.com/bootstrap4/sanfran.jpg" alt="Card image cap">
+    {% if question.image %}
+      <img class="card-img-bottom" style="max-height:420px;"
+           src="{{question.image.url}}" alt="{{question.title}} image">
+    {% endif %}
 
       <div class="row">
-        <div class="col m-2 pl-3">
-        </div>
-
-        <div class="col m-2 p-1">
-            <button class="btn btn-sm btn-primary"> Answer</button>
+        <div class="col m-2 p-1 ml-4">
+            <button class="btn btn-sm btn-primary answerQuestion"
+                    style="background-color: #F77402; color: white; border-color: white;"
+                    data-toggle="modal" data-target="#answerQuestionModal"
+                    data-id="{{question.id}}"
+                    data-image="{{question.author.profile.image.url}}"
+                    data-username="{{question.author.username}}"
+                    data-title="{{question.title}}">
+                    <i class="fa fa-answer"></i> Answer
+            </button>
             <div class="col d-inline"> <i class="fa fa-thumbs-down"></i> Oppose</div>
-
         </div>
        </div>
 </div>
+{% endfor %}
 
 
 <br>
@@ -79,6 +96,58 @@
        </div>
 </div>
 
+
+
+
+<!-- answer question Modal -->
+<div class="modal fade" id="answerQuestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="row pl-4 pt-3">
+            <span class="pr-3">
+                <div id="questionAuthorImage">
+
+                </div>
+            </span>
+           <span class="modal-title">
+                <div id="questionAnswerUsername" class="col pl-0">
+
+                </div>
+            </span>
+      </div>
+
+        <div class="row pl-5 pt-3 container">
+            <div id="questionToAnswer">
+            </div>
+        </div>
+
+        {% if user.is_authenticated %}
+        <form action="{% url 'answers:answers_new' %}" method="post">
+            {% csrf_token %}
+            <div class="row container mx-auto">
+                <textarea class="form-control m-3 mt-2" name="answer_question" id="answerInput" cols="25" rows="5" placeholder="Your answer..."></textarea>
+            </div>
+
+            <input type="hidden" name="questionId" id="questionId">
+
+              <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button class="btn btn-primary"><i class="fa fa-send"></i> Answer </button>
+              </div>
+         </form>
+        {% else %}
+        <div class="container mt-2 p-4">
+            Have an answer to this question? Please <a href="/accounts/login">login</a> to provide your answer
+        </div>
+        {% endif %}
+    </div>
+  </div>
+</div>
+<!-- End answer question Modal -->
+
+
+
+
 {% endblock content %}
 
 
@@ -107,3 +176,30 @@
           {% include 'pagination.html' %}
       </div>
 {% endblock pagination %}
+
+
+<!-- customJs -->
+  {% block customJs %}
+
+<script>
+        $('.answerQuestion').on('click', function(){
+            var id = $(this).data('id')
+            var title = $(this).data('title')
+            var image = $(this).data('image')
+            var username = $(this).data('username')
+            var name = $('#questionAuthorUsername');
+
+            $("#questionId").val(id)
+
+            $(".appendQuestion").remove()
+            $(".appendUsername").remove()
+            $(".appendImage").remove()
+            $("<span class='appendUsername mb-0 pb-0'>" + username + ' is asking...' + "</span>").insertAfter('#questionAnswerUsername');
+            $("<h5 class='appendQuestion'>" + title + "</h5>").insertAfter('#questionToAnswer');
+            $("<img  style='height:30px; width:30px;' class='img-fluid rounded-circle appendImage'>").attr('src', image).insertAfter('#questionAuthorImage');
+
+        });
+</script>
+
+  {% endblock customJs %}
+<!-- End customJs -->

@@ -5,16 +5,14 @@ from django.contrib.auth.models import User
 import questions.models
 
 
-# Create your models here.
-
 class AnswersModel(models.Model):
     question = models.ForeignKey('questions.QuestionsModel', on_delete=models.CASCADE, related_name='question')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
     content = models.TextField(max_length=255)
-    likes = models.ManyToManyField(User)
-    shares = models.IntegerField()
-    reply = models.ForeignKey('questions.QuestionsModel', on_delete=models.CASCADE, related_name='reply')
-    send_count = models.IntegerField()
+    likes = models.ManyToManyField(User, blank=True)
+    shares = models.IntegerField(default=0)
+    reply = models.ForeignKey('questions.QuestionsModel', on_delete=models.CASCADE, related_name='reply', null=True, blank=True)
+    send_count = models.IntegerField(default=0)
     date_published = models.DateTimeField(auto_now_add=True, verbose_name='Date Published')
     date_updated = models.DateTimeField(auto_now=True, verbose_name='Date Updated')
 
