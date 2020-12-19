@@ -9,7 +9,6 @@ from .models import QuestionsModel
 
 def questions_index(request):
     questions_all = QuestionsModel.objects.all().order_by('-date_published')
-
     context = {'questions': questions_all}
     return render(request, 'questions/index.html', context)
 
