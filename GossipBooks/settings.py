@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'django.contrib.sites',
 
     # My apps
@@ -154,6 +155,7 @@ MEDIA_URL = '/media/'
 
 SITE_ID = 1
 
+LOGIN_URL = '/accounts/login'
 LOGIN_REDIRECT_URL = '/welcome'
 
 # Provider specific settings

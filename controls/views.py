@@ -1,13 +1,17 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.urls import reverse
+
 from users.models import Interests
 
 
 def index(request):
-    context = {}
-    return render(request, 'questions/index.html', context)
+    # context = {}
+    return redirect('questions:questions_index')
 
 
+@login_required()
 def welcome(request):
     if request.method == 'POST':
         questions = request.POST.get('questions', False)

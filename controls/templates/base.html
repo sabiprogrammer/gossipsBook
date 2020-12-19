@@ -19,16 +19,18 @@
     <title>{% block title%} {% endblock title%} | Gossip Books </title>
 </head>
 <body>
+    <div class="mb-5">
         <!-- Navigation -->
           {% block navigation %}
 
           {% endblock navigation %}
         <!-- End Navigation -->
+    </div>
 
     <div class="container">
         <div class="row">
               <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
-                  <div class="mb-3 mt-3">
+                  <div class="mt-5">
                     <strong>
                       {% include 'messages.html' %}
                     </strong>
@@ -86,7 +88,12 @@
         });
     });
 </script>
-
 <!-- End Custom Javascript/JQuery -->
+
+<!-- customJs -->
+  {% block customJs %}
+
+  {% endblock customJs %}
+<!-- End customJs -->
 </body>
 </html>
