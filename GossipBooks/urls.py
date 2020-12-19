@@ -19,7 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('gossips', include('gossips.urls', namespace='gossips')),
+    path('gossips/', include('gossips.urls', namespace='gossips')),
     path('questions', include('questions.urls', namespace='questions')),
     path('cheaters', include('cheaters.urls', namespace='cheaters')),
     path('answers', include('answers.urls', namespace='answers')),

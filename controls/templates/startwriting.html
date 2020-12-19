@@ -168,16 +168,18 @@
 
 
 
-          <form id="start_typing_gossips" class="data">
+          <form id="start_typing_gossips" action="{% url 'gossips:gossips_new' %}" class="data" enctype="multipart/form-data" method="post">
+              {% csrf_token %}
               <div class="form-group">
                 <input type="text" class="form-control" name="title" placeholder="Give your gossip a title...">
               </div>
               <div class="form-group">
-                  <textarea class="form-control" name="description" cols="30" rows="10" placeholder="Briefly let us about this gossip..."></textarea>
+                  <textarea class="form-control" name="content" cols="30" rows="10" placeholder="Briefly let us about this gossip..."></textarea>
               </div>
             <div class="row">
               <div class="form-group col">
-                <input type="file" class="form-control-file">
+                <input type="file" class="form-control" name="image">
+                  <small class="text-muted">Add image (optional)</small>
               </div>
 
               <div class="col">
@@ -212,7 +214,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary"><i class="fa fa-send"></i> Submit Gossip</button>
+                        <button class="btn btn-primary"><i class="fa fa-send"></i> Submit Gossip</button>
                     </div>
           </form>
 
