@@ -33,4 +33,5 @@ def questions_new(request):
             messages.success(request, 'Well Done! You just asked a question')
         return redirect('questions:questions_index')
     else:
+        messages.warning(request, 'Please log in')
         return redirect('questions:questions_index')
