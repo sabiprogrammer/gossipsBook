@@ -41,7 +41,7 @@
 <nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <div class="container">
         <div class="row">
-              <a class="navbar-brand" href="#">
+              <a class="navbar-brand" href="{% url 'gossips:gossips_index' %}">
                   <img src="{% static 'images/GossipsBook.png' %}" alt="">
               </a>
 
@@ -65,7 +65,7 @@
 
                 <ul class="navbar-nav mr-auto ml-5">
                       <li class="nav-item active">
-                        <a class="nav-link  pr-4 pl-4" title="Home" href="#" style="font-size: 35px; padding: 0px;">
+                        <a class="nav-link  pr-4 pl-4" title="Home" href="{% url 'gossips:gossips_index' %}" style="font-size: 35px; padding: 0px;">
                             <i class="fa fa-home"></i>
                             <span class="sr-only">(current)</span>
                         </a>
@@ -277,16 +277,18 @@
                     </div>
           </form>
 
-          <form id="cheaters" class="data">
+          <form id="cheaters" class="data" action="{% url 'cheaters:cheaters_new' %}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
               <div class="form-group">
                 <input type="text" class="form-control" name="title" placeholder="What is your title...">
               </div>
               <div class="form-group">
-                  <textarea class="form-control" name="description" cols="30" rows="10" placeholder="Write a brief description"></textarea>
+                  <textarea class="form-control" name="content" cols="30" rows="10" placeholder="Write a brief description"></textarea>
               </div>
             <div class="row">
               <div class="form-group col">
-                <input type="file" class="form-control-file">
+                <input type="file" class="form-control" name="image">
+                  <small class="text-muted">Add image (optional)</small>
               </div>
 
               <div class="col">
@@ -322,7 +324,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary"><i class="fa fa-send"></i> Submit</button>
+                        <button class="btn btn-primary"><i class="fa fa-send"></i> Submit</button>
                     </div>
           </form>
       </div>

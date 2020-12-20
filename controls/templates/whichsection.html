@@ -25,19 +25,35 @@
   color: white;
 }
 </style>
+            {% url 'questions:questions_index' as questions_page %}
+            {% url 'gossips:gossips_index' as gossips_page %}
+            {% url 'cheaters:cheaters_index' as cheaters_page %}
 
 <div class="container mb-4">
     <div class="row whichsection">
-        <div class="col">
-            <a href="#">Questions</a>
+        <div class="col {% if request.path == questions_page %} active_section {% endif %}">
+            <a href="{% url 'questions:questions_index' %}">
+                     <i class="fa fa-check" style="color:white;"></i>
+
+                Questions
+            </a>
         </div>
         <div> | </div>
-        <div class="col active_section">
-            <a href="#"> <i class="fa fa-check"></i> Gossips</a>
+
+        <div class="col {% if request.path == gossips_page %} active_section {% endif %}">
+            <a href="{% url 'gossips:gossips_index' %}">
+                <i class="fa fa-check" style="color:white;"></i>
+                Gossips
+            </a>
         </div>
+
+
         <div> | </div>
-        <div class="col">
-            <a href="#">Cheaters</a>
+        <div class="col {% if request.path == cheaters_page %} active_section {% endif %}">
+            <a href="{% url 'cheaters:cheaters_index' %}">
+                    <i class="fa fa-check" style="color:white;"></i>
+                Cheaters
+            </a>
         </div>
     </div>
 </div>
