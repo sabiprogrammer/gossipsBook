@@ -52,6 +52,10 @@ class QuestionsModel(models.Model):
     def get_update_url(self):
         return reverse('questions:question_update', kwargs={'question': self.slug})
 
+    def get_answers(self):
+        answers = AnswersModel.objects.filter(question=self)
+        return answers
+
     def __str__(self):
         return self.title
 

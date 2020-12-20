@@ -19,17 +19,17 @@
 
                 <div class="col">
                     <div class="progress">
-                      <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">60%</div>
-                      <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">40%</div>
+                      <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: {{gossip.percent_true}}%" aria-valuenow="{{gossip.percent_true}}" aria-valuemin="0" aria-valuemax="100">{{gossip.percent_true}}%</div>
+                      <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: {{gossip.percent_false}}%" aria-valuenow="{{gossip.percent_false}}" aria-valuemin="0" aria-valuemax="100">{{gossip.percent_false}}%</div>
                     </div>
-                    <div class="pull-right">39 persons voted</div>
+                    <div class="pull-right">{{gossip.get_total_voters}} person{{gossip.get_total_voters|pluralize}} voted</div>
                 </div>
             </div>
 
 
         </h6>
         <h5> {{gossip.title|truncatewords:30}}    </h5>
-        <p class="card-text"> {{gossip.content|truncatewords:255}} <a href="#">read more</a></p>
+        <p class="card-text"> {{gossip.content|truncatewords:255}} </p>
       </div>
 
     {% if gossip.image %}

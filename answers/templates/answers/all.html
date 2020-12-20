@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
 {% block content %}
 
 <style>
@@ -39,7 +41,7 @@
 
     }
 </style>
-{% for post in posts %}
+{% for question in questions %}
 
   {% include 'answers/all_answers.html' %}
 
@@ -52,7 +54,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle">
-           <img style="height:30px; width:30px;" class="img-fluid rounded-circle" src="https://www.w3schools.com/bootstrap4/sanfran.jpg">
+           <img style="height:30px; width:30px;" class="img-fluid rounded-circle" src="{% static 'images/default_profile_pic.png' %}">
             username
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -83,7 +85,7 @@
           <br>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary"><i class="fa fa-send"></i> Share</button>
+                        <button type="button" class="btn btn-dark" data-dismiss="modal">Coming Soon!</button>
                     </div>
       </div>
     </div>

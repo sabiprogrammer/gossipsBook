@@ -1,21 +1,8 @@
-from django.shortcuts import render
-from .forms import CreateUserForm
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
-
-# Create your views here.
-
-
-# def register_user(request):
-#     if request.method == 'POST':
-#         form = CreateUserForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             username = form.cleaned_data.get('username')
-#             messages.info(request, f'Account created successfully. Please log in')
-#             return redirect('login')
-#     else:
-#         form = CreateUserForm()
-#     return render(request, 'users/register.html', {'form': form})
+from .forms import UserUpdateForm, ProfileUpdateForm
 
 
 def login_user(request):
@@ -51,6 +38,26 @@ def user_logout(request):
     return redirect('/questions')
 
 
+@login_required()
 def user_profile(request):
-    context = {}
+    email = request.user.email
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        if u_form.is_valid() and p_form.is_valid():
+            user = u_form.save(commit=False)
+            user.email = email
+            user.save()
+            # u_form.save()
+            p_form.save()
+            messages.success(request, 'Profile updated successfully')
+        else:
+            messages.warning(request, 'Some errors occured while updating your profile')
+            return render(request, 'users/profile.html', context={'u_form': u_form, 'p_form': p_form})
+        return redirect('users:user_profile')
+
+    p_form = ProfileUpdateForm(instance=request.user.profile)
+    u_form = UserUpdateForm(instance=request.user)
+
+    context = {'p_form': p_form, 'u_form': u_form, 'email': email}
     return render(request, 'users/profile.html', context)

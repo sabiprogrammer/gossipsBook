@@ -1,65 +1,151 @@
-{% extends 'base.html' %}
+<!doctype html>
 {% load static %}
-{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Bala">
+    <meta name="description" content="Gossip Books">
+    <meta name="keywords" content="Gossip Books, answers">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-<section class="container mt-5">
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    <title>Profile Settings | Gossip Books </title>
+</head>
+<body>
+    <div class="mb-5">
+        <!-- Navigation -->
+          {% block navigation %}
+            {% include 'navigation.html' %}
+          {% endblock navigation %}
+        <!-- End Navigation -->
+    </div>
+
+    <div class="container">
         <div class="row">
-          <div class="col-xs-12 col-sm-12 col-md-3 col col-lg-3 justify-content-center">
-            <img style="height:350px; width:350px;" src="{{user.profile.profile_pic.url}}" alt="">
-            <br>
-            <div>
-              {{p_form.profile_pic}}
-            </div>
-          </div>
-          <div class="col-md-1 col-lg-1"></div>
+             <!-- Aside section starts here -->
+             <div class="col-md-4 col-lg-4 col-xl-4 d-none d-md-block">
+                <div class="card mt-5">
+                  <h5 class="card-title card-header">Profile Settings</h5>
+                  <div class="card-body">
+                      <ul class="list-group">
+                        <li class="list-group-item"> Account   </li>
+                        <li class="list-group-item"> Privacy Policy  </li>
+                        <li class="list-group-item"> Email and Notifcation     </li>
+                        <li class="list-group-item"> Languages  </li>
+                      </ul>
+                  </div>
 
-          <br><br>
+                </div>
 
-          <div class="col-xs-12 col-sm-12 col-md-7 col col-lg-7">
-        {% for field in u_form %}
-            {% if field.errors %}
-            <div class="alert alert-danger">
-                {{field.errors | striptags}}
-            </div>
-            {% endif %}
-        {% endfor %}
 
-        {% for field in p_form %}
-            {% if field.errors %}
-            <div class="alert alert-danger">
-                {{field.errors | striptags}}
-            </div>
-            {% endif %}
-        {% endfor %}
+                <div class="card mt-3">
+                  <div class="card-body">
+                      <div class="row justify-content-center">
+                            <div class="p-2">About | </div>
+                            <div class="p-2">Terms of use | </div>
+                            <div class="p-2">Privacy | </div>
+                            <div class="p-2">&copy; GossipsBook, India</div>
+                      </div>
+                 </div>
 
-            <div class="card">
-              <div class="card-body">
-               <div>
-                  <label>Phone No:   </label>
-                  {{p_form.phone}}
-               </div>
-                <br>
-                <div>
-                  <label>Email Address:   </label>
-                  {{u_form.email}}
-               </div>
-                <br>
-                <div>
-                  <label>Username:   </label>
-                  {{u_form.username}}
-               </div>
-
+                </div>
               </div>
-            </div>
 
-          </div>
+              <!-- Aside section ends here -->
+
+
+              <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                  <div class="mt-5">
+                    <strong>
+                      {% include 'messages.html' %}
+                    </strong>
+                  </div>
+
+              <!-- main section starts here -->
+                  <div class="mt-4">
+                        <section class="container mt-5">
+                            <form method="post" enctype="multipart/form-data">
+                              {% csrf_token %}
+                                  <div class="justify-content-center text-center">
+                                        <img style="height:250px; width:250px;" src="{{user.profile.image.url}}" alt="" class="img-fluid rounded-circle">
+                                        <br>
+                                        <div>
+                                          {{p_form.image}}
+                                        </div>
+                                  </div>
+                                  <div class="justify-content-center">
+                                    {% if u_form.errors %}
+                                    {% for field in u_form %}
+                                        {% for error in field.errors %}
+                                        <div class="alert alert-danger">
+                                            "{{ field.name|upper }}" {{ error }}
+                                        </div>
+                                        {% endfor %}
+                                    {% endfor %}
+                                        {% for error in u_form.non_field_errors %}
+                                        <div class="alert alert-danger">
+                                             {{ error }}
+                                        </div>
+                                        {% endfor %}
+                                    {% endif %}
+
+                                         {% if p_form.errors %}
+                                    {% for field in p_form %}
+                                        {% for error in field.errors %}
+                                        <div class="alert alert-danger">
+                                           "{{ field.name|upper }}" {{ error }}
+                                        </div>
+                                        {% endfor %}
+                                    {% endfor %}
+                                        {% for error in p_form.non_field_errors %}
+                                        <div class="alert alert-danger">
+                                            {{ error }}
+                                        </div>
+                                        {% endfor %}
+                                    {% endif %}
+
+                                        <div class="card">
+                                          <div class="card-body">
+                                            <div>
+                                              <label>Email Address:   </label>
+                                               {{u_form.email}}
+                                            </div>
+                                            <br>
+                                            <div>
+                                              <label>Username:   </label>
+                                              {{u_form.username}}
+                                            </div>
+                                              <br>
+                                            <div>
+                                              <label>Bio:   </label>
+                                              {{p_form.bio}}
+                                            </div>
+
+                                          </div>
+                                        </div>
+
+                                    </div>
+                              <br>
+                              <button class="btn btn-block" style="color:white; background-color: #F77402;">Update Profile</button>
+                            </form>
+
+                            <br><br>
+                        </section>
+                  </div>
+              <!-- main section ends here -->
+              </div>
         </div>
-      <br>
-      <button class="btn btn-primary btn-block">Update Profile</button>
-    </form>
-    <br><br>
-</section>
+    </div>
 
-{% endblock content %}
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+</html>

@@ -46,6 +46,33 @@ class CheatersModel(models.Model):
     def get_update_url(self):
         return reverse('cheaters:cheater_update', kwargs={'cheater_slug': self.slug})
 
+    def percent_true(self):
+        true_number = int(self.true.all().count())
+        false_number = int(self.false.all().count())
+        total_number = true_number + false_number
+
+        try:
+            calculate = (true_number / total_number) * 100
+        except ZeroDivisionError:
+            calculate = 0
+        return calculate
+
+    def percent_false(self):
+        true_number = int(self.true.all().count())
+        false_number = int(self.false.all().count())
+        total_number = true_number + false_number
+        try:
+            calculate = (false_number / total_number) * 100
+        except ZeroDivisionError:
+            calculate = 0
+        return calculate
+
+    def get_total_voters(self):
+        true_number = int(self.true.all().count())
+        false_number = int(self.false.all().count())
+        total_voters = true_number + false_number
+        return total_voters
+
     def __str__(self):
         return self.title
 

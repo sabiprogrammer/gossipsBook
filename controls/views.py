@@ -7,8 +7,10 @@ from users.models import Interests
 
 
 def index(request):
-    # context = {}
-    return redirect('questions:questions_index')
+    if request.user.is_authenticated:
+        return redirect('questions:questions_index')
+    else:
+        return redirect('/accounts/login')
 
 
 @login_required()

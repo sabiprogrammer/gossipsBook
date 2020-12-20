@@ -19,17 +19,17 @@
 
                 <div class="col">
                     <div class="progress">
-                      <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">60%</div>
-                      <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">40%</div>
+                      <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: {{cheater.percent_true}}%" aria-valuenow="{{cheater.percent_true}}" aria-valuemin="0" aria-valuemax="100">{{cheater.percent_true}}%</div>
+                      <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: {{cheater.percent_false}}%" aria-valuenow="{{cheater.percent_false}}" aria-valuemin="0" aria-valuemax="100">{{cheater.percent_false}}%</div>
                     </div>
-                    <div class="pull-right">39 persons voted</div>
+                    <div class="pull-right">{{cheater.get_total_voters}} person{{cheater.get_total_voters|pluralize}} voted</div>
                 </div>
             </div>
 
 
         </h6>
         <h5> {{cheater.title|truncatewords:30}}    </h5>
-        <p class="card-text"> {{cheater.content|truncatewords:255}} <a href="#">read more</a></p>
+        <p class="card-text"> {{cheater.content|truncatewords:255}} </p>
       </div>
 
     {% if cheater.image %}
@@ -55,7 +55,7 @@
 
                  <form class="d-inline" action="{% url 'cheaters:cheater_reaction' cheater.id %}">
                     <input type="hidden" name="action" value="false">
-                     {% if user in gossip.false.all %}
+                     {% if user in cheater.false.all %}
                         <button
                                 type="button"
                                 onclick="funcFalse()"
