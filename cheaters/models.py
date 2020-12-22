@@ -24,7 +24,7 @@ class Tags(models.Model):
 
 
 class CheatersModel(models.Model):
-    title = models.CharField(max_length=65, unique=True, help_text='What is the title of your cheater story?',
+    title = models.CharField(max_length=255, unique=True, help_text='What is the title of your cheater story?',
                              verbose_name='Title')
     content = models.TextField(max_length=3000)
     slug = models.SlugField(unique=True)
@@ -82,7 +82,7 @@ class CheatersModel(models.Model):
 
 class Comments(models.Model):
     cheater = models.ForeignKey(CheatersModel, on_delete=models.CASCADE)
-    content = models.TextField(max_length=300)
+    content = models.TextField(max_length=500)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cheater_comment_author')
     date_published = models.DateTimeField(auto_now_add=True, verbose_name='Date Published')
     date_updated = models.DateTimeField(auto_now=True, verbose_name='Date Updated')

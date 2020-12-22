@@ -26,7 +26,7 @@ class Tags(models.Model):
 
 
 class GossipsModel(models.Model):
-    title = models.CharField(max_length=65, unique=True, help_text='What is the title of your gossip?',
+    title = models.CharField(max_length=255, unique=True, help_text='What is the title of your gossip?',
                              verbose_name='Title')
     content = models.TextField(max_length=3000)
     slug = models.SlugField(unique=True)

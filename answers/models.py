@@ -8,7 +8,7 @@ import questions.models
 class AnswersModel(models.Model):
     question = models.ForeignKey('questions.QuestionsModel', on_delete=models.CASCADE, related_name='question')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
-    content = models.TextField(max_length=255)
+    content = models.TextField(max_length=555)
     likes = models.ManyToManyField(User, blank=True)
     shares = models.IntegerField(default=0)
     reply = models.ForeignKey('questions.QuestionsModel', on_delete=models.CASCADE, related_name='reply', null=True, blank=True)

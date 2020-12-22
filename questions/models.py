@@ -14,7 +14,7 @@ def upload_location(instance, filename, *args, **kwargs):
 
 
 class Tags(models.Model):
-    title = models.CharField(max_length=55, unique=True)
+    title = models.CharField(max_length=255, unique=True)
     description = models.TextField(max_length=300, blank=True, null=True, help_text='You can optionally provide a '
                                                                                     'description for this tag')
 
@@ -26,7 +26,7 @@ class Tags(models.Model):
 
 
 class QuestionsModel(models.Model):
-    title = models.CharField(max_length=65, unique=True, help_text='What is the title of your question?',
+    title = models.CharField(max_length=265, unique=True, help_text='What is the title of your question?',
                              verbose_name='Title')
     slug = models.SlugField(unique=True)
     date_published = models.DateTimeField(auto_now_add=True, verbose_name='Date Published')
@@ -37,11 +37,6 @@ class QuestionsModel(models.Model):
     vote_up = models.ManyToManyField(User, related_name='vote_up', blank=True)
     vote_down = models.ManyToManyField(User, related_name='vote_down', blank=True)
     shares = models.IntegerField(default=0)
-
-    # true = models.ForeignKey(User, on_delete=models.CASCADE, related_name='true')
-    # false = models.ForeignKey(User, on_delete=models.CASCADE, related_name='false')
-    # content = models.TextField(max_length=3000)
-    # comments = models.models.ForeignKey(Comments, on_delete=models.CASCADE, related_name='comments')
 
     def get_absolute_url(self):
         return reverse('questions:question_detail', kwargs={'question': self.slug})
