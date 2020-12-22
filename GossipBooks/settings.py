@@ -111,11 +111,11 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'd3cuqebi9drg9h',
-#         'HOST': 'ec2-54-166-114-48.compute-1.amazonaws.com',
+#         'NAME': 'd9t0iccvmsl35s',
+#         'HOST': 'ec2-23-20-205-19.compute-1.amazonaws.com',
 #         'PORT': 5432,
-#         'USER': 'knysciviedacrl',
-#         'PASSWORD': '007fc987d52751e66ff685450a5544474107b88796c441c5c8ccd41a0ac64d1e'
+#         'USER': 'wnducfffnqafij',
+#         'PASSWORD': '97dc744a5b901e34228171b4955eddb4e4417497c96c77cf7792f7208a9220cc'
 #     }
 # }
 
