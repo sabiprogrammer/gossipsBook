@@ -46,6 +46,9 @@ class CheatersModel(models.Model):
     def get_update_url(self):
         return reverse('cheaters:cheater_update', kwargs={'cheater_slug': self.slug})
 
+    def get_total_comments(self):
+            return self.comments_set.all()
+            
     def percent_true(self):
         true_number = int(self.true.all().count())
         false_number = int(self.false.all().count())

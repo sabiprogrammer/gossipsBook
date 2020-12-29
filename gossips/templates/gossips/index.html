@@ -20,8 +20,8 @@
 
 
         </h6>
-        <h5> {{gossip.title|truncatewords:30}} </h5>
-        <p class="card-text"> {{gossip.content|truncatewords:255}} </p>
+        <h6> <strong>{{gossip.title|truncatewords:30}}</strong> </h6>
+        <p> {{gossip.content|truncatewords:255}} </p>
     </div>
 
     {% if gossip.image %}
@@ -79,10 +79,10 @@
             {% endif %}
         </div>
 
-        <div class="col m-2 p-1 d-inline">
-            <a href="#" class="mr-3"> <i class="fa fa-share-alt"></i> Share</a>
+        <div class="col m-2 p-1 d-inline text-right mr-4">
+            <a href="#" class="mr-3"> <i class="fa fa-share-alt"></i> <span class="d-none d-md-inline">Share</span> </a>
             <a href="#" class="comment" data-toggle="modal" data-id="{{gossip.id}}" data-title="{{gossip.title}}" data-target="#commentModal">
-                <i class="fa fa-comment"></i> Comment
+                <i class="fa fa-comment"></i> <span class="d-none d-md-inline">Comment </span>  ({{gossip.get_total_comments.count}})
             </a>
         </div>
     </div>
@@ -103,14 +103,14 @@
             <form action="{% url 'gossips:gossip_add_comment' %}" method="post">
                 {% csrf_token %}
                 <div class="row container mx-auto">
-                    <textarea class="form-control m-3 mt-2" name="commentContent" cols="25" rows="5" placeholder="Your comment..."></textarea>
+                    <textarea required class="form-control m-3 mt-2" name="commentContent" cols="25" rows="5" placeholder="Your comment..."></textarea>
                 </div>
 
                 <input type="hidden" name="gossipId" id="gossipId">
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button class="btn btn-primary"><i class="fa fa-send"></i> Answer </button>
+                    <button class="btn btn-primary"><i class="fa fa-send"></i> Submit </button>
                 </div>
             </form>
             {% else %}
