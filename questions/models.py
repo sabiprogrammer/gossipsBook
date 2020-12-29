@@ -26,7 +26,7 @@ class Tags(models.Model):
 
 
 class QuestionsModel(models.Model):
-    title = models.CharField(max_length=265, unique=True, help_text='What is the title of your question?',
+    title = models.CharField(max_length=75, unique=True, help_text='What is the title of your question?',
                              verbose_name='Title')
     slug = models.SlugField(unique=True)
     date_published = models.DateTimeField(auto_now_add=True, verbose_name='Date Published')
@@ -50,6 +50,10 @@ class QuestionsModel(models.Model):
     def get_answers(self):
         answers = AnswersModel.objects.filter(question=self)
         return answers
+
+    def get_oppose_count(self):
+        result = self.vote_down.all().count()
+        return result
 
     def __str__(self):
         return self.title

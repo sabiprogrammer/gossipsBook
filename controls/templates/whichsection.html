@@ -1,58 +1,68 @@
 {% load static %}
 <style>
-    .whichsection{
+    .whichsection {
         position: relative;
         min-width: 0px;
         background-color: white;
         background-clip: border-box;
-        border: 1px solid rgba(0,0,0, .225);
-        border-radius: .25rem;
         font-size: 18px;
-        padding: 3px;
         text-align: center;
-}
-
-.whichsection a{
-    color: #F77402;
-}
-
-.active_section{
-  background-color: #F77402;
-  color: white
-}
-
-.active_section a{
-  color: white;
-}
+    }
+    
+    .whichsection a {
+        color: #F77402;
+    }
+    
+    .active_section {
+        background-color: #F77402;
+        color: white
+    }
+    
+    .active_section a {
+        color: white;
+    }
+    
+    .dot {
+        border-left: 2px solid black;
+        height: inherit;
+        position: relative;
+        margin-left: 3px;
+        margin-right: 3px;
+        float: right;
+    }
+    
+    .question {
+        font-size: 15px;
+    }
+    
+    .col {
+        padding: 7px;
+    }
 </style>
-            {% url 'questions:questions_index' as questions_page %}
-            {% url 'gossips:gossips_index' as gossips_page %}
-            {% url 'cheaters:cheaters_index' as cheaters_page %}
+{% url 'questions:questions_index' as questions_page %} {% url 'gossips:gossips_index' as gossips_page %} {% url 'cheaters:cheaters_index' as cheaters_page %}
 
 <div class="container mb-4">
     <div class="row whichsection">
-        <div class="col {% if request.path == questions_page %} active_section {% endif %}">
-            <a href="{% url 'questions:questions_index' %}">
-                     <i class="fa fa-check" style="color:white;"></i>
-
-                Questions
+        <div class="col {% if request.path == questions_page %} active_section {% endif %} my-auto">
+            <a href="{% url 'questions:questions_index' %}" class="question">
+                {% if request.path == questions_page %} <i class="fa fa-check" style="color:white;"></i> {% endif %} Questions
             </a>
-        </div>
-        <div> | </div>
 
-        <div class="col {% if request.path == gossips_page %} active_section {% endif %}">
+        </div>
+
+        <div class="dot"> </div>
+
+        <div class="col {% if request.path == gossips_page %} active_section {% endif %} my-auto">
             <a href="{% url 'gossips:gossips_index' %}">
-                <i class="fa fa-check" style="color:white;"></i>
-                Gossips
+                {% if request.path == gossips_page %} <i class="fa fa-check" style="color:white;"></i> {% endif %} Gossips
             </a>
         </div>
 
+        <div class="dot"> </div>
 
-        <div> | </div>
-        <div class="col {% if request.path == cheaters_page %} active_section {% endif %}">
+        <div class="col {% if request.path == cheaters_page %} active_section {% endif %} my-auto">
             <a href="{% url 'cheaters:cheaters_index' %}">
-                    <i class="fa fa-check" style="color:white;"></i>
-                Cheaters
+                {% if request.path == cheaters_page %} <i class="fa fa-check" style="color:white;"></i> {% endif %} Cheaters
             </a>
         </div>
     </div>

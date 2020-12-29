@@ -1,143 +1,217 @@
-{% extends 'base.html' %}
-{% load static %}
-{% load humanize %}
-{% block content %}
-
-
-{% for question in questions %}
+{% extends 'base.html' %} {% load static %} {% load humanize %} {% block content %} {% for question in questions %}
 <div class="card mb-4">
-      <div class="card-body">
+    <div class="card-body">
         <p class="card-title d-inline" style="font-size: 19px;">
-          <img style="height:35px; width:35px; float: left;" class="img-fluid rounded-circle mr-3"
-               src="{{question.author.profile.image.url}}" alt="{{question.author}} profile image">
+            <img style="height:35px; width:35px; float: left;" class="img-fluid rounded-circle mr-1" src="{{question.author.profile.image.url}}" alt="{{question.author}} profile image">
+            <h5 class="d-inline">
+                <small>{{question.author.username}}</small>
+            </h5>
 
-          <strong>{{question.title|truncatewords:30}}</strong>
-
-                   <h6 class="d-inline">
-                       <small class="text-muted">{{question.date_published|naturaltime}}
-                       </small>
-                   </h6>
+            <small class="text-muted ml-2">{{question.date_published|naturaltime}}</small>
         </p>
-      </div>
+        <section class="text-left">
+            <h5><strong>{{question.title|truncatewords:30}}</strong></h5>
+        </section>
+    </div>
 
     {% if question.image %}
-      <img class="card-img-bottom" style="max-height:420px;"
-           src="{{question.image.url}}" alt="{{question.title}} image">
-    {% endif %}
+    <img class="card-img-bottom" style="max-height:420px;" src="{{question.image.url}}" alt="{{question.title}} image"> {% endif %}
 
-      <div class="row">
-        <div class="col m-2 p-1 ml-4">
-            <button class="btn btn-sm btn-primary answerQuestion"
-                    style="background-color: #F77402; color: white; border-color: white;"
-                    data-toggle="modal" data-target="#answerQuestionModal"
-                    data-id="{{question.id}}"
-                    data-image="{{question.author.profile.image.url}}"
-                    data-username="{{question.author.username}}"
-                    data-title="{{question.title}}">
-                    <i class="fa fa-answer"></i> Answer
-            </button>
-            <div class="col d-inline"> <i class="fa fa-thumbs-down"></i> Oppose</div>
+    <div class="row">
+        <div class="col-7 m-2">
+            <button title="answer this questions" {% if user == question.author %} disabled {% endif %} class="btn btn-sm btn-primary answerQuestion" style="background-color: #F77402; color: white; border-color: white;" data-toggle="modal" data-target="#answerQuestionModal"
+                data-id="{{question.id}}" data-image="{{question.author.profile.image.url}}" data-username="{{question.author.username}}" data-title="{{question.title}}">
+                    <i class="fa fa-edit"></i> 
+                <span> Answer </span> ({{question.get_answers.count}})       
+            </button> 
+            {% if user in question.vote_down.all %}
+            <button class="btn btn-sm btn-dark text-white disabled" data-toggle="modal" data-target="#opposeQuestionDoneModal"> 
+                <i class="fa fa-thumbs-down"></i>
+                <span class="d-none d-md-inline"> Oppose </span> ({{question.get_oppose_count}})
+            </button> 
+            
+            {% else %}
+            <button class="btn btn-sm btn-dark text-white opposeQuestion" title="oppose this answer" data-id="{{question.id}}" data-username="{{question.author.username}}" data-image="{{question.author.profile.image.url}}" data-title="{{question.title}}" data-toggle="modal"
+                data-target="#opposeQuestionModal"> 
+              <i class="fa fa-thumbs-down"></i>
+              <span class="d-none d-md-inline"> Oppose </span> ({{question.get_oppose_count}})
+            </button> 
+            {% endif %}
+
         </div>
-       </div>
+
+        <div class="col-3 text-right pr-3 m-2">
+            <a href="#"><i class="fa fa-share-alt"></i> Share</a>
+        </div>
+    </div>
 </div>
 {% endfor %}
 
 
 <!-- answer question Modal -->
 <div class="modal fade" id="answerQuestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="row pl-4 pt-3">
-            <span class="pr-3">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="row pl-4 pt-3">
+                <span class="pr-3">
                 <div id="questionAuthorImage">
 
                 </div>
             </span>
-           <span class="modal-title">
-                <div id="questionAnswerUsername" class="col pl-0">
+                <span class="modal-title">
+                <div id="questionAnswerUsername">
 
                 </div>
             </span>
-      </div>
-
-        <div class="row pl-5 pt-3 container">
-            <div id="questionToAnswer">
-            </div>
-        </div>
-
-        {% if user.is_authenticated %}
-        <form action="{% url 'answers:answers_new' %}" method="post">
-            {% csrf_token %}
-            <div class="row container mx-auto">
-                <textarea class="form-control m-3 mt-2" name="answer_question" id="answerInput" cols="25" rows="5" placeholder="Your answer..."></textarea>
             </div>
 
-            <input type="hidden" name="questionId" id="questionId">
+            <div class="row pl-5 pt-3 container">
+                <div id="questionToAnswer">
+                </div>
+            </div>
 
-              <div class="modal-footer">
+            {% if user.is_authenticated %}
+            <form action="{% url 'answers:answers_new' %}" method="post">
+                {% csrf_token %}
+                <div class="row container mx-auto">
+                    <textarea class="form-control m-3 mt-2" name="answer_question" id="answerInput" cols="25" rows="5" placeholder="Your answer..."></textarea>
+                </div>
+
+                <input type="hidden" name="questionId" id="questionId">
+
+                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button class="btn btn-primary"><i class="fa fa-send"></i> Answer </button>
-              </div>
-         </form>
-        {% else %}
-        <div class="container mt-2 p-4">
-            Have an answer to this question? Please <a href="/accounts/login">login</a> to provide your answer
+                </div>
+            </form>
+            {% else %}
+            <div class="container mt-2 p-4">
+                Have an answer to this question? Please <a href="/accounts/login">login</a> to provide your answer
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
     </div>
-  </div>
 </div>
 <!-- End answer question Modal -->
 
 
 
+<!-- oppose question Modal -->
+<div class="modal fade" id="opposeQuestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="row pl-4 pt-3">
+                <span class="pr-3">
+                  <div id="questionToOpposeAuthorImage">
 
+                  </div>
+                </span>
+                <span>
+                  <div id="questionAuthorUsername">
+
+                  </div>
+                </span>
+            </div>
+
+            <div class="row pl-5 pt-3 container">
+                <div id="questionToOppose">
+                </div>
+            </div>
+            <br> {% if user.is_authenticated %}
+            <form action="{% url 'questions:oppose_question' %}">
+                <div class="container mx-auto justify-content-center">
+                    <h6>Are you sure you want to oppose this question?</h6>
+                    <p>You CANNOT undo this action...</p>
+                </div>
+
+                <input type="hidden" name="opposeQuestionId" id="opposeQuestionId">
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No, Go Back</button>
+                    <button class="btn btn-danger"><i class="fa fa-check-circle"></i> Yes, Oppose </button>
+                </div>
+            </form>
+            {% else %}
+            <div class="container mt-2 p-4">
+                You want to oppose this question? Please <a href="/accounts/login">login</a> to do so
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<!-- End oppose question Modal -->
+
+
+
+<!-- oppose question done Modal -->
+<div class="modal fade" id="opposeQuestionDoneModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="container justify-content-center">
+                <h5 class="text-danger">
+                    You have already opposed this question
+                </h5>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Okay</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End oppose question done Modal -->
 {% endblock content %}
 
 
-
-{% block navigation %}
-      {% include 'navigation.html' %}
-{% endblock navigation %}
-
-
-{% block startwriting %}
-    {% include 'startwriting.html' %}
-{% endblock startwriting %}
-
-
-{% block whichsection %}
-    {% include 'whichsection.html' %}
-{% endblock whichsection %}
-
-
-{% block aside %}
-      {% include 'aside.html' %}
-{% endblock aside %}
+<section>{% block navigation %} {% include 'navigation.html' %} {% endblock navigation %}</section>
+<section>{% block startwriting %} {% include 'startwriting.html' %} {% endblock startwriting %} </section>
+<section>{% block aside %} {% include 'aside.html' %} {% endblock aside %}</section>
+<section>{% block whichsection %} {% include 'whichsection.html' %} {% endblock whichsection %}</section>
 
 
 <!-- customJs -->
-  {% block customJs %}
-
+{% block customJs %}
 <script>
-        $('.answerQuestion').on('click', function(){
-            var id = $(this).data('id')
-            var title = $(this).data('title')
-            var image = $(this).data('image')
-            var username = $(this).data('username')
-            var name = $('#questionAuthorUsername');
+    $('.answerQuestion').on('click', function() {
+        var id = $(this).data('id')
+        var title = $(this).data('title')
+        var image = $(this).data('image')
+        var username = $(this).data('username')
+        var name = $('#questionAuthorUsername');
 
-            $("#questionId").val(id)
+        $("#questionId").val(id)
 
-            $(".appendQuestion").remove()
-            $(".appendUsername").remove()
-            $(".appendImage").remove()
-            $("<span class='appendUsername mb-0 pb-0'>" + username + ' is asking...' + "</span>").insertAfter('#questionAnswerUsername');
-            $("<h5 class='appendQuestion'>" + title + "</h5>").insertAfter('#questionToAnswer');
-            $("<img  style='height:30px; width:30px;' class='img-fluid rounded-circle appendImage'>").attr('src', image).insertAfter('#questionAuthorImage');
+        $(".appendQuestion").remove()
+        $(".appendUsername").remove()
+        $(".appendImage").remove()
+        $("<span class='appendUsername mb-0 pb-0'>" + username + ' is asking...' + "</span>").insertAfter('#questionAnswerUsername');
+        $("<h5 class='appendQuestion'>" + title + "</h5>").insertAfter('#questionToAnswer');
+        $("<img  style='height:30px; width:30px;' class='img-fluid rounded-circle appendImage'>").attr('src', image).insertAfter('#questionAuthorImage');
 
-        });
+    });
 </script>
 
-  {% endblock customJs %}
+<script>
+    $('.opposeQuestion').on('click', function() {
+        var id = $(this).data('id')
+        var title = $(this).data('title')
+        var image = $(this).data('image')
+        var username = $(this).data('username')
+
+        var name = $('#questionAuthorUsername');
+
+        $("#opposeQuestionId").val(id)
+
+        $(".appendQuestion").remove()
+        $(".appendUsername").remove()
+        $(".appendImage").remove()
+        $("<span class='appendUsername mb-0 pb-0'>" + username + "</span>").insertAfter('#questionAuthorUsername');
+        $("<q class='appendQuestion lead'>" + title + "</q>").insertAfter('#questionToOppose');
+        $("<img  style='height:30px; width:30px;' class='img-fluid rounded-circle appendImage'>").attr('src', image).insertAfter('#questionToOpposeAuthorImage');
+
+    });
+</script>
+
+{% endblock customJs %}
 <!-- End customJs -->

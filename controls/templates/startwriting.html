@@ -1,14 +1,16 @@
 {% load static %}
 <style>
-    .checkbox{
+    .checkbox {
         display: inline-flex;
         align-items: center;
         cursor: pointer;
     }
-    .checkbox_input{
+    
+    .checkbox_input {
         display: none;
     }
-    .checkbox_box{
+    
+    .checkbox_box {
         width: 1.20em;
         height: 1.20em;
         position: relative;
@@ -21,254 +23,242 @@
         flex-shrink: 0;
         transition: background 0.25s, border-color 0.55s;
     }
-    .checkbox_box::after{
+    
+    .checkbox_box::after {
         content: '\2713';
         color: white;
         transform: scale(0);
         transition: transform 0.55s
     }
-
-    .checkbox_input:checked + .checkbox_box{
+    
+    .checkbox_input:checked+.checkbox_box {
         background: #F77402;
         border-color: #F77402;
     }
-    .checkbox_input:checked + .checkbox_box::after{
+    
+    .checkbox_input:checked+.checkbox_box::after {
         transform: scale(1.1);
-
     }
 </style>
-    <div class="card mb-4">
-        <div class="card-body">
-                <h6 class="card-title">
+<div class="card mb-4">
+    <div class="card-body">
+        <h6 class="card-title">
 
-                    {% if user.is_authenticated %}
+            {% if user.is_authenticated %}
 
-                        <img style="height:35px; width:35px;" class="img-fluid rounded-circle"
-                           src="{{ user.profile.image.url }}">
-                         {{ user.username }}
+            <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{{ user.profile.image.url }}"> {{ user.username }} {% else %}
 
-                    {% else %}
+            <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{{ user.profile.image.url }}  {% static 'images/default_profile_pic2.png' %} "> Anonymous User <a href="/accounts/login">login</a> {% endif %}
 
-                        <img style="height:35px; width:35px;" class="img-fluid rounded-circle"
-                           src="{{ user.profile.image.url }}  {% static 'images/default_profile_pic2.png' %} ">
-                        Anonymous User <a href="/accounts/login">login</a>
-
-                    {% endif %}
-
-                </h6>
-            <form action="#">
-                {% csrf_token %}
-                <input class="form-control" type="text"  placeholder="Start writing here..." data-toggle="modal" data-target="#start_typing_modal">
-            </form>
-        </div>
+        </h6>
+        <form action="#">
+            {% csrf_token %}
+            <input class="form-control" type="text" placeholder="Start writing here..." data-toggle="modal" data-target="#start_typing_modal">
+        </form>
     </div>
+</div>
 
 
 <!-- start_typing Modal -->
 <div class="modal fade" id="start_typing_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
 
-            {% if user.is_authenticated %}
-               <img style="height:30px; width:30px;" class="img-fluid rounded-circle" src="{{user.profile.image.url}}">
-                {{user.username}}
-
-            {% else %}
-                 <img style="height:30px; width:30px;" class="img-fluid rounded-circle" src="{% static 'images/default_profile_pic2.png' %}">
-                Anonymous User? <a href="/accounts/login">login</a>
-            {% endif %}
-        </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    {% if user.is_authenticated %}
+                    <img style="height:30px; width:30px;" class="img-fluid rounded-circle" src="{{user.profile.image.url}}"> {{user.username}} {% else %}
+                    <img style="height:30px; width:30px;" class="img-fluid rounded-circle" src="{% static 'images/default_profile_pic2.png' %}"> Anonymous User? <a href="/accounts/login">login</a> {% endif %}
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
+            </div>
 
-      {% if user.is_authenticated %}
-        <h6 class="p-3 ">
-            Select a category...
-        </h6>
-      {% else %}
-          <h6 class="p-3 ">
-            Please <a href="/accounts/login"> login </a> to make post
-        </h6>
-      {% endif %}
+            {% if user.is_authenticated %}
+            <h6 class="p-3 ">
+                Select a category...
+            </h6>
+            {% else %}
+            <h6 class="p-3 ">
+                Please <a href="/accounts/login"> login </a> to make post
+            </h6>
+            {% endif %}
 
 
-      <div class="modal-body">
-          <div id="myForm" class="mb-3">
-             <div class="form-check form-check-inline">
-              <label class="form-check-label" for="start_typing_question">
+            <div class="modal-body">
+                <div id="myForm" class="mb-3">
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label" for="start_typing_question">
                   <input class="form-check-input" type="radio" id="start_typing_question" name="category" value="start_typing_questions"> Question
               </label>
-            </div>
-            <div class="form-check form-check-inline">
-              <label class="form-check-label" for="start_typing_gossip">
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label" for="start_typing_gossip">
                   <input class="form-check-input" type="radio" id="start_typing_gossip" name="category" value="start_typing_gossips"> Gossips
               </label>
-            </div>
-              <div class="form-check form-check-inline">
-              <label class="form-check-label" for="start_typing_cheater">
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label" for="start_typing_cheater">
                   <input class="form-check-input" type="radio" id="start_typing_cheater" name="category" value="start_typing_cheaters"> Cheaters
               </label>
-            </div>
-          </div>
-
-
-<!--          This part fades in depending on selected checkbox above - has 3 parts (forms)-->
-            <form id="start_typing_questions" class="data" action="{% url 'questions:questions_new' %}" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                  <div class="form-group">
-                    <input type="text" class="form-control" name="title" placeholder='Start your question with "What", "Why, "How", etc...'>
-                    <small class="form-text text-muted">Get answers from members of the community right away...</small>
-                  </div>
-
-                <div class="row">
-                  <div class="form-group col">
-                    <input type="file" class="form-control" name="image">
-                    <small class="text-muted">Add image (optional)</small>
-                  </div>
-
-                  <div class="col">
-                    <i class="fa fa-link"></i> link
-                  </div>
+                    </div>
                 </div>
 
-                <div>
-                    <h6>Related Tags:</h6>
-                    <div class="form-check form-check-inline">
-                      <label class="form-check-label checkbox" for="business4">
+
+                <!--          This part fades in depending on selected checkbox above - has 3 parts (forms)-->
+                <form id="start_typing_questions" class="data" action="{% url 'questions:questions_new' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input required type="text" class="form-control" name="title" placeholder='Start your question with "What", "Why, "How", etc...'>
+                        <small class="form-text text-muted">Get answers from members of the community right away...</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col">
+                            <input type="file" accept="image/*" class="form-control-file" name="image">
+                            <small class="text-muted">Add Image (optional - Image only) </small>
+                        </div>
+
+                        <div class="col text-right mr-3">
+                            <i class="fa fa-link"></i><small class="text-muted"> Add a link (optional) </small>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h6>Related Tags:</h6>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label checkbox" for="business4">
                         <input class="form-check-input checkbox_input" type="checkbox" name="business4" value="business" id="business4">
                         <div class="checkbox_box"></div>
                            business
                       </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <label class="form-check-label checkbox" for="entertainment4">
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label checkbox" for="entertainment4">
                           <input class="form-check-input checkbox_input" type="checkbox" name="entertainment4" id="entertainment4" value="entertainment">
                           <div class="checkbox_box"></div>
                           entertainment
                       </label>
-                    </div>
-                     <div class="form-check form-check-inline">
-                      <label class="form-check-label checkbox" for="sports4">
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label checkbox" for="sports4">
                           <input class="form-check-input checkbox_input" name="sports4" type="checkbox" id="sports4" value="sports">
                           <div class="checkbox_box"></div>
                           sports
                       </label>
-                    </div>
-                </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button class="btn btn-primary"><i class="fa fa-send"></i> Ask Question</button>
                         </div>
-           </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button class="btn btn-primary"><i class="fa fa-send"></i> Ask Question</button>
+                    </div>
+                </form>
 
 
 
-          <form id="start_typing_gossips" action="{% url 'gossips:gossips_new' %}" class="data" enctype="multipart/form-data" method="post">
-              {% csrf_token %}
-              <div class="form-group">
-                <input type="text" class="form-control" name="title" placeholder="Give your gossip a title...">
-              </div>
-              <div class="form-group">
-                  <textarea class="form-control" name="content" cols="30" rows="10" placeholder="Briefly let us about this gossip..."></textarea>
-              </div>
-            <div class="row">
-              <div class="form-group col">
-                <input type="file" class="form-control" name="image">
-                  <small class="text-muted">Add image (optional)</small>
-              </div>
+                <form id="start_typing_gossips" action="{% url 'gossips:gossips_new' %}" class="data" enctype="multipart/form-data" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input required type="text" class="form-control" name="title" placeholder="Give your gossip a title...">
+                    </div>
+                    <div class="form-group">
+                        <textarea required class="form-control" name="content" cols="30" rows="10" placeholder="Briefly let us about this gossip..."></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col">
+                            <input required type="file" accept="image/*" class="form-control-file" name="image">
+                            <small class="text-muted">Add Proof (Mandatory - Image only)</small>
+                        </div>
 
-              <div class="col">
-                <i class="fa fa-link"></i> link
-              </div>
-            </div>
+                        <div class="col text-right mr-3">
+                            <i class="fa fa-link"></i><small class="text-muted"> Add a link (optional) </small>
+                        </div>
+                    </div>
 
-            <div>
-                <h6>Related Tags:</h6>
-                <div class="form-check form-check-inline">
-                  <label class="form-check-label checkbox" for="business5">
+                    <div>
+                        <h6>Related Tags:</h6>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label checkbox" for="business5">
                     <input class="form-check-input checkbox_input" type="checkbox" name="business5" value="business" id="business5">
                     <div class="checkbox_box"></div>
                        business
                   </label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <label class="form-check-label checkbox" for="entertainment5">
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label checkbox" for="entertainment5">
                       <input class="form-check-input checkbox_input" type="checkbox" id="entertainment5" value="entertainment">
                       <div class="checkbox_box"></div>
                       entertainment
                   </label>
-                </div>
-                 <div class="form-check form-check-inline">
-                  <label class="form-check-label checkbox" for="sports5">
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label checkbox" for="sports5">
                       <input class="form-check-input checkbox_input" type="checkbox" id="sports5" value="sports">
                       <div class="checkbox_box"></div>
                       sports
                   </label>
-                </div>
-            </div>
+                        </div>
+                    </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button class="btn btn-primary"><i class="fa fa-send"></i> Submit Gossip</button>
                     </div>
-          </form>
+                </form>
 
-          <form id="start_typing_cheaters" class="data" action="{% url 'cheaters:cheaters_new' %}" enctype="multipart/form-data" method="post">
-              {% csrf_token %}
-              <div class="form-group">
-                <input type="text" class="form-control" name="title" placeholder="What is your title...">
-              </div>
-              <div class="form-group">
-                  <textarea class="form-control" name="content" cols="30" rows="10" placeholder="Write a brief description"></textarea>
-              </div>
-            <div class="row">
-              <div class="form-group col">
-                <input type="file" class="form-control" name="image">
-                  <small class="text-muted">Add image (optional)</small>
-              </div>
+                <form id="start_typing_cheaters" class="data" action="{% url 'cheaters:cheaters_new' %}" enctype="multipart/form-data" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input required type="text" class="form-control" name="title" placeholder="What is your title...">
+                    </div>
+                    <div class="form-group">
+                        <textarea required class="form-control" name="content" cols="30" rows="10" placeholder="Write a brief description"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col">
+                            <input type="file" accept="image/*" class="form-control-file" name="image" required>
+                            <small class="text-muted">Add Proof (Mandatory - Image only)</small>
+                        </div>
 
-              <div class="col">
-                <i class="fa fa-link"></i> link
-              </div>
-            </div>
+                        <div class="col text-right mr-3">
+                            <i class="fa fa-link"></i><small class="text-muted"> Add a link (optional) </small>
+                        </div>
+                    </div>
 
-            <div>
-                <h6>Related Tags:</h6>
-                <div class="form-check form-check-inline">
-                  <label class="form-check-label checkbox" for="business6">
+                    <div>
+                        <h6>Related Tags:</h6>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label checkbox" for="business6">
                     <input class="form-check-input checkbox_input" type="checkbox" name="business6" value="business" id="business6">
                     <div class="checkbox_box"></div>
                        business
                   </label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <label class="form-check-label checkbox" for="entertainment6">
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label checkbox" for="entertainment6">
                       <input class="form-check-input checkbox_input" type="checkbox" id="entertainment6" value="entertainment3">
                       <div class="checkbox_box"></div>
                       entertainment
                   </label>
-                </div>
-                 <div class="form-check form-check-inline">
-                  <label class="form-check-label checkbox" for="sports6">
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label checkbox" for="sports6">
                       <input class="form-check-input checkbox_input" type="checkbox" id="sports6" value="sports3">
                       <div class="checkbox_box"></div>
                       sports
                   </label>
-                </div>
-            </div>
+                        </div>
+                    </div>
 
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button class="btn btn-primary"><i class="fa fa-send"></i> Submit</button>
                     </div>
-          </form>
-      </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

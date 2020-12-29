@@ -1,171 +1,196 @@
-{% extends 'base.html' %}
-{% load humanize %}
-{% load static %}
-{% block content %}
-
-{% for cheater in cheaters %}
+{% extends 'base.html' %} {% load humanize %} {% load static %} {% block content %} {% for cheater in cheaters %}
 <div class="card mb-4">
-      <div class="card-body">
+    <div class="card-body">
         <h6 class="card-title">
-          <img style="height:35px; width:35px;" class="img-fluid rounded-circle"   src="{{cheater.author.profile.image.url}}">
-
-            {{cheater.author.username}}
-
+            <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{{cheater.author.profile.image.url}}"> {{cheater.author.username}}
+            <small class="text-muted ml-2">{{cheater.date_published|naturaltime}}</small>
             <div class="row">
                 <div class="col">
-                    <small class="text-muted">{{cheater.date_published|naturaltime}}</small>
 
                 </div>
 
                 <div class="col">
                     <div class="progress">
-                      <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: {{cheater.percent_true}}%" aria-valuenow="{{cheater.percent_true}}" aria-valuemin="0" aria-valuemax="100">{{cheater.percent_true}}%</div>
-                      <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: {{cheater.percent_false}}%" aria-valuenow="{{cheater.percent_false}}" aria-valuemin="0" aria-valuemax="100">{{cheater.percent_false}}%</div>
+                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: {{cheater.percent_true}}%" aria-valuenow="{{cheater.percent_true}}" aria-valuemin="0" aria-valuemax="100">{{cheater.percent_true}}%</div>
+                        <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: {{cheater.percent_false}}%" aria-valuenow="{{cheater.percent_false}}" aria-valuemin="0" aria-valuemax="100">{{cheater.percent_false}}%</div>
                     </div>
-                    <div class="pull-right">{{cheater.get_total_voters}} person{{cheater.get_total_voters|pluralize}} voted</div>
+                    <div class="text-right">{{cheater.get_total_voters}} person{{cheater.get_total_voters|pluralize}} voted</div>
                 </div>
             </div>
 
 
         </h6>
-        <h5> {{cheater.title|truncatewords:30}}    </h5>
+        <h5> {{cheater.title|truncatewords:30}} </h5>
         <p class="card-text"> {{cheater.content|truncatewords:255}} </p>
-      </div>
+    </div>
 
     {% if cheater.image %}
-      <img class="card-img-bottom" style="max-height:420px;" src="{{cheater.image.url}}" alt="Card image cap">
-    {% endif %}
+    <img class="card-img-bottom" style="max-height:420px;" src="{{cheater.image.url}}" alt="Card image cap"> {% endif %}
 
-      <div class="row">
-        <div class="col m-2 ml-4 d-inline">
+    <div class="row">
+        <div class="col m-2 ml-5 d-inline">
             <div class="row d-inline">
-                <form class="d-inline" action="{% url 'cheaters:cheater_reaction' cheater.id %}">
-                    <input type="hidden" name="action" value="true">
-                    {% if user in cheater.true.all %}
-                        <button
-                                type="button"
-                                onclick="funcTrue()"
-                                class="btn btn-sm btn-primary disabled">
-                            <i class="fa fa-check"></i> True
-                        </button>
+                <form class="d-inline">
+                    {% if user in cheater.true.all or user in cheater.false.all %}
+                    <button type="button" class="btn btn-sm btn-primary disabled">
+                        <i class="fa fa-check"></i> True
+                    </button> 
                     {% else %}
-                        <button class="btn btn-sm btn-primary"> <i class="fa fa-check"></i> True</button>
+                    <button type="button"
+                        data-toggle="modal" 
+                        data-id="{{cheater.id}}" 
+                        data-action="true" 
+                        data-target="#reactionModal"  
+                        class="reaction btn btn-sm btn-primary"> 
+                        <i class="fa fa-check"></i> True
+                    </button> 
                     {% endif %}
                 </form>
 
-                 <form class="d-inline" action="{% url 'cheaters:cheater_reaction' cheater.id %}">
-                    <input type="hidden" name="action" value="false">
-                     {% if user in cheater.false.all %}
-                        <button
-                                type="button"
-                                onclick="funcFalse()"
-                                class="btn btn-sm btn-danger disabled">
-                            <i class="fa fa-times"></i> False
-                        </button>
-                     {% else %}
-                        <button class="btn btn-sm btn-danger"> <i class="fa fa-times"></i> False</button>
-                     {% endif %}
+                <form class="d-inline">
+                    {% if user in cheater.false.all or user in cheater.true.all %}
+                    <button type="button" class="btn btn-sm btn-danger disabled">
+                        <i class="fa fa-times"></i> False
+                    </button> 
+                    {% else %}
+                    <button type="button"
+                        data-toggle="modal" 
+                        data-id="{{cheater.id}}" 
+                        data-action="false" 
+                        data-target="#reactionModal"  
+                        class="reaction btn btn-sm btn-danger"> 
+                        <i class="fa fa-times"></i> False
+                    </button> 
+                    {% endif %}
                 </form>
             </div>
+
+            {% if user in cheater.true.all %}
+            <div style="color: #F77402; margin-left: -10px;" class="text-small">
+               <small>You voted true</small> 
+            </div>
+            {% elif user in cheater.false.all %}
+            <div style="color: #F77402; margin-left: -10px;" class="text-small">
+                <small>You voted false</small>
+            </div>
+            {% endif %}
         </div>
 
         <div class="col m-2 p-1 d-inline">
-            <a href="#" class="mr-3"> <i class="fa fa-share"></i> Share</a>
-            <a href="#"
-               class="comment"
-               data-toggle="modal"
-                data-id="{{cheater.id}}"
-                data-title="{{cheater.title}}"
-               data-target="#commentModal">
+            <a href="#" class="mr-3"> <i class="fa fa-share-alt"></i> Share</a>
+            <a href="#" class="comment" data-toggle="modal" data-id="{{cheater.id}}" data-title="{{cheater.title}}" data-target="#commentModal">
                 <i class="fa fa-comment"></i> Comment
             </a>
         </div>
-       </div>
+    </div>
 </div>
 {% endfor %}
 
 
 <!-- comment Modal -->
 <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="row pl-5 pt-3 container">
-            <div id="cheaterToComment">
-            </div>
-        </div>
-
-        {% if user.is_authenticated %}
-        <form action="{% url 'cheaters:cheater_add_comment' %}" method="post">
-            {% csrf_token %}
-            <div class="row container mx-auto">
-                <textarea class="form-control m-3 mt-2" name="commentContent" cols="25" rows="5" placeholder="Your comment..."></textarea>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="row pl-5 pt-3 container">
+                <div id="cheaterToComment">
+                </div>
             </div>
 
-            <input type="hidden" name="cheaterId" id="cheaterId">
+            {% if user.is_authenticated %}
+            <form action="{% url 'cheaters:cheater_add_comment' %}" method="post">
+                {% csrf_token %}
+                <div class="row container mx-auto">
+                    <textarea required class="form-control m-3 mt-2" name="commentContent" cols="25" rows="5" placeholder="Your comment..."></textarea>
+                </div>
 
-              <div class="modal-footer">
+                <input type="hidden" name="cheaterId" id="cheaterId">
+
+                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button class="btn btn-primary"><i class="fa fa-send"></i> Answer </button>
-              </div>
-         </form>
-        {% else %}
-        <div class="container mt-2 p-4">
-            Would you like to comment on this cheater's story? Please <a href="/accounts/login">login</a>
+                </div>
+            </form>
+            {% else %}
+            <div class="container mt-2 p-4">
+                Would you like to comment on this cheater's story? Please <a href="/accounts/login">login</a>
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
     </div>
-  </div>
 </div>
 <!-- End comment Modal -->
 
-{% endblock content %}
+
+<!-- Reaction Modal -->
+<div class="modal fade" id="reactionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="row pl-5 pt-3 container">
+                <div id="gossipToComment">
+                </div>
+            </div>
+
+            {% if user.is_authenticated %}
+            <div class="container">
+                <p id="reactionSection"></p>
+                <p>
+                    <strong>Note that you CANNOT undo this action...</strong>
+                </p>
+            </div>
+            <form class="d-inline" action="{% url 'cheaters:cheater_reaction' %}">
+                <input type="hidden" name="action" value="" id="action"> 
+                <input type="hidden" name="cheater_id" value="" id="cheater_id"> 
+               
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No, Go Back</button>
+                    <button class="btn btn-outline-primary"><i class="fa fa-send"></i> Yes, continue </button>
+                </div>
+            </form>
+            {% else %}
+            <div class="container mt-2 p-4">
+                Would you like to vote on this cheater? Please <a href="/accounts/login">login</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<!-- End reaction Modal -->
+
+<section>{% endblock content %} {% block navigation %} {% include 'navigation.html' %} {% endblock navigation %}</section>
+<section> {% block startwriting %} {% include 'startwriting.html' %} {% endblock startwriting %}</section>
+<section>{% block whichsection %} {% include 'whichsection.html' %} {% endblock whichsection %}</section>
+<section>{% block aside %} {% include 'aside.html' %} {% endblock aside %}</section>
 
 
-
-{% block navigation %}
-      {% include 'navigation.html' %}
-{% endblock navigation %}
-
-
-{% block startwriting %}
-    {% include 'startwriting.html' %}
-{% endblock startwriting %}
-
-
-{% block whichsection %}
-    {% include 'whichsection.html' %}
-{% endblock whichsection %}
-
-
-{% block aside %}
-      {% include 'aside.html' %}
-{% endblock aside %}
-
-
-{% block customJs %}
 <!-- customJs -->
+{% block customJs %}
 <script>
-    funcTrue(){
-        alert("You've already indicated that this story is True");
-    }
+    $('.comment').on('click', function() {
+        var id = $(this).data('id');
+        var title = $(this).data('title');
 
-    funcFalse(){
-        alert("You've already indicated that this story is False");
-    }
+        $("#cheaterId").val(id)
+
+        $(".appendTitle").remove()
+        $("<h5 class='appendTitle'>" + title + "</h5>").insertAfter('#cheaterToComment');
+
+    });
+
+    $('.reaction').on('click', function() {
+        var id = $(this).data('id');
+        var action = $(this).data('action');
+        var boldAction = "<strong class='text-uppercase'>"+ action +"</strong>"
+        var message = 'You are about to vote "'+ boldAction +'" for this cheater'
+
+        $("#cheater_id").val(id)
+        $("#action").val(action)
+
+        $(".appendReaction").remove()
+        $("<p class='appendReaction'>" + message + "</p>").insertAfter('#reactionSection');
+
+    });
 </script>
 
-<script>
-        $('.comment').on('click', function(){
-            var id = $(this).data('id');
-            var title = $(this).data('title');
-
-            $("#cheaterId").val(id)
-
-            $(".appendTitle").remove()
-            $("<h5 class='appendTitle'>" + title + "</h5>").insertAfter('#cheaterToComment');
-
-        });
-</script>
-
-  {% endblock customJs %}
+{% endblock customJs %}
 <!-- End customJs -->

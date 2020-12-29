@@ -35,3 +35,21 @@ def questions_new(request):
     else:
         messages.warning(request, 'Please log in')
         return redirect('questions:questions_index')
+
+
+@login_required()
+def oppose_question(request):
+    if request.method == 'GET':
+        question_id = request.GET.get('opposeQuestionId', False)
+        try:
+            question_model = QuestionsModel.objects.get(id=question_id)
+            question_model.vote_down.add(request.user)
+            messages.success(request, 'Hurray! You have just opposed that question!')
+            return redirect('questions:questions_index')
+        except:
+            messages.warning(request, 'an error occured while processing your data')
+            return redirect('questions:questions_index')
+        
+    else:
+        messages.warning(request, 'invalid HTTP method')
+        return redirect('questions:questions_index')

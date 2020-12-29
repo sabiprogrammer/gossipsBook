@@ -1,68 +1,55 @@
-{% load static %}
-{% load humanize %}
+{% load static %} {% load humanize %}
 <div class="row mb-5">
-<div class="card w-100">
-      <div class="card-body">
-        <h6 class="card-title">
-          <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{{question.author.profile.image.url}}">
-          {{question.author.username}}
+    <div class="card w-100">
+        <div class="card-body">
+            <h6 class="card-title">
+                <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{{question.author.profile.image.url}}"> {{question.author.username}}
 
+                <small class="text-muted ml-2">{{question.date_published|naturaltime}}</small>
+            </h6>
+            <h5>
+                {{question.title|truncatewords:100}}
+            </h5>
+
+
+
+            {% for answer in question.get_answers %}
+
+            <hr>
             <div class="row">
-                <div class="col">
-                    <small class="text-muted">{{question.date_published|naturaltime}}</small>
-
-                </div>
-            </div>
-
-
-
-        </h6>
-        <h5>
-          {{question.title|truncatewords:100}}
-        </h5>
-
-
-
-        {% for answer in question.get_answers %}
-
-              <hr>
-          <div class="row">
                 <div class="col text-left">
                     <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{{answer.author.profile.image.url}}">
                     <span class="ml-2"> {{answer.author.username}} </span>
                 </div>
                 <div class="col text-right">
-                    <button type="button" style="background-color: #F77402; color: white; border-color: white" class="btn btn-primary"  data-toggle="modal" data-target="#send_to_category">
+                    <button type="button" style="background-color: #F77402; color: white; border-color: white" class="btn btn-primary" data-toggle="modal" data-target="#send_to_category">
                     <i class="fa fa-paper-plane"></i>    Send
                     </button>
                 </div>
-          </div>
-            <p class="card-text"> {{answer.content}}  </p>
-
-
-          <div class="row">
-            <div class="col m-2 pl-3">
-                <form action="{% url 'answers:like_answer' answer.id%}">
-                    {% if user in answer.likes.all %}
-                    <button class="btn btn-sm btn-danger"> <i class="fa fa-thumbs-down"></i> Unlike </button>
-                    {% else %}
-                    <button class="btn btn-sm btn-primary"> <i class="fa fa-thumbs-up"></i> Like </button>
-                    {% endif %}
-                </form>
             </div>
+            <p class="card-text"> {{answer.content}} </p>
 
-            <div class="col m-2 p-1">
-                <div class="col d-inline"> <i class="fa fa-share"></i> Share</div>
-                <div class="col d-inline"><i class="fa fa-comment"></i> Reply</div>
+
+            <div class="row">
+                <div class="col m-2 pl-3">
+                    <form action="{% url 'answers:like_answer' answer.id%}">
+                        {% if user in answer.likes.all %}
+                        <button class="btn btn-sm btn-danger"> <i class="fa fa-thumbs-down"></i> Unlike </button> {% else %}
+                        <button class="btn btn-sm btn-primary"> <i class="fa fa-thumbs-up"></i> Like (44) </button> {% endif %}
+                    </form>
+                </div>
+
+                <div class="col m-2 p-1">
+                    <div class="col d-inline"> <i class="fa fa-share-alt"></i> Share</div>
+                    <div class="col d-inline"><i class="fa fa-comment"></i> Reply</div>
+                </div>
             </div>
-          </div>
-          {% empty %}
-          <div class="text-center p-4" style="color: #F77402; font-weight: bold; font-size: 20px;">
-              This question has not received any answers yet.
-          </div>
-        {% endfor %}
+            {% empty %}
+            <div class="text-center p-4" style="color: #F77402; font-weight: bold; font-size: 20px;">
+                This question has not received any answers yet.
+            </div>
+            {% endfor %}
 
-   </div>
+        </div>
+    </div>
 </div>
-</div>
-

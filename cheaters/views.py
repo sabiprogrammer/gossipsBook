@@ -20,18 +20,23 @@ def cheaters_new(request):
         image = request.FILES.get('image', False)
         user = request.user
 
-        slugs = CheatersModel.objects.filter(slug=slugify(title))
+        if title and content and image and user:
 
-        if slugs:
-            messages.warning(request, 'Sorry, but a user already shared this same cheater story')
-        else:
-            if image:
-                cheater_model = CheatersModel.objects.create(title=title, author=user, content=content, image=image)
+            slugs = CheatersModel.objects.filter(slug=slugify(title))
+
+            if slugs:
+                messages.warning(request, 'Sorry, but a user already shared this same cheater story')
             else:
-                cheater_model = CheatersModel.objects.create(title=title, author=user, content=content)
+                if image:
+                    cheater_model = CheatersModel.objects.create(title=title, author=user, content=content, image=image)
+                else:
+                    cheater_model = CheatersModel.objects.create(title=title, author=user, content=content)
 
-            messages.success(request, 'Well Done! You just shared a Cheater story!!')
-        return redirect('cheaters:cheaters_index')
+                messages.success(request, 'Well Done! You just shared a Cheater story!!')
+            return redirect('cheaters:cheaters_index')
+        else:
+            messages.warning(request, "There must NOT be any empty fields")
+            return redirect('cheaters:cheaters_index')
     else:
         # messages.warning(request, 'Invalid HTTP request')
         return redirect('cheaters:cheaters_index')
@@ -44,40 +49,38 @@ def cheater_detail(request, cheater_slug):
 
 
 @login_required()
-def cheater_reaction(request, pk):
+def cheater_reaction(request):
     action = request.GET.get('action', False)
-    cheater = get_object_or_404(CheatersModel, id=pk)
+    cheater_id = request.GET.get('cheater_id', False)
 
-    if action == 'true':
-        if cheater.false.filter(id=request.user.id).exists():
-            cheater.false.remove(request.user)
-            cheater.save()
-        if cheater.true.filter(id=request.user.id).exists():
-            cheater.true.remove(request.user)
-            cheater.save()
-            messages.info(request, 'You indicated that cheater story is true before. But not anymore')
-            # cheater.true.all().count();
-        else:
-            cheater.true.add(request.user)
-            cheater.save()
-            messages.success(request, 'Thanks! You just indicated that this cheater story is true')
-            # gossip.true.all().count();
-    else:
-        if cheater.true.filter(id=request.user.id).exists():
-            cheater.true.remove(request.user)
-            cheater.save()
-        if cheater.false.filter(id=request.user.id).exists():
-            cheater.false.remove(request.user)
-            cheater.save()
-            messages.info(request, 'You indicated that cheater story is false before. But not anymore')
-            # cheater.true.all().count();
-        else:
-            cheater.false.add(request.user)
-            cheater.save()
-            messages.success(request, 'Thanks! You just indicated that this cheater story is false')
-            # cheater.true.all().count();
+    cheater = get_object_or_404(CheatersModel, id=cheater_id)
 
-    return redirect('cheaters:cheaters_index')
+    try:
+        if action == 'true':
+            if cheater.false.filter(id=request.user.id).exists():
+                messages.warning(request, "You've initially said that this cheater's story is False!")
+                return redirect('cheaters:cheaters_index')
+            if not cheater.true.filter(id=request.user.id).exists():    
+                cheater.true.add(request.user)
+                cheater.save()
+                messages.success(request, 'Thanks! You just indicated that this cheater story is true')
+            else:
+                messages.warning(request, "You have earlier indicated that this cheater story is true")    
+        else:
+            if cheater.true.filter(id=request.user.id).exists():
+                messages.warning(request, "You've initially said that this cheater story is True!")
+                return redirect('cheaters:cheaters_index')
+            if not cheater.false.filter(id=request.user.id).exists():
+                cheater.false.add(request.user)
+                cheater.save()
+                messages.success(request, 'Thanks! You just indicated that this cheater story is false')
+            else:
+                messages.warning(request, "You have earlier indicated that this cheater story is false")
+
+        return redirect('cheaters:cheaters_index')
+    except:
+        messages.warning(request, "An error occured while processing your request")
+        return redirect('cheaters:cheaters_index')
 
 
 @login_required()

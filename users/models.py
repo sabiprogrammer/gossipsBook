@@ -13,7 +13,7 @@ def upload_location(instance, filename, *args, **kwargs):
 
 
 class Interests(models.Model):
-    title = models.CharField(max_length=55, unique=True)
+    title = models.CharField(max_length=75, unique=True)
     description = models.TextField(max_length=300, blank=True, null=True, help_text='You can optionally provide a '
                                                                                     'description for this interest')
 
@@ -27,8 +27,9 @@ class Interests(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default_profile_pic2.png', upload_to=upload_location, blank=True)
-    bio = models.TextField(max_length=555, null=True, blank=True)
-    interests = models.ManyToManyField(Interests, related_name='interests')
+    bio = models.TextField(max_length=455, null=True, blank=True)
+    location = models.CharField(max_length=255, null=True, blank=True)
+    interests = models.ManyToManyField(Interests, related_name='interests', blank=True)
     followers = models.ManyToManyField(User, related_name='followers', blank=True)
     following = models.ManyToManyField(User, related_name='following', blank=True)
     date_created = models.DateTimeField(auto_now_add=True)

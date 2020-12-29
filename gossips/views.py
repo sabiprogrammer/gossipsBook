@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.text import slugify
 from django.contrib import messages
+from django.urls import reverse
 
 from .models import GossipsModel, Comments
 
@@ -44,40 +45,38 @@ def gossip_detail(request, gossip_slug):
 
 
 @login_required()
-def gossip_reaction(request, pk):
+def gossip_reaction(request):
     action = request.GET.get('action', False)
-    gossip = get_object_or_404(GossipsModel, id=pk)
+    gossip_id = request.GET.get('gossip_id', False)
 
-    if action == 'true':
-        if gossip.false.filter(id=request.user.id).exists():
-            gossip.false.remove(request.user)
-            gossip.save()
-        if gossip.true.filter(id=request.user.id).exists():
-            gossip.true.remove(request.user)
-            gossip.save()
-            messages.info(request, 'You indicated that gossip is true before. But not anymore')
-            # gossip.true.all().count();
-        else:
-            gossip.true.add(request.user)
-            gossip.save()
-            messages.success(request, 'Thanks! You just indicated that this gossip is true')
-            # gossip.true.all().count();
-    else:
-        if gossip.true.filter(id=request.user.id).exists():
-            gossip.true.remove(request.user)
-            gossip.save()
-        if gossip.false.filter(id=request.user.id).exists():
-            gossip.false.remove(request.user)
-            gossip.save()
-            messages.info(request, 'You indicated that gossip is false before. But not anymore')
-            # gossip.true.all().count();
-        else:
-            gossip.false.add(request.user)
-            gossip.save()
-            messages.success(request, 'Thanks! You just indicated that this gossip is false')
-            # gossip.true.all().count();
+    gossip = get_object_or_404(GossipsModel, id=gossip_id)
 
-    return redirect('gossips:gossips_index')
+    try:
+        if action == 'true':
+            if gossip.false.filter(id=request.user.id).exists():
+                messages.warning(request, "You've initially said that this gossip is False!")
+                return redirect('gossips:gossips_index')
+            if not gossip.true.filter(id=request.user.id).exists():    
+                gossip.true.add(request.user)
+                gossip.save()
+                messages.success(request, 'Thanks! You just indicated that this gossip is true')
+            else:
+                messages.warning(request, "You have earlier indicated that this gossip is true")
+        else:
+            if gossip.true.filter(id=request.user.id).exists():
+                messages.warning(request, "You've initially said that this gossip is True!")
+                return redirect('gossips:gossips_index')
+            if not gossip.false.filter(id=request.user.id).exists():
+                gossip.false.add(request.user)
+                gossip.save()
+                messages.success(request, 'Thanks! You just indicated that this gossip is false')
+            else:
+                messages.warning(request, "You have earlier indicated that this gossip is false")
+
+        return redirect('gossips:gossips_index')
+    except:
+        messages.warning(request, "An error occured while processing your request")
+        return redirect('gossips:gossips_index')
 
 
 @login_required()

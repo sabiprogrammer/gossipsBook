@@ -1,0 +1,154 @@
+<!doctype html> {% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Bala">
+    <meta name="description" content="Gossip Books">
+    <meta name="keywords" content="Gossip Books, answers">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    <title>{{user.username}}'s Profile | Gossip Books </title>
+    <style>
+        .card-text {
+            border-bottom: 1px solid rgb(219, 213, 213);
+            padding-bottom: 3px;
+        }
+        
+        .active_section {
+            background-color: #F77402;
+            border: #F77402;
+        }
+        
+        .active_section a {
+            color: white
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="mb-5">
+        <!-- Navigation -->
+        {% block navigation %} {% include 'navigation.html' %} {% endblock navigation %}
+        <!-- End Navigation -->
+    </div>
+
+    <div class="container image-container">
+        <div class="row">
+            <img class="img-fluid profile_hero" src="{% static 'images/avatar.jpg' %}
+            " alt="Profile image">
+        </div>
+
+        <div class="row">
+            <section class="col-4">
+                <div class="card profile_image">
+                    <img class="card-img-top" src="{% static 'images/avatar.jpg' %}" alt="{{user.username}} profile image">
+                    <div class="card-body pt-2">
+                        <a href="#" class="btn btn-outline-light btn-sm btn-block follow-button mb-3"><i class="fa fa-user-plus"></i> Follow</a>
+                        <p class="card-text"><strong>Followers:</strong> 33</p>
+                        <p class="card-text"><strong>Following:</strong> 33</p>
+                        <p class="card-text"><strong>Gossips:</strong> 33</p>
+                        <p class="card-text"><strong>Questions:</strong> 33</p>
+                        <p class="card-text"><strong>Cheaters Story:</strong> 33</p>
+                        <p class="card-text"><strong>Answers:</strong> 33</p>
+                        <p class="card-text"><strong>Location:</strong> Lorem ipsum dolor sit amet, consectetur</p>
+                        <p><strong>Languages:</strong> Lorem ipsum dolor sit amet, consectetur</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="col-8 mt-4 pl-5">
+
+                <!-- PROFILE DETAIL FOR MD SCREEN SIZE -->
+                <div class="d-none d-md-inline">
+                    <div class="row">
+                        <div class="col-4">
+                            Username
+                            <br>
+                            <i class="fa fa-map-marker"></i> Location
+                        </div>
+                        <div class="col-4">
+                            <a href="#" class="btn btn-outline-dark"><i class="fa fa-send"></i> Send Message</a>
+                        </div>
+                        <div class="col-4">
+                            <a href="#" class="btn btn-outline-dark"><i class="fa fa-share-alt"></i> Share Profile</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROFILE DETAIL FOR SM SCREEN SIZE -->
+                <div class="d-sm-inline d-md-none">
+                    <div class="row">
+                        <div class="col-7">
+                            Username
+                            <br>
+                            <i class="fa fa-map-marker"></i> Location
+                        </div>
+                        <div class="col-2">
+                            <a href="#"><i class="fa fa-send"></i></a>
+                        </div>
+                        <div class="col-2">
+                            <a href="#"><i class="fa fa-share-alt"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <section>
+                    <div class="row mt-5 justify-content-center">
+                        <div class="btn btn-outline-dark btn-sm m-2 active_section">
+                            <a href="#">Gossips</a>
+                        </div>
+
+                        <div class="btn btn-outline-dark btn-sm m-2">
+                            <a href="#">Questions</a>
+                        </div>
+
+                        <div class="btn btn-outline-dark btn-sm m-2">
+                            <a href="#">Cheaters</a>
+                        </div>
+
+                        <div class="btn btn-outline-dark btn-sm m-2">
+                            <a href="#">Answers</a>
+                        </div>
+
+                        <div class="btn btn-outline-dark btn-sm m-2">
+                            <a href="#">Following</a>
+                        </div>
+
+                        <div class="btn btn-outline-dark btn-sm m-2">
+                            <a href="#">Follwers</a>
+                        </div>
+                    </div>
+                </section>
+
+                <hr>
+                <main>
+                    <h2>Detail will appear here...</h2>
+                </main>
+
+                <hr>
+                <main>
+                    <h2>Bio...</h2>
+                </main>
+
+                <hr>
+                <main>
+                    <h2>Interests...</h2>
+                </main>
+            </section>
+        </div>
+    </div>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+</body>
+
+</html>

@@ -61,3 +61,11 @@ def user_profile(request):
 
     context = {'p_form': p_form, 'u_form': u_form, 'email': email}
     return render(request, 'users/profile.html', context)
+
+
+# @login_required()
+def user_view_profile(request):
+    # email = request.user.email
+
+    context = {}
+    return render(request, 'users/view_profile.html', context)
