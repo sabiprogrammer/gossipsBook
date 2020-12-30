@@ -181,20 +181,6 @@
         $("<h5 class='appendTitle'>" + title + "</h5>").insertAfter('#cheaterToComment');
 
     });
-
-    $('.reaction').on('click', function() {
-        var id = $(this).data('id');
-        var action = $(this).data('action');
-        var boldAction = "<strong class='text-uppercase'>"+ action +"</strong>"
-        var message = 'You are about to vote "'+ boldAction +'" for this cheater'
-
-        $("#cheater_id").val(id)
-        $("#action").val(action)
-
-        $(".appendReaction").remove()
-        $("<p class='appendReaction'>" + message + "</p>").insertAfter('#reactionSection');
-
-    });
 </script>
 
 {% endblock customJs %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %} 
+{% block content %} 
+
+<section class="ml-3">
+   {% include 'detail.html' with post=gossip %}
+</section>
+
+{% endblock content %}
+
+<section>
+   {% block navigation %} {% include 'navigation.html' %} {% endblock navigation %}
+</section>
+
+
+<section>
+   {% block aside %} {% include 'aside.html' %} {% endblock aside %}
+</section>

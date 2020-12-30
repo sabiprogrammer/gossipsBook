@@ -49,7 +49,7 @@ class GossipsModel(models.Model):
         return reverse('gossips:gossip_update', kwargs={'gossip_slug': self.slug})
     
     def get_total_comments(self):
-        return self.comments_set.all()
+        return self.comments_set.all().order_by('-date_published')
 
     def percent_true(self):
         true_number = int(self.true.all().count())

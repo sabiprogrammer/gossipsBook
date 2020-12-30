@@ -25,7 +25,7 @@
 
 
         </h6>
-        <h6> <strong>{{gossip.title|truncatewords:30}}</strong> </h6>
+        <h6> <strong><a class="text-dark" href="{% url 'gossips:gossip_detail' gossip.slug %}">{{gossip.title|truncatewords:30}}</a> </strong> </h6>
         <p> {{gossip.content|truncatewords:255}} </p>
     </div>
 
@@ -194,25 +194,6 @@
         $("<h5 class='appendTitle'>" + title + "</h5>").insertAfter('#gossipToComment');
 
     });
-
-    $('.reaction').on('click', function() {
-        var id = $(this).data('id');
-        var action = $(this).data('action');
-        var boldAction = "<strong class='text-uppercase'>"+ action +"</strong>"
-        var message = 'You are about to vote "'+ boldAction +'" for this gossip'
-
-        $("#gossip_id").val(id)
-        $("#action").val(action)
-
-        $(".appendReaction").remove()
-        $("<p class='appendReaction'>" + message + "</p>").insertAfter('#reactionSection');
-
-    });
-</script>
-
-
-<script>
-
 </script>
 
 {% endblock customJs %}
