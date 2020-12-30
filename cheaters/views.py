@@ -27,11 +27,7 @@ def cheaters_new(request):
             if slugs:
                 messages.warning(request, 'Sorry, but a user already shared this same cheater story')
             else:
-                if image:
-                    cheater_model = CheatersModel.objects.create(title=title, author=user, content=content, image=image)
-                else:
-                    cheater_model = CheatersModel.objects.create(title=title, author=user, content=content)
-
+                cheater_model = CheatersModel.objects.create(title=title, author=user, content=content, image=image)
                 messages.success(request, 'Well Done! You just shared a Cheater story!!')
             return redirect('cheaters:cheaters_index')
         else:
@@ -95,7 +91,11 @@ def cheater_add_comment(request):
             Comments.objects.create(cheater=cheater, author=user, content=content)
             messages.success(request, "You've successfully made you comment")
         except:
-            return redirect('cheaters:cheaters_index')
+            messages.warning(request, 'An error occured while trying to add your comment')
     else:
         messages.warning(request, 'Invalid HTTP request')
     return redirect('cheaters:cheaters_index')
+
+
+def cheater_detail(request, cheater_slug):
+    pass

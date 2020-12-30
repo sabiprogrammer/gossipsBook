@@ -25,11 +25,9 @@
         .active_section {
             background-color: #F77402;
             border: #F77402;
+            color: white;
         }
         
-        .active_section a {
-            color: white
-        }
     </style>
 
 </head>
@@ -37,30 +35,40 @@
 <body>
     <div class="mb-5">
         <!-- Navigation -->
-        {% block navigation %} {% include 'navigation.html' %} {% endblock navigation %}
+        {% include 'navigation.html' %} 
         <!-- End Navigation -->
     </div>
-
     <div class="container image-container">
         <div class="row">
-            <img class="img-fluid profile_hero" src="{% static 'images/avatar.jpg' %}
-            " alt="Profile image">
+            <img class="img-fluid profile_hero" src="{{user_profile.profile.image.url}}
+            " alt="{{user_profile.username}}'s image">
         </div>
 
         <div class="row">
             <section class="col-4">
                 <div class="card profile_image">
-                    <img class="card-img-top" src="{% static 'images/avatar.jpg' %}" alt="{{user.username}} profile image">
+                    <img class="card-img-top" src="{{user_profile.profile.image.url}}" alt="{{user_profile.username}} profile image">
                     <div class="card-body pt-2">
-                        <a href="#" class="btn btn-outline-light btn-sm btn-block follow-button mb-3"><i class="fa fa-user-plus"></i> Follow</a>
-                        <p class="card-text"><strong>Followers:</strong> 33</p>
-                        <p class="card-text"><strong>Following:</strong> 33</p>
-                        <p class="card-text"><strong>Gossips:</strong> 33</p>
-                        <p class="card-text"><strong>Questions:</strong> 33</p>
-                        <p class="card-text"><strong>Cheaters Story:</strong> 33</p>
-                        <p class="card-text"><strong>Answers:</strong> 33</p>
-                        <p class="card-text"><strong>Location:</strong> Lorem ipsum dolor sit amet, consectetur</p>
-                        <p><strong>Languages:</strong> Lorem ipsum dolor sit amet, consectetur</p>
+                        {% if not request.user == user_profile %}
+                        {% if request.user in user_profile.profile.followers.all %}
+                        <a href="{% url 'users:follow_user' user_profile.username %}" class="btn btn-outline-light btn-sm btn-block follow-button mb-3"><i class="fa fa-user-minus"></i> Unfollow</a>
+                        {% else %}
+                        <a href="{% url 'users:follow_user' user_profile.username %}" class="btn btn-outline-light btn-sm btn-block follow-button mb-3"><i class="fa fa-user-plus"></i> Follow</a>
+                        {% endif %}
+                        {% endif %}
+                        <p class="card-text text-lead">Followers: {{followers.count}}</p>
+                        <p class="card-text">Following: {{following.count}}</p>
+                        <p class="card-text">Gossips: {{user_gossips.count}}</p>
+                        <p class="card-text">Questions: {{user_questions.count}}</p>
+                        <p class="card-text">Cheaters: {{user_cheaters.count}}</p>
+                        <p class="card-text">Answers: 0 </p>
+                        <p class="card-text">Location: {{user_profile.profile.location}}</p>
+                        <p>Languages: {{user_profile.profile.languages}}</p>
+                        {% if request.user == user_profile %}
+                        <p>
+                            <a class="p-0 m-0" href="#"> Edit Profile</a>
+                        </p>
+                        {% endif %}
                     </div>
                 </div>
             </section>
@@ -71,9 +79,9 @@
                 <div class="d-none d-md-inline">
                     <div class="row">
                         <div class="col-4">
-                            Username
+                            {{user_profile.username}}
                             <br>
-                            <i class="fa fa-map-marker"></i> Location
+                            <i class="fa fa-map-marker"></i> {{user_profile.profile.location}}
                         </div>
                         <div class="col-4">
                             <a href="#" class="btn btn-outline-dark"><i class="fa fa-send"></i> Send Message</a>
@@ -88,9 +96,9 @@
                 <div class="d-sm-inline d-md-none">
                     <div class="row">
                         <div class="col-7">
-                            Username
+                            {{user_profile.username}}
                             <br>
-                            <i class="fa fa-map-marker"></i> Location
+                            <i class="fa fa-map-marker"></i> {{user_profile.profile.location}}
                         </div>
                         <div class="col-2">
                             <a href="#"><i class="fa fa-send"></i></a>
@@ -103,52 +111,117 @@
 
 
                 <section>
+                    
                     <div class="row mt-5 justify-content-center">
-                        <div class="btn btn-outline-dark btn-sm m-2 active_section">
-                            <a href="#">Gossips</a>
+                        <div class="btn btn-outline-dark btn-sm m-2" id="gossipsButton">
+                            Gossips
+                        </div>
+
+                        <div class="btn btn-outline-dark btn-sm m-2" id="questionsButton">
+                            Questions
+                        </div>
+
+                        <div class="btn btn-outline-dark btn-sm m-2" id="cheatersButton">
+                            Cheaters
+                        </div>
+
+                        <div class="btn btn-outline-dark btn-sm m-2" id="AnswersButton">
+                            Answers
                         </div>
 
                         <div class="btn btn-outline-dark btn-sm m-2">
-                            <a href="#">Questions</a>
+                           Following
                         </div>
 
                         <div class="btn btn-outline-dark btn-sm m-2">
-                            <a href="#">Cheaters</a>
-                        </div>
-
-                        <div class="btn btn-outline-dark btn-sm m-2">
-                            <a href="#">Answers</a>
-                        </div>
-
-                        <div class="btn btn-outline-dark btn-sm m-2">
-                            <a href="#">Following</a>
-                        </div>
-
-                        <div class="btn btn-outline-dark btn-sm m-2">
-                            <a href="#">Follwers</a>
+                            Follwers
                         </div>
                     </div>
                 </section>
 
                 <hr>
-                <main>
-                    <h2>Detail will appear here...</h2>
+                <main class="detailSection" id="questionsList">
+                    {% for question in user_questions %}
+                    <div class="card mb-2">   
+                        <div class="card-body p-1"><a href="{% url 'questions:question_detail' question.slug %}">{{question.title}}</a> </div> 
+                    </div>
+                    {% endfor %}
+                </main>
+
+                <main class="detailSection" id="gossipsList">
+                    {% for gossip in user_gossips %}
+                    <div class="card mb-2">   
+                        <div class="card-body p-1"><a href="{% url 'gossips:gossip_detail' gossip.slug %}">{{gossip.title}}</a> </div> 
+                    </div>
+                    {% endfor %}
+                </main>
+
+                <main class="detailSection" id="cheatersList">
+                    {% for cheater in user_cheaters %}
+                    <div class="card mb-2">   
+                        <div class="card-body p-1"><a href="{% url 'cheaters:cheater_detail' cheater.slug %}">{{cheater.title}}</a> </div> 
+                    </div>
+                    {% endfor %}
                 </main>
 
                 <hr>
                 <main>
-                    <h2>Bio...</h2>
+                    <h6>Bio:</h6>
+                    <div class="card">
+                        <div class="card-body">
+                                {{user_profile.profile.bio|safe}}
+                        </div> 
+                    </div>
                 </main>
-
                 <hr>
                 <main>
-                    <h2>Interests...</h2>
+                    <h6>Interests:</h6>
+                    <div class="">   
+                        <div class="card-body p-1">
+                            <ul>
+                                {% for interest in user_profile.profile.interests.all %}
+                                    <li>{{ interest.title }} </li>
+                                {% endfor %}
+                            </ul>
+                        </div> 
+                    </div>
                 </main>
             </section>
         </div>
     </div>
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+
+    <script>
+        $('.detailSection').hide();
+        $('#gossipsButton').addClass('active_section');
+        $('#gossipsList').show(); 
+         
+        $('#gossipsButton').on('click', function() {
+            $('.detailSection').hide();
+            $('#questionsButton').removeClass('active_section');
+            $('#cheatersButton').removeClass('active_section');
+            $('#gossipsButton').addClass('active_section');
+            $('#gossipsList').show();     
+        });
+
+        $('#cheatersButton').on('click', function() {
+            $('.detailSection').hide();
+            $('#questionsButton').removeClass('active_section');
+            $('#gossipsButton').removeClass('active_section');
+            $('#cheatersButton').addClass('active_section');
+            $('#cheatersList').show();     
+        });
+
+        $('#questionsButton').on('click', function() {
+            $('.detailSection').hide();
+            $('#gossipsButton').removeClass('active_section');
+            $('#cheatersButton').removeClass('active_section');
+            $('#questionsButton').addClass('active_section');
+            $('#questionsList').show();     
+        });
+    </script>
 </body>
 
 </html>

@@ -2,7 +2,12 @@
 <div class="card mb-4">
     <div class="card-body">
         <h6 class="card-title">
-            <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{{cheater.author.profile.image.url}}"> {{cheater.author.username}}
+            <a href="{% url 'users:user_view_profile' cheater.author.username %}" class="text-dark">
+                <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{{cheater.author.profile.image.url}}"> 
+                {{cheater.author.username}}
+            </a>
+            
+
             <small class="text-muted ml-2">{{cheater.date_published|naturaltime}}</small>
             <div class="row">
                 <div class="col">

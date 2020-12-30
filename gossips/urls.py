@@ -4,9 +4,9 @@ from .views import gossips_index, gossips_new, gossip_detail, gossip_reaction, g
 app_name = 'gossips'
 
 urlpatterns = [
-    path('', gossips_index, name='gossips_index'),
-    path('new', gossips_new, name='gossips_new'),
+    path('<slug:gossip_slug>/detail', gossip_detail, name='gossip_detail'),
     path('gossip_add_comment', gossip_add_comment, name='gossip_add_comment'),
     path('reactions', gossip_reaction, name='gossip_reaction'),
-    path('<slug:gossip_slug>', gossip_detail, name='gossip_detail'),
+    path('new', gossips_new, name='gossips_new'),
+    path('', gossips_index, name='gossips_index'),
 ]

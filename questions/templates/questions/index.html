@@ -2,10 +2,13 @@
 <div class="card mb-4">
     <div class="card-body">
         <p class="card-title d-inline" style="font-size: 19px;">
-            <img style="height:35px; width:35px; float: left;" class="img-fluid rounded-circle mr-1" src="{{question.author.profile.image.url}}" alt="{{question.author}} profile image">
-            <h5 class="d-inline">
-                <small>{{question.author.username}}</small>
-            </h5>
+            
+            <a class="text-dark" href="{% url 'users:user_view_profile' question.author.username %}">
+                <img style="height:35px; width:35px; float: left;" class="img-fluid rounded-circle mr-1" src="{{question.author.profile.image.url}}" alt="{{question.author}} profile image">
+                <h5 class="d-inline">
+                    <small>{{question.author.username}}</small>
+                </h5>
+            </a>
 
             <small class="text-muted ml-2">{{question.date_published|naturaltime}}</small>
         </p>

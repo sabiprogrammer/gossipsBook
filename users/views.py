@@ -1,6 +1,13 @@
-from django.shortcuts import render, redirect
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.urls import reverse
+
+
+from questions.models import QuestionsModel
+from cheaters.models import CheatersModel
+from gossips.models import GossipsModel
 
 from .forms import UserUpdateForm, ProfileUpdateForm
 
@@ -23,7 +30,7 @@ def login_user(request):
                 return redirect('controls:welcome')
             else:
                 messages.warning(request, 'Disabled Account')
-                return HttpResponse('Disabled Account')
+                # return HttpResponse('Disabled Account')
         else:
             messages.warning(request, 'Incorrect Details Provided!')
             return redirect('login')
@@ -63,9 +70,58 @@ def user_profile(request):
     return render(request, 'users/profile.html', context)
 
 
-# @login_required()
-def user_view_profile(request):
-    # email = request.user.email
+def user_view_profile(request, username):
+    try:
+        user_profile = User.objects.get(username=username)
+    except:
+        messages.warning(request, "An error occured while trying to get the user details")
+        return redirect('gossips:gossips_index')
+    
+    user_questions = QuestionsModel.objects.filter(author=user_profile).order_by('-date_published')
+    user_gossips = GossipsModel.objects.filter(author=user_profile).order_by('-date_published')
+    user_cheaters = CheatersModel.objects.filter(author=user_profile).order_by('-date_published')
 
-    context = {}
+    followers = user_profile.profile.followers.all()
+    following = user_profile.profile.following.all()
+
+    context = {'user_profile': user_profile, 
+                'user_questions': user_questions, 
+                'user_gossips': user_gossips, 
+                'user_cheaters': user_cheaters,
+                'followers': followers,
+                'following': following}
     return render(request, 'users/view_profile.html', context)
+
+
+@login_required()
+def follow_user(request, username):
+    logged_in_user = request.user
+
+    try:
+        user_to_follow = User.objects.get(username=username)
+    except:
+        messages.warning(request, "Error! Unable to follow that user")
+        return redirect('gossips:gossips_index')
+
+    if logged_in_user == user_to_follow:
+        messages.warning(request, "You cannot follow yourself!")
+        return redirect('gossips:gossips_index')
+    else:
+        if logged_in_user in user_to_follow.profile.followers.all():
+            user_to_follow.profile.followers.remove(logged_in_user)
+            user_to_follow.save()
+
+            logged_in_user.profile.following.remove(user_to_follow)
+            logged_in_user.save()
+            messages.success(request, f"You unfollowed {user_to_follow.username}")
+        else:
+            user_to_follow.profile.followers.add(logged_in_user)
+            user_to_follow.save()
+
+            logged_in_user.profile.following.add(user_to_follow)
+            logged_in_user.save()
+            messages.success(request, f"You followed {user_to_follow.username}")
+
+    return redirect(reverse('users:user_view_profile', kwargs={'username': user_to_follow.username}))
+    
+

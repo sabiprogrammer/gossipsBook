@@ -53,3 +53,7 @@ def oppose_question(request):
     else:
         messages.warning(request, 'invalid HTTP method')
         return redirect('questions:questions_index')
+
+
+def question_detail(request, question_slug):
+    pass

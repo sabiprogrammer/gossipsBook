@@ -45,10 +45,13 @@
         <h6 class="card-title">
 
             {% if user.is_authenticated %}
+            <a class="text-dark" href="{% url 'users:user_view_profile' user.username %}">
+                <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{{ user.profile.image.url }}"> {{ user.username }} 
+            </a>
+            {% else %}
 
-            <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{{ user.profile.image.url }}"> {{ user.username }} {% else %}
-
-            <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{{ user.profile.image.url }}  {% static 'images/default_profile_pic2.png' %} "> Anonymous User <a href="/accounts/login">login</a> {% endif %}
+            <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{{ user.profile.image.url }}  {% static 'images/default_profile_pic2.png' %} "> Anonymous User <a href="/accounts/login">login</a> 
+            {% endif %}
 
         </h6>
         <form action="#">

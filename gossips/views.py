@@ -21,25 +21,26 @@ def gossips_new(request):
         image = request.FILES.get('image', False)
         user = request.user
 
-        slugs = GossipsModel.objects.filter(slug=slugify(title))
+        if title and content and image and user:
 
-        if slugs:
-            messages.warning(request, 'Sorry, but a user already shared this same gossip')
-        else:
-            if image:
-                gossip_model = GossipsModel.objects.create(title=title, author=user, content=content, image=image)
+            slugs = GossipsModel.objects.filter(slug=slugify(title))
+
+            if slugs:
+                messages.warning(request, 'Sorry, but a user already shared this same gossip')
             else:
-                gossip_model = GossipsModel.objects.create(title=title, author=user, content=content)
-
-            messages.success(request, 'Well Done! You just shared a gossips!!')
-        return redirect('gossips:gossips_index')
+                gossip_model = GossipsModel.objects.create(title=title, author=user, content=content, image=image)
+                messages.success(request, 'Well Done! You just shared a gossips!!')
+            return redirect('gossips:gossips_index')
+        else:
+            messages.warning(request, "There must NOT be any empty fields")
+            return redirect('gossips:gossips_index')
     else:
         # messages.warning(request, 'Invalid HTTP request')
         return redirect('gossips:gossips_index')
 
 
 def gossip_detail(request, gossip_slug):
-    gossip = get_object_or_404(GossipsModel, slug=gossip_slug).order_by('-date_published')
+    gossip = get_object_or_404(GossipsModel, slug=gossip_slug)
     context = {'gossip': gossip}
     return render(request, 'gossips/gossip_detail.html', context)
 
@@ -91,7 +92,7 @@ def gossip_add_comment(request):
             Comments.objects.create(gossip=gossip, author=user, content=content)
             messages.success(request, "You've successfully made you comment")
         except:
-            return redirect('gossips:gossips_index')
+            messages.warning(request, 'An error occured while trying to add your comment')
     else:
         messages.warning(request, 'Invalid HTTP request')
     return redirect('gossips:gossips_index')

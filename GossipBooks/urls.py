@@ -20,13 +20,13 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('gossips/', include('gossips.urls', namespace='gossips')),
-    path('questions', include('questions.urls', namespace='questions')),
-    path('cheaters', include('cheaters.urls', namespace='cheaters')),
+    path('questions/', include('questions.urls', namespace='questions')),
+    path('cheaters/', include('cheaters.urls', namespace='cheaters')),
     path('answers', include('answers.urls', namespace='answers')),
     path('users/', include('users.urls', namespace='users')),
     path('accounts/', include('allauth.urls')),
-    path('', include('controls.urls', namespace='controls')),
     path('admin/', admin.site.urls),
+    path('', include('controls.urls', namespace='controls')),
 ]
 
 if settings.DEBUG:
