@@ -39,7 +39,7 @@ def cheaters_new(request):
 
 
 def cheater_detail(request, cheater_slug):
-    cheater = get_object_or_404(CheatersModel, slug=cheater_slug).order_by('-date_published')
+    cheater = get_object_or_404(CheatersModel, slug=cheater_slug)
     context = {'cheater': cheater}
     return render(request, 'cheaters/cheater_detail.html', context)
 
@@ -96,6 +96,3 @@ def cheater_add_comment(request):
         messages.warning(request, 'Invalid HTTP request')
     return redirect('cheaters:cheaters_index')
 
-
-def cheater_detail(request, cheater_slug):
-    pass

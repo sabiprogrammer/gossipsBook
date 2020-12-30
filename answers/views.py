@@ -7,7 +7,7 @@ from .models import AnswersModel
 
 
 def answers_all(request):
-    questions_all = QuestionsModel.objects.all()
+    questions_all = QuestionsModel.objects.all().order_by('-date_published')
     if request.user.is_authenticated:
         questions = questions_all.filter(author=request.user)
         context = {'questions': questions}

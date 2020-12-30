@@ -1,6 +1,6 @@
 {% load humanize %}
 <section class="row">
-   <h4><strong>{{post.title}} Lorem ipsum dolor sit amet consectetur adipisicing elit.</strong> </h4>
+   <h4><strong>{{post.title}} </strong> </h4>
 </section>
 
 <section class="row">
@@ -39,7 +39,7 @@
 
 
 <div class="row mt-3">
-   <div class="col m-2 ml-3 d-inline">
+   <div class="col ml-3 d-inline">
        <div class="row d-inline">
            <form class="d-inline">
                    {% if request.user in post.true.all or request.user in post.false.all %}
@@ -112,7 +112,7 @@
          <small class="text-muted ml-1">{{comment.date_published|naturaltime}}</small>
 
           <div>
-            {{comment.content|safe}}
+            {{comment.content}}
           </div>
           <hr>
       </div>
@@ -131,9 +131,9 @@
    <div class="card-body">
 
       {% if user.is_authenticated %}
-     <form action="{% url 'gossips:gossip_add_comment' %}" method="post">
+     <form action="{{comment_form_url}}" method="post">
       {% csrf_token %}
-      <input type="hidden" name="gossipId" value="{{post.id}}">
+      <input type="hidden" name="{{hidden_id}}Id" value="{{post.id}}">
        <div class="form-group">
          <textarea required class="form-control" name="commentContent" rows="3" placeholder="Your comment..."></textarea>
        </div>
@@ -165,9 +165,9 @@
                    <strong>Note that you CANNOT undo this action...</strong>
                </p>
            </div>
-           <form class="d-inline" action="{% url 'gossips:gossip_reaction' %}">
+           <form class="d-inline" action="{{reaction_url}}">
                <input type="hidden" name="action" value="" id="action"> 
-               <input type="hidden" name="gossip_id" value="" id="gossip_id"> 
+               <input type="hidden" name="{{hidden_id}}_id" value="" id="{{hidden_id}}_id"> 
               
                
                <div class="modal-footer">

@@ -25,8 +25,10 @@
 
 
         </h6>
-        <h6> <strong>{{cheater.title|truncatewords:30}}</strong> </h6>
-        <p class="card-text"> {{cheater.content|truncatewords:255}} </p>
+        <a href="{% url 'cheaters:cheater_detail' cheater.slug %}" class="text-dark">
+            <h6> <strong>{{cheater.title|truncatewords:30}}</strong> </h6>
+            <p class="card-text"> {{cheater.content|truncatewords:255}} </p>
+        </a>
     </div>
 
     {% if cheater.image %}
