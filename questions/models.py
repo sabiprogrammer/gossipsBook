@@ -28,7 +28,7 @@ class Tags(models.Model):
 class QuestionsModel(models.Model):
     title = models.CharField(max_length=75, unique=True, help_text='What is the title of your question?',
                              verbose_name='Title')
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(max_length=255, unique=True)
     date_published = models.DateTimeField(auto_now_add=True, verbose_name='Date Published')
     date_updated = models.DateTimeField(auto_now=True, verbose_name='Date Updated')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='question_author')
