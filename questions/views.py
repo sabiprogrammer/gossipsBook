@@ -56,4 +56,4 @@ def oppose_question(request):
 
 
 def question_detail(request, question_slug):
-    pass
+    return redirect('questions:questions_index')
