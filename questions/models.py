@@ -39,13 +39,13 @@ class QuestionsModel(models.Model):
     shares = models.IntegerField(default=0)
 
     def get_absolute_url(self):
-        return reverse('questions:question_detail', kwargs={'question': self.slug})
+        return reverse('questions:question_detail', kwargs={'question_slug': self.slug})
 
     def get_delete_url(self):
-        return reverse('questions:question_delete', kwargs={'question': self.slug})
+        return reverse('questions:question_delete', kwargs={'question_slug': self.slug})
 
     def get_update_url(self):
-        return reverse('questions:question_update', kwargs={'question': self.slug})
+        return reverse('questions:question_update', kwargs={'question_slug': self.slug})
 
     def get_answers(self):
         answers = AnswersModel.objects.filter(question=self)

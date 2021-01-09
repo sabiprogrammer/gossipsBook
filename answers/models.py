@@ -23,9 +23,9 @@ class AnswersModel(models.Model):
     def get_delete_url(self):
         return reverse('answers:answer_delete', kwargs={'answer': self.pk})
 
-    # def get_update_url(self):
-    #     return reverse('answers:answer_update', kwargs={'answer': self.slug})
-
+    def total_likes(self):
+        return str(self.likes.all().count())
+        
     def __str__(self):
         return f"{self.author}'s answer to {self.question}"
 

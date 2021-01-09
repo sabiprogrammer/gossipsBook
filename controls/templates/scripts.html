@@ -1,0 +1,50 @@
+{% load static %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<!-- Custom Javascript/JQuery -->
+
+<script>
+    $(document).ready(function(){
+      //  controls the radio button check and unchecked functionality of the navigation and "whichsection" section
+        $(".data").hide();
+
+        $('#myForm input').on('change', function(){
+            var setValue = $('[type="radio"]:checked').val();
+            $(".data").hide();
+            $("#" + $(this).val()).fadeIn(700);
+        });
+
+
+
+        $('.reaction').on('click', function() {
+            var id = $(this).data('id');
+            var action = $(this).data('action');
+            var boldAction = "<strong class='text-uppercase'>"+ action +"</strong>"
+            var message = 'You are about to vote "'+ boldAction +'" for this post'
+
+            $("#gossip_id").val(id)
+            $("#action").val(action)
+
+            $("#cheater_id").val(id)
+
+            $(".appendReaction").remove()
+            $("<p class='appendReaction'>" + message + "</p>").insertAfter('#reactionSection');
+
+        });
+
+        // Request For Removal Logic
+        $('.rfr').on('click', function() {
+            var id = $(this).data('id');
+            var section = $(this).data('section');
+
+            $("#section").val(section)
+            $("#post_id").val(id)
+
+        });
+
+        
+
+    });
+</script>
+<!-- End Custom Javascript/JQuery -->

@@ -13,7 +13,11 @@
             <small class="text-muted ml-2">{{question.date_published|naturaltime}}</small>
         </p>
         <section class="text-left">
-            <h5><strong>{{question.title|truncatewords:30}}</strong></h5>
+            <h5>
+                <strong>
+                    <a class="text-dark" href="{{question.get_absolute_url}}"> {{question.title|truncatewords:30}} </a>
+                </strong>
+            </h5>
         </section>
     </div>
 
@@ -44,7 +48,7 @@
         </div>
 
         <div class="col-3 text-right pr-3 m-2">
-            <a href="#"><i class="fa fa-share-alt"></i> Share</a>
+            <a href="{% include 'share_link.html' %}" data-toggle="modal" data-target="#shareModal"><i class="fa fa-share-alt"></i> Share</a>
         </div>
     </div>
 </div>

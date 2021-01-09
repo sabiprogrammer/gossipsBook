@@ -34,7 +34,7 @@
 <hr>
 
 <section>
-   {{post.content}}
+   {{post.content | linebreaks}}
 </section>
 
 
@@ -90,8 +90,8 @@
    </div>
 
    <div class="col m-2 p-1 d-inline text-right mr-4">
-       <a href="#" class="mr-3"> <i class="fa fa-share-alt"></i> <span class="d-none d-md-inline">Share</span> </a>
-       <a class="btn btn-outline-dark btn-sm" href="#" class="rfr" data-toggle="modal" data-id="{{post.id}}" data-title="{{post.title}}" data-target="#rfrModal">
+       <a href="{% include 'share_link.html' %}" data-toggle="modal" data-target="#shareModal" class="mr-3"> <i class="fa fa-share-alt"></i> <span class="d-none d-md-inline">Share</span> </a>
+       <a class="btn btn-outline-dark btn-sm rfr" href="#" data-section="{{hidden_id}}" data-toggle="modal" data-id="{{post.id}}" data-title="{{post.title}}" data-target="#rfrModal">
            <i class="fa fa-exclamation-triangle"></i> RFR
        </a>
    </div>
@@ -112,7 +112,7 @@
          <small class="text-muted ml-1">{{comment.date_published|naturaltime}}</small>
 
           <div>
-            {{comment.content}}
+            {{comment.content | linebreaks}}
           </div>
           <hr>
       </div>
@@ -196,15 +196,18 @@
                   <h5>Why do you want to Request For Removal (RFR) of this post?</h5>
                </div>
    
-               <form>
-                  <textarea required class="form-control" name="rfr_form" id="rfr_form" cols="30" rows="5" placeholder="State your reason here and we will consider it"></textarea>
-               </form>
+               <form method="POST" action="{% url 'controls:rfr' %}">
+                  <textarea required class="form-control" name="reason" id="rfr_form" cols="30" rows="5" placeholder="State your reason here and we will consider it"></textarea>
+                  <input type="hidden" name="section" id="section">
+                  <input type="hidden" name="post_id" id="post_id">
+                  {% csrf_token %}
+                  
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Go Back</button>
+                    <button class="btn btn-outline-primary btn-sm"><i class="fa fa-send"></i> Submit </button>
+                   </div>
+                </form>
                <br>
-           </div>
-
-           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal">Go Back</button>
-            <button class="btn btn-outline-primary btn-sm" data-dismiss="modal"><i class="fa fa-send"></i> Submit </button>
            </div>
        </div>
    </div>

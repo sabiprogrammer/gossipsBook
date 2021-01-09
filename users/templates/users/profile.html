@@ -38,7 +38,6 @@
                         <li class="list-group-item"> Account   </li>
                         <li class="list-group-item"> Privacy Policy  </li>
                         <li class="list-group-item"> Email and Notifcation     </li>
-                        <li class="list-group-item"> Languages  </li>
                       </ul>
                   </div>
 
@@ -128,6 +127,23 @@
                                               {{p_form.bio}}
                                             </div>
 
+                                            <br>
+                                            <div>
+                                              <label>Location:   </label>
+                                              {{p_form.location}}
+                                            </div>
+
+                                            <br>
+                                            <div>
+                                              <label>Languages:   </label>
+                                              {{p_form.languages}}
+                                            </div>
+                                            <div>
+                                              <br>
+                                              <label>Interests:   </label>
+                                              {{p_form.interests}}
+                                            </div>
+
                                           </div>
                                         </div>
 
@@ -145,7 +161,6 @@
     </div>
 
 
-<script src="{% static 'js/jquery.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
+{% include 'scripts.html' %}
 </body>
 </html>

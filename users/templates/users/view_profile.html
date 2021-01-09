@@ -66,7 +66,7 @@
                         <p>Languages: {{user_profile.profile.languages}}</p>
                         {% if request.user == user_profile %}
                         <p>
-                            <a class="p-0 m-0" href="#"> Edit Profile</a>
+                            <a class="p-0 m-0" href="{% url 'users:user_profile' %}"> Edit Profile</a>
                         </p>
                         {% endif %}
                     </div>
@@ -87,7 +87,7 @@
                             <a href="#" class="btn btn-outline-dark"><i class="fa fa-send"></i> Send Message</a>
                         </div>
                         <div class="col-4">
-                            <a href="#" class="btn btn-outline-dark"><i class="fa fa-share-alt"></i> Share Profile</a>
+                            <a href="{% include 'share_link.html' %}" data-toggle="modal" data-target="#shareModal" class="btn btn-outline-dark"><i class="fa fa-share-alt"></i> Share Profile</a>
                         </div>
                     </div>
                 </div>
@@ -104,7 +104,7 @@
                             <a href="#"><i class="fa fa-send"></i></a>
                         </div>
                         <div class="col-2">
-                            <a href="#"><i class="fa fa-share-alt"></i></a>
+                            <a href="{% include 'share_link.html' %}" data-toggle="modal" data-target="#shareModal"><i class="fa fa-share-alt"></i></a>
                         </div>
                     </div>
                 </div>
@@ -169,7 +169,7 @@
                     <h6>Bio:</h6>
                     <div class="card">
                         <div class="card-body">
-                                {{user_profile.profile.bio|safe}}
+                                {{user_profile.profile.bio|safe|linebreaks}}
                         </div> 
                     </div>
                 </main>

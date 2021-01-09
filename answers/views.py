@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.urls import reverse
 
 from questions.models import QuestionsModel
 from .models import AnswersModel
@@ -29,9 +30,10 @@ def answers_new(request):
             question = QuestionsModel.objects.get(id=question_id)
             AnswersModel.objects.create(question=question, author=user, content=answer)
             messages.success(request, 'Well done! You just answered a question')
+            return redirect(reverse('questions:question_detail', kwargs={'question_slug': question.slug}))
         except:
             messages.warning(request, 'Oops! Sorry but an error occured.')
-        return redirect('questions:questions_index')
+            return redirect('questions:questions_index')
     else:
         messages.warning(request, 'You need to log in to answer this question')
         return redirect('questions:questions_index')

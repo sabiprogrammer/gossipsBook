@@ -37,17 +37,26 @@ from .models import Profile
 #             })
 #         }
 
-
+from .models import Interests
 class ProfileUpdateForm(forms.ModelForm):
-    # image = forms.CharField(widget=forms.FileInput(attrs={'class': 'form-control'}))
+    # ind = forms.multi
+    interests = forms.ModelMultipleChoiceField(queryset=Interests.objects.all(), label="Interests")
 
     class Meta:
         model = Profile
-        fields = ['image', 'bio']
+        fields = ['image', 'bio', 'location', 'languages', 'interests']
         widgets = {
             'bio': forms.Textarea(attrs={
                 'class': 'form-control',
                 'placeholder': 'Please write a brief description of yourself...',
+            }),
+            'location': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Update your location',
+            }),
+            'languages': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter languages you speak separated by comma',
             }),
             'image': forms.FileInput(attrs={
                 'class': 'form-control-file p-3',

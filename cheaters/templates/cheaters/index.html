@@ -27,7 +27,7 @@
         </h6>
         <a href="{% url 'cheaters:cheater_detail' cheater.slug %}" class="text-dark">
             <h6> <strong>{{cheater.title|truncatewords:30}}</strong> </h6>
-            <p class="card-text"> {{cheater.content|truncatewords:255}} </p>
+            <p class="card-text"> {{cheater.content | linebreaks | truncatewords:255}} </p>
         </a>
     </div>
 
@@ -84,7 +84,7 @@
         </div>
 
         <div class="col m-2 p-1 d-inline text-right mr-4">
-            <a href="#" class="mr-3"> <i class="fa fa-share-alt"></i> <span class="d-none d-md-inline">Share</span></a>
+            <a href="{% include 'share_link.html' %}" data-toggle="modal" data-target="#shareModal" class="mr-3"> <i class="fa fa-share-alt"></i> <span class="d-none d-md-inline">Share</span></a>
             <a href="#" class="comment" data-toggle="modal" data-id="{{cheater.id}}" data-title="{{cheater.title}}" data-target="#commentModal">
                 <i class="fa fa-comment"></i> <span class="d-none d-md-inline">Comment </span>  ({{cheater.get_total_comments.count}})
             </a>

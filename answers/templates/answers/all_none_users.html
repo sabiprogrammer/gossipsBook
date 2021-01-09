@@ -66,23 +66,23 @@
                     <span class="ml-2"> {{answer.author.username}} </span>
                 </div>
                 <div class="col text-right">
-                    <a href="/accounts/login" style="background-color: #F77402; color: white; border-color: white" class="btn btn-primary" data-toggle="modal" data-target="#send_to_category">
-                        <i class="fa fa-sign-in"></i> Login to answer this question
+                    <a href="/accounts/login" style="background-color: #F77402; color: white; border-color: white" class="btn btn-primary">
+                        <i class="fa fa-sign-in"></i> Login to answer <span class="d-none d-md-inline">this question</span>
                     </a>
                 </div>
             </div>
-            <p class="card-text"> {{answer.content}} </p>
+            <p class="card-text"> {{answer.content| linebreaks}} </p>
 
 
             <div class="row">
                 <div class="col m-2 pl-3">
-                    <a href="/accounts/login" type="button" class="btn btn-sm btn-info"> <i class="fa fa-thumbs-up"></i> Login to Like (44)</a>
+                    <a href="/accounts/login" type="button" class="btn btn-sm btn-info"> <i class="fa fa-thumbs-up"></i> Login to Like ({{answer.total_likes}})</a>
                     </form>
                 </div>
 
                 <div class="col m-2 p-1">
-                    <div class="col d-inline"> <i class="fa fa-share-alt"></i> Share</div>
-                    <div class="col d-inline"><i class="fa fa-comment"></i> Reply</div>
+                    <a class="col d-inline" href="{% include 'share_link.html' %}" data-toggle="modal" data-target="#shareModal"> <i class="fa fa-share-alt"></i> <span class="d-none d-md-inline">Share</span></a>
+                    <a class="col d-inline"><i class="fa fa-comment"></i> Reply</a>
                 </div>
             </div>
             {% empty %}
@@ -98,49 +98,6 @@
 
 {% endfor %}
 
-
-<!-- Modal -->
-<div class="modal fade" id="send_to_category" tabindex="-1" role="dialog" aria-labelledby="send_to_categoryTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">
-                    <img style="height:30px; width:30px;" class="img-fluid rounded-circle" src="{% static 'images/default_profile_pic.png' %}"> username
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-            </div>
-
-
-
-            <div class="modal-body">
-                <div>
-                    <h6>Answer this question</h6>
-                    <div class="form-check form-check-inline">
-                        <label class="form-check-label checkbox" for="business1">
-                    <input class="form-check-input checkbox_input" type="radio" name="category" value="business1" id="business1">
-                    <div class="checkbox_box"></div>
-                       Gossips
-                  </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <label class="form-check-label checkbox" for="entertainment1">
-                      <input class="form-check-input checkbox_input" name="category" type="radio" id="entertainment1" value="entertainment1">
-                      <div class="checkbox_box"></div>
-                      Cheaters
-                  </label>
-                    </div>
-                </div>
-                <br>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-dark" data-dismiss="modal">Coming Soon!</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock content %} {% block navigation %} {% include 'navigation.html' %} {% endblock navigation %} {% block aside %} {% include 'aside.html' %} {% endblock aside %} {% block pagination %}
 <div class="mb-2 mt-3">
     {% include 'pagination.html' %}

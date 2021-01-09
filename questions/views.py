@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.text import slugify
 from django.contrib import messages
 
@@ -56,4 +56,5 @@ def oppose_question(request):
 
 
 def question_detail(request, question_slug):
-    return redirect('questions:questions_index')
+    question = get_object_or_404(QuestionsModel, slug=question_slug)
+    return render(request, 'questions/question_detail.html', context={'question':question})

@@ -72,47 +72,37 @@
   {% endblock pagination %}
 <!-- End pagination -->
 
-<script src="{% static 'js/jquery.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-
-<!-- Custom Javascript/JQuery -->
-
-<script>
-    $(document).ready(function(){
-        $(".data").hide();
-
-        $('#myForm input').on('change', function(){
-            var setValue = $('[type="radio"]:checked').val();
-            $(".data").hide();
-            $("#" + $(this).val()).fadeIn(700);
-        });
-
-
-
-        $('.reaction').on('click', function() {
-            var id = $(this).data('id');
-            var action = $(this).data('action');
-            var boldAction = "<strong class='text-uppercase'>"+ action +"</strong>"
-            var message = 'You are about to vote "'+ boldAction +'" for this post'
-
-            $("#gossip_id").val(id)
-            $("#action").val(action)
-
-            $("#cheater_id").val(id)
-
-            $(".appendReaction").remove()
-            $("<p class='appendReaction'>" + message + "</p>").insertAfter('#reactionSection');
-
-        });
-
-    });
-</script>
-<!-- End Custom Javascript/JQuery -->
+{% include 'scripts.html' %}
 
 <!-- customJs -->
   {% block customJs %}
 
   {% endblock customJs %}
 <!-- End customJs -->
+
+
+<!-- Share Modal -->
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+              <div class="container">
+              <h6>Share on:</h6>
+                <div class="row justify-content-center">
+                  <img style="height:50px; width:50px;" class="img-fluid rounded-circle mr-4" src="{% static 'images/default_profile_pic.png' %}">
+                  <img style="height:50px; width:50px;" class="img-fluid rounded-circle mr-4" src="{% static 'images/default_profile_pic.png' %}">
+                  <img style="height:50px; width:50px;" class="img-fluid rounded-circle mr-4" src="{% static 'images/default_profile_pic.png' %}">
+                  <img style="height:50px; width:50px;" class="img-fluid rounded-circle" src="{% static 'images/default_profile_pic.png' %}">
+                </div>
+              </div>
+              </br>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-outline-dark" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End share Modal -->
 </body>
 </html>

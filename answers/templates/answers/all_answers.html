@@ -27,21 +27,23 @@
                     </button>
                 </div>
             </div>
-            <p class="card-text"> {{answer.content}} </p>
+            <p class="card-text"> {{answer.content| linebreaks}} </p>
 
 
             <div class="row">
                 <div class="col m-2 pl-3">
                     <form action="{% url 'answers:like_answer' answer.id%}">
                         {% if user in answer.likes.all %}
-                        <button class="btn btn-sm btn-danger"> <i class="fa fa-thumbs-down"></i> Unlike </button> {% else %}
-                        <button class="btn btn-sm btn-primary"> <i class="fa fa-thumbs-up"></i> Like (44) </button> {% endif %}
+                        <button class="btn btn-sm btn-danger"> <i class="fa fa-thumbs-up"></i> liked {{answer.total_likes}} </button> 
+                        {% else %}
+                        <button class="btn btn-sm btn-primary"> <i class="fa fa-thumbs-up"></i> {{answer.total_likes}} Like{{answer.total_likes | pluralize}} </button> 
+                        {% endif %}
                     </form>
                 </div>
 
                 <div class="col m-2 p-1">
-                    <div class="col d-inline"> <i class="fa fa-share-alt"></i> Share</div>
-                    <div class="col d-inline"><i class="fa fa-comment"></i> Reply</div>
+                    <a class="col d-inline" href="{% include 'share_link.html' %}" data-toggle="modal" data-target="#shareModal"> <i class="fa fa-share-alt"></i> Share</a>
+                    <a class="col d-inline"><i class="fa fa-comment"></i> Reply</a>
                 </div>
             </div>
             {% empty %}
