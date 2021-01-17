@@ -22,11 +22,12 @@
     </div>
 
     {% if question.image %}
-    <img class="card-img-bottom" style="max-height:420px;" src="{{question.image.url}}" alt="{{question.title}} image"> {% endif %}
+    <img class="card-img-bottom" style="max-height:420px;" src="{{question.image.url}}" alt="{{question.title}} image"> 
+    {% endif %}
 
     <div class="row">
         <div class="col-7 m-2">
-            <button title="answer this questions" {% if user == question.author %} disabled {% endif %} class="btn btn-sm btn-primary answerQuestion" style="background-color: #F77402; color: white; border-color: white;" data-toggle="modal" data-target="#answerQuestionModal"
+            <button title="answer this questions" {% if user == question.author %} disabled {% endif %} class="btn btn-sm btn-primary answerQuestion" style="background-color: #FF9933; color: white; border-color: white;" data-toggle="modal" data-target="#answerQuestionModal"
                 data-id="{{question.id}}" data-image="{{question.author.profile.image.url}}" data-username="{{question.author.username}}" data-title="{{question.title}}">
                     <i class="fa fa-edit"></i> 
                 <span> Answer </span> ({{question.get_answers.count}})       

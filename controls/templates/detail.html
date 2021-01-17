@@ -19,19 +19,21 @@
 
    <div class="col-7">
       <div class="progress">
-            <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: {{post.percent_true}}%" aria-valuenow="{{post.percent_true}}" aria-valuemin="0" aria-valuemax="100">{{post.percent_true}}%</div>
-            <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: {{post.percent_false}}%" aria-valuenow="{{post.percent_false}}" aria-valuemin="0" aria-valuemax="100">{{post.percent_false}}%</div>
+            <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: {{post.percent_true}}%" aria-valuenow="{{post.percent_true}}" aria-valuemin="0" aria-valuemax="100">{{post.percent_true| floatformat:1}}%</div>
+            <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: {{post.percent_false}}%" aria-valuenow="{{post.percent_false}}" aria-valuemin="0" aria-valuemax="100">{{post.percent_false| floatformat:1}}%</div>
       </div>
       <div class="text-right">{{post.get_total_voters}} person{{post.get_total_voters|pluralize}} voted</div>
    </div>
 </div>
-<hr>
 
+{% if post.image %}
+<hr>
 <section>
    <img class="img-fluid" src="{{post.image.url}}" alt="gossips book" style="max-height: 300px; width: 100%;">
 </section>
-
 <hr>
+{% endif %}
+
 
 <section>
    {{post.content | linebreaks}}
@@ -43,7 +45,7 @@
        <div class="row d-inline">
            <form class="d-inline">
                    {% if request.user in post.true.all or request.user in post.false.all %}
-                   <button type="button" class="btn btn-sm btn-primary disabled">
+                   <button type="button" class="true_reaction_button btn btn-sm disabled">
                        <i class="fa fa-check"></i> True
                    </button> 
                    {% else %}
@@ -52,7 +54,7 @@
                        data-id="{{post.id}}" 
                        data-action="true" 
                        data-target="#reactionModal"  
-                       class="reaction btn btn-sm btn-primary"> 
+                       class="true_reaction_button reaction btn btn-sm btn-primary"> 
                        <i class="fa fa-check"></i> 
                        True
                    </button> 
@@ -61,7 +63,7 @@
 
            <form class="d-inline">
                {% if request.user in post.false.all or request.user in post.true.all %}
-               <button type="button" class="btn btn-sm btn-danger disabled">
+               <button type="button" class="false_reaction_button btn btn-sm disabled">
                        <i class="fa fa-times"></i> False
                    </button> 
                {% else %}
@@ -70,7 +72,7 @@
                    data-id="{{post.id}}" 
                    data-action="false" 
                    data-target="#reactionModal" 
-                   class="reaction btn btn-sm btn-danger"> 
+                   class="false_reaction_button reaction btn btn-sm btn-danger"> 
                    <i class="fa fa-times"></i> 
                    False
                </button> 
@@ -79,11 +81,11 @@
        </div>
 
        {% if request.user in post.true.all %}
-       <div style="color: #F77402; margin-left: -10px;" class="text-small">
+       <div style="color: #FF9933; margin-left: -10px;" class="text-small">
           <small>You voted true</small> 
        </div>
        {% elif request.user in post.false.all %}
-       <div style="color: #F77402; margin-left: -10px;" class="text-small">
+       <div style="color: #FF9933; margin-left: -10px;" class="text-small">
            <small>You voted false</small>
        </div>
        {% endif %}
@@ -146,6 +148,7 @@
      {% endif %}
    </div>
  </div>
+ <!-- End Comments Form -->
 
 
  

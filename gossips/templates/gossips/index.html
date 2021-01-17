@@ -2,13 +2,20 @@
 <div class="card mb-4">
     <div class="card-body">
         <h6 class="card-title">
-            <a href="{% url 'users:user_view_profile' gossip.author.username %}" class="text-dark">
-                <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{{gossip.author.profile.image.url}}"> 
-                {{gossip.author.username}}
-            </a>
-            
-
-            <small class="text-muted ml-2">{{gossip.date_published|naturaltime}}</small>
+            <div class="mb-3 row ml-1">
+                <div>
+                   <img class="img-fluid rounded-circle" src="{{gossip.author.profile.image.url}}" alt="{{gossip.author.username}} image" style="width: 35px; height: 35px;">
+                </div>
+          
+                <div class="col-8">
+                   <strong><a href="{% url 'users:user_view_profile' gossip.author.username %}" class="text-dark">{{gossip.author.username}}</a>  </strong>
+                   <small class="text-muted ml-1">{{gossip.date_published|naturaltime}}</small>
+                    <div class="text-muted mt-2 mr-3">
+                        {{gossip.author.profile.designation}}
+                    </div>
+                </div>
+            </div>
+         
             <div class="row">
                 <div class="col">
 
@@ -16,8 +23,8 @@
 
                 <div class="col">
                     <div class="progress">
-                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: {{gossip.percent_true}}%" aria-valuenow="{{gossip.percent_true}}" aria-valuemin="0" aria-valuemax="100">{{gossip.percent_true}}%</div>
-                        <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: {{gossip.percent_false}}%" aria-valuenow="{{gossip.percent_false}}" aria-valuemin="0" aria-valuemax="100">{{gossip.percent_false}}%</div>
+                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: {{gossip.percent_true}}%" aria-valuenow="{{gossip.percent_true}}" aria-valuemin="0" aria-valuemax="100">{{gossip.percent_true | floatformat:1}}%</div>
+                        <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: {{gossip.percent_false}}%" aria-valuenow="{{gossip.percent_false}}" aria-valuemin="0" aria-valuemax="100">{{gossip.percent_false | floatformat:1}}%</div>
                     </div>
                     <div class="text-right">{{gossip.get_total_voters}} person{{gossip.get_total_voters|pluralize}} voted</div>
                 </div>
@@ -40,7 +47,7 @@
             <div class="row d-inline">
                 <form class="d-inline">
                         {% if user in gossip.true.all or user in gossip.false.all %}
-                        <button type="button" class="btn btn-sm btn-primary disabled">
+                        <button type="button" class="true_reaction_button btn btn-sm disabled">
                             <i class="fa fa-check"></i> True
                         </button> 
                         {% else %}
@@ -49,7 +56,7 @@
                             data-id="{{gossip.id}}" 
                             data-action="true" 
                             data-target="#reactionModal"  
-                            class="reaction btn btn-sm btn-primary"> 
+                            class="true_reaction_button reaction btn btn-sm btn-primary"> 
                             <i class="fa fa-check"></i> 
                             True
                         </button> 
@@ -58,7 +65,7 @@
 
                 <form class="d-inline">
                     {% if user in gossip.false.all or user in gossip.true.all %}
-                    <button type="button" class="btn btn-sm btn-danger disabled">
+                    <button type="button" class="false_reaction_button btn btn-sm disabled">
                             <i class="fa fa-times"></i> False
                         </button> 
                     {% else %}
@@ -67,7 +74,7 @@
                         data-id="{{gossip.id}}" 
                         data-action="false" 
                         data-target="#reactionModal" 
-                        class="reaction btn btn-sm btn-danger"> 
+                        class="false_reaction_button reaction btn btn-sm btn-danger"> 
                         <i class="fa fa-times"></i> 
                         False
                     </button> 
@@ -76,11 +83,11 @@
             </div>
 
             {% if user in gossip.true.all %}
-            <div style="color: #F77402; margin-left: -10px;" class="text-small">
+            <div style="color: #FF9933; margin-left: -10px;" class="text-small">
                <small>You voted true</small> 
             </div>
             {% elif user in gossip.false.all %}
-            <div style="color: #F77402; margin-left: -10px;" class="text-small">
+            <div style="color: #FF9933; margin-left: -10px;" class="text-small">
                 <small>You voted false</small>
             </div>
             {% endif %}

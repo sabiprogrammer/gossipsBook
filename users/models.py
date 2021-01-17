@@ -2,9 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-
-from PIL import Image
 from django.urls import reverse
+from PIL import Image
 
 
 def upload_location(instance, filename, *args, **kwargs):
@@ -29,6 +28,7 @@ class Profile(models.Model):
     image = models.ImageField(default='default_profile_pic2.png', upload_to=upload_location, blank=True)
     bio = models.TextField(max_length=455, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
+    designation = models.CharField(max_length=255, null=True, blank=True)
     languages = models.CharField(max_length=255, null=True, blank=True)
     interests = models.ManyToManyField(Interests, related_name='interests', blank=True)
     followers = models.ManyToManyField(User, related_name='followers', blank=True)

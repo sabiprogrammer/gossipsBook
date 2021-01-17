@@ -20,14 +20,17 @@ def cheaters_new(request):
         image = request.FILES.get('image', False)
         user = request.user
 
-        if title and content and image and user:
+        if title and content and user:
 
             slugs = CheatersModel.objects.filter(slug=slugify(title))
 
             if slugs:
                 messages.warning(request, 'Sorry, but a user already shared this same cheater story')
             else:
-                cheater_model = CheatersModel.objects.create(title=title, author=user, content=content, image=image)
+                if image:
+                    CheatersModel.objects.create(title=title, author=user, content=content, image=image)
+                else:
+                    CheatersModel.objects.create(title=title, author=user, content=content)
                 messages.success(request, 'Well Done! You just shared a Cheater story!!')
             return redirect('cheaters:cheaters_index')
         else:

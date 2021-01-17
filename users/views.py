@@ -8,6 +8,7 @@ from django.urls import reverse
 from questions.models import QuestionsModel
 from cheaters.models import CheatersModel
 from gossips.models import GossipsModel
+from answers.models import AnswersModel
 
 from .forms import UserUpdateForm, ProfileUpdateForm
 
@@ -65,8 +66,9 @@ def user_profile(request):
 
     p_form = ProfileUpdateForm(instance=request.user.profile)
     u_form = UserUpdateForm(instance=request.user)
+    user_profile = User.objects.get(username=request.user.username)
 
-    context = {'p_form': p_form, 'u_form': u_form, 'email': email}
+    context = {'p_form': p_form, 'u_form': u_form, 'email': email, 'user_profile': user_profile}
     return render(request, 'users/profile.html', context)
 
 
@@ -80,6 +82,7 @@ def user_view_profile(request, username):
     user_questions = QuestionsModel.objects.filter(author=user_profile).order_by('-date_published')
     user_gossips = GossipsModel.objects.filter(author=user_profile).order_by('-date_published')
     user_cheaters = CheatersModel.objects.filter(author=user_profile).order_by('-date_published')
+    user_answers = AnswersModel.objects.filter(author__username=username)
 
     followers = user_profile.profile.followers.all()
     following = user_profile.profile.following.all()
@@ -88,6 +91,7 @@ def user_view_profile(request, username):
                 'user_questions': user_questions, 
                 'user_gossips': user_gossips, 
                 'user_cheaters': user_cheaters,
+                'user_answers' : user_answers,
                 'followers': followers,
                 'following': following}
     return render(request, 'users/view_profile.html', context)

@@ -13,88 +13,59 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
 
     <title>{% block title%} {% endblock title%} | Gossip Books </title>
+
+    <style>
+    .checkbox-1x {
+        transform: scale(1.5);
+        -webkit-transform: scale(1.5);
+    }
+    /* .checkbox-2x {
+        transform: scale(2);
+        -webkit-transform: scale(2);
+    } */
+    li{
+        display: inline;
+    }
+    </style>
 </head>
 <body>
-
-
-<section class="container mt-5 mb-5">
-     <div class="card-header bg-dark text-white" style="box-shadow: 0px 4px 5px grey;">
-         <h1>What are your interests?</h1>
-         <br>
-         <p style="font-size:18px;">
-             Whatever you're interested in, GossipsBook has it all. If you tell us what interests you, we'll be able to
-             curate your experience.
-         </p>
-     </div>
-    <br>
-    <div style="box-shadow: 3px 3px 8px 5px grey;" class="p-5">
-        <form class="form-inline" method="post">
-            {% csrf_token %}
-            <div class="row text-center">
-                 <div class="card text-white bg-secondary col-4 m-2 p-4 mb-5" style="max-width: 15rem;">
-                        <div class="custom-control custom-checkbox">
-                            <div class="card-header">
-                                <input type="checkbox" class="custom-control-input" id="questions" name="questions">
-                                <label class="custom-control-label" for="questions">Questions</label>
-                            </div>
-                        </div>
-                 </div>
-
-                 <div class="card text-white bg-primary col-4 m-2 p-4 mb-5" style="max-width: 15rem;">
-                    <div class="custom-control custom-checkbox">
-                            <div class="card-header">
-                                <input type="checkbox" class="custom-control-input" id="gossips" name="gossips">
-                                <label class="custom-control-label" for="gossips">Gossips</label>
-                            </div>
-                    </div>
-                 </div>
-
-                 <div class="card text-white bg-success col-4 m-2 p-4 mb-5" style="max-width: 15rem;">
-                    <div class="custom-control custom-checkbox">
-                            <div class="card-header">
-                                <input type="checkbox" class="custom-control-input" id="cheaters" name="cheaters">
-                                <label class="custom-control-label" for="cheaters">Cheaters</label>
-                            </div>
-                    </div>
-                 </div>
-
-                 <div class="card text-white bg-danger col-4 m-2 p-4 mb-5" style="max-width: 15rem;">
-                    <div class="custom-control custom-checkbox">
-                            <div class="card-header">
-                                <input type="checkbox" class="custom-control-input" id="travels" name="travels">
-                                <label class="custom-control-label" for="travels">Travels</label>
-                            </div>
-                    </div>
-                 </div>
-
-                 <div class="card text-white bg-warning col-4 m-2 p-4 mb-5" style="max-width: 15rem;">
-                    <div class="custom-control custom-checkbox">
-                            <div class="card-header">
-                                <input type="checkbox" class="custom-control-input" id="sports" name="sports">
-                                <label class="custom-control-label" for="sports">Sports</label>
-                            </div>
-                    </div>
-                 </div>
-
-                <div class="card text-white bg-info col-4 m-2 p-4 mb-5" style="max-width: 15rem;">
-                    <div class="custom-control custom-checkbox">
-                            <div class="card-header">
-                                <input type="checkbox" class="custom-control-input" id="politics" name="politics">
-                                <label class="custom-control-label" for="politics">Politics</label>
-                            </div>
-                    </div>
-                </div>
-
-            <button class="btn btn-outline-warning btn-block">Continue</button>
+    <section class="container mt-5 mb-5">
+        <div class="bg-light d-none d-md-block p-4">
+            <h2>What are your interests?</h2>
+            <hr>
+            <p style="font-size:18px;">
+                Whatever you're interested in, GossipsBook has it all. If you tell us what interests you, we'll be able to
+                curate your experience.
+            </p>
         </div>
-        </form>
-        </div>
-</section>
 
+        <div class="bg-light d-md-none p-3">
+            <h3>What are your interests?</h3>
+            <hr>
+            <p style="font-size:15px;">
+                Whatever you're interested in, GossipsBook has it all. If you tell us what interests you, we'll be able to
+                curate your experience.
+            </p>
+        </div>
+        <div class="p-5">
+            <form method="POST">
+                <div class="row">
+                    {% for interest in interests %}
+                    <div class="col-4">
+                        <label for="interest_{{interest.id}}"> 
+                            <input type="checkbox" {% if interest in request.user.profile.interests.all %} checked {% endif %} name="interests" value="{{interest.id}}" id="interest_{{interest.id}}" class="m-3 checkbox-1x">
+                            {{interest.title}} 
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>    
+                <button type="submit" class="btn btn-block btn-outline-dark">Continue &rarr;</button>
+                {% csrf_token %}
+            </form>
+        </div>
+    </section>
 <script src="{% static 'js/jquery.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 </body>

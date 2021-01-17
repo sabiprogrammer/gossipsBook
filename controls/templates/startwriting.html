@@ -32,8 +32,8 @@
     }
     
     .checkbox_input:checked+.checkbox_box {
-        background: #F77402;
-        border-color: #F77402;
+        background: #FF9933;
+        border-color: #FF9933;
     }
     
     .checkbox_input:checked+.checkbox_box::after {
@@ -114,13 +114,19 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <input required type="text" class="form-control" name="title" placeholder='Start your question with "What", "Why, "How", etc...'>
-                        <small class="form-text text-muted">Get answers from members of the community right away...</small>
+                        
+                        <div>
+                            <span>Hint (<i class="fa fa-bolt"></i>):</span>
+                        </div>
+                        <div>
+                            <span class="text-danger">Feel free! Express yourself. Ask anything you'll like to know about...</span>
+                        </div>
                     </div>
 
                     <div class="row">
                         <div class="form-group col">
                             <input type="file" accept="image/*" class="form-control-file" name="image">
-                            <small class="text-muted">Add Image (optional - Image only) </small>
+                            <small class="text-muted">Add Image</small>
                         </div>
 
                         <div class="col text-right mr-3">
@@ -129,28 +135,7 @@
                     </div>
 
                     <div>
-                        <h6>Related Tags:</h6>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label checkbox" for="business4">
-                        <input class="form-check-input checkbox_input" type="checkbox" name="business4" value="business" id="business4">
-                        <div class="checkbox_box"></div>
-                           business
-                      </label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label checkbox" for="entertainment4">
-                          <input class="form-check-input checkbox_input" type="checkbox" name="entertainment4" id="entertainment4" value="entertainment">
-                          <div class="checkbox_box"></div>
-                          entertainment
-                      </label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label checkbox" for="sports4">
-                          <input class="form-check-input checkbox_input" name="sports4" type="checkbox" id="sports4" value="sports">
-                          <div class="checkbox_box"></div>
-                          sports
-                      </label>
-                        </div>
+                        {% include 'related_tags.html' with title_tag_section="Related Tags:" name="d" %}
                     </div>
 
                     <div class="modal-footer">
@@ -165,44 +150,29 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <input required type="text" class="form-control" name="title" placeholder="Give your gossip a title...">
+                        <div>
+                            <span>Hint (<i class="fa fa-bolt"></i>):</span>
+                        </div>
+                        <div>
+                            <span class="text-danger">Do you have a gossip to share? Share it! Let's see what our users think...</span>
+                        </div>
                     </div>
                     <div class="form-group">
                         <textarea required class="form-control" name="content" cols="30" rows="10" placeholder="Briefly let us about this gossip..."></textarea>
                     </div>
                     <div class="row">
                         <div class="form-group col">
-                            <input required type="file" accept="image/*" class="form-control-file" name="image">
-                            <small class="text-muted">Add Proof (Mandatory - Image only)</small>
+                            <input type="file" accept="image/*" class="form-control-file" name="image">
+                            <small class="text-muted">Add Proof (Image only)</small>
                         </div>
 
                         <div class="col text-right mr-3">
-                            <i class="fa fa-link"></i><small class="text-muted"> Add a link (optional) </small>
+                            <i class="fa fa-link"></i><small class="text-muted"> Add a link </small>
                         </div>
                     </div>
 
                     <div>
-                        <h6>Related Tags:</h6>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label checkbox" for="business5">
-                    <input class="form-check-input checkbox_input" type="checkbox" name="business5" value="business" id="business5">
-                    <div class="checkbox_box"></div>
-                       business
-                  </label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label checkbox" for="entertainment5">
-                      <input class="form-check-input checkbox_input" type="checkbox" id="entertainment5" value="entertainment">
-                      <div class="checkbox_box"></div>
-                      entertainment
-                  </label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label checkbox" for="sports5">
-                      <input class="form-check-input checkbox_input" type="checkbox" id="sports5" value="sports">
-                      <div class="checkbox_box"></div>
-                      sports
-                  </label>
-                        </div>
+                        {% include 'related_tags.html' with title_tag_section="Related Tags:" name="e" %}
                     </div>
 
                     <div class="modal-footer">
@@ -215,44 +185,29 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <input required type="text" class="form-control" name="title" placeholder="What is your title...">
+                        <div>
+                            <span>Hint (<i class="fa fa-bolt"></i>):</span>
+                        </div>
+                        <div>
+                            <span class="text-danger">Have you ever been cheated? (online or offline)? Our users would like to hear it! Share the story publicly with us...</span>
+                        </div>
                     </div>
                     <div class="form-group">
                         <textarea required class="form-control" name="content" cols="30" rows="10" placeholder="Write a brief description"></textarea>
                     </div>
                     <div class="row">
                         <div class="form-group col">
-                            <input required type="file" accept="image/*" class="form-control-file" name="image" required>
-                            <small class="text-muted">Add Proof (Mandatory - Image only)</small>
+                            <input type="file" accept="image/*" class="form-control-file" name="image">
+                            <small class="text-muted">Add Proof (Image only)</small>
                         </div>
 
                         <div class="col text-right mr-3">
-                            <i class="fa fa-link"></i><small class="text-muted"> Add a link (optional) </small>
+                            <i class="fa fa-link"></i><small class="text-muted"> Add a link </small>
                         </div>
                     </div>
 
                     <div>
-                        <h6>Related Tags:</h6>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label checkbox" for="business6">
-                    <input class="form-check-input checkbox_input" type="checkbox" name="business6" value="business" id="business6">
-                    <div class="checkbox_box"></div>
-                       business
-                  </label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label checkbox" for="entertainment6">
-                      <input class="form-check-input checkbox_input" type="checkbox" id="entertainment6" value="entertainment3">
-                      <div class="checkbox_box"></div>
-                      entertainment
-                  </label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <label class="form-check-label checkbox" for="sports6">
-                      <input class="form-check-input checkbox_input" type="checkbox" id="sports6" value="sports3">
-                      <div class="checkbox_box"></div>
-                      sports
-                  </label>
-                        </div>
+                        {% include 'related_tags.html' with title_tag_section="Related Tags:" name="f" %}
                     </div>
 
 

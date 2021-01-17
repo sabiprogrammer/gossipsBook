@@ -37,7 +37,7 @@
                       <ul class="list-group">
                         <li class="list-group-item"> Account   </li>
                         <li class="list-group-item"> Privacy Policy  </li>
-                        <li class="list-group-item"> Email and Notifcation     </li>
+                        <li class="list-group-item"><a href="/accounts/email/">Email and Notification</a>      </li>
                       </ul>
                   </div>
 
@@ -129,6 +129,12 @@
 
                                             <br>
                                             <div>
+                                              <label>Designation:   </label>
+                                              {{p_form.designation}}
+                                            </div>
+
+                                            <br>
+                                            <div>
                                               <label>Location:   </label>
                                               {{p_form.location}}
                                             </div>
@@ -141,7 +147,12 @@
                                             <div>
                                               <br>
                                               <label>Interests:   </label>
-                                              {{p_form.interests}}
+                                              <ul>
+                                                {% for interest in user_profile.profile.interests.all %}
+                                                    <li>{{ interest.title }} </li>
+                                                {% endfor %}
+                                              </ul>
+                                              <a href="{% url 'controls:welcome' %}">Edit Interests</a>
                                             </div>
 
                                           </div>
@@ -149,7 +160,7 @@
 
                                     </div>
                               <br>
-                              <button class="btn btn-block" style="color:white; background-color: #F77402;">Update Profile</button>
+                              <button class="btn btn-block" style="color:white; background-color: #FF9933;">Update Profile</button>
                             </form>
 
                             <br><br>

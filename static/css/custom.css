@@ -1,5 +1,6 @@
 body {
     background-color: #F1F2F2;
+    font-family: Bebas Neue;
 }
 
 
@@ -7,7 +8,7 @@ body {
 
 .navbar {
     min-height: 50px;
-    background-color: #F77402;
+    background-color: #FF9933;
     box-shadow: 0px 4px 5px grey;
 }
 
@@ -50,17 +51,17 @@ body {
 /* Pagination CUSTOMIZATION */
 
 .page-item.active .page-link {
-    background-color: #F77402;
-    border: 1px solid #F77402;
+    background-color: #FF9933;
+    border: 1px solid #FF9933;
     color: white;
 }
 
 li.page-item {
-    color: #F77402;
+    color: #FF9933;
 }
 
 .page-link {
-    color: #F77402;
+    color: #FF9933;
 }
 
 
@@ -161,13 +162,13 @@ li.page-item {
     top: 90px;
     border-radius: 25px;
     background-color: white;
-    border: 2px solid#F77402;
+    border: 2px solid#FF9933;
     width: 65%;
     font-size: 23px;
 }
 
 .follow-button a {
-    color: #F77402;
+    color: #FF9933;
 }
 
 @media only screen and (max-width: 1200px) {
@@ -195,7 +196,7 @@ li.page-item {
 @media only screen and (max-width: 470px) {
     .follow-button {
         top: -3px;
-        border: 1px solid#F77402;
+        border: 1px solid#FF9933;
     }
 }
 
@@ -209,8 +210,8 @@ li.page-item {
 
 .follow-button {
     background-color: white;
-    border: 1px solid#F77402;
-    color: #F77402;
+    border: 1px solid#FF9933;
+    color: #FF9933;
 }
 
 
@@ -218,4 +219,17 @@ li.page-item {
 
 .profile_details {
     box-shadow: 0px 4px 5px grey;
+}
+
+/* cutomizing the false and true button */
+.false_reaction_button{
+    background-color: #138808;
+    color: white;
+    border-color: #138808;
+}
+
+.true_reaction_button{
+    background-color: #FF9933;
+    color: white;
+    border-color: #FF9933;
 }

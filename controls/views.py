@@ -3,58 +3,32 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
 
+from .models import FalseInformation
+
 from users.models import Interests
+from users.forms import InterestsForm
 from gossips.models import GossipsModel
 from cheaters.models import CheatersModel
 
 
 def index(request):
     if request.user.is_authenticated:
-        return redirect('questions:questions_index')
+        return redirect('gossips:gossips_index')
     else:
         return redirect('/accounts/login')
 
 
 @login_required()
 def welcome(request):
+    interests = Interests.objects.all()
     if request.method == 'POST':
-        questions = request.POST.get('questions', False)
-        gossips = request.POST.get('gossips', False)
-        cheaters = request.POST.get('cheaters', False)
-        travels = request.POST.get('travels', False)
-        sports = request.POST.get('sports', False)
-        politics = request.POST.get('politics', False)
+        form = InterestsForm(request.POST or None, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Interests saved successfully")
+            return redirect('gossips:gossips_index')
 
-        try:
-            if questions:
-                interest = Interests.objects.get(title='Questions')
-                request.user.profile.interests.add(interest)
-
-            if gossips:
-                interest = Interests.objects.get(title='Gossips')
-                request.user.profile.interests.add(interest)
-
-            if cheaters:
-                interest = Interests.objects.get(title='Cheaters')
-                request.user.profile.interests.add(interest)
-
-            if travels:
-                interest = Interests.objects.get(title='Travels')
-                request.user.profile.interests.add(interest)
-
-            if sports:
-                interest = Interests.objects.get(title='Sports')
-                request.user.profile.interests.add(interest)
-
-            if politics:
-                interest = Interests.objects.get(title='Politics')
-                request.user.profile.interests.add(interest)
-            messages.success(request, 'Interests Saved! Welcome To Your Feed')
-        except:
-            pass
-        return redirect('controls:index_page')
-
-    context = {}
+    context = {'interests': interests}
     return render(request, 'welcome.html', context)
 
 
@@ -88,3 +62,5 @@ def feedback(request):
     return redirect('gossips:gossips_index')
 
 
+def false_information(request):
+    return render(request, 'false_information.html', {'posts': FalseInformation.objects.all().order_by('-date_published')})

@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.text import slugify
 from django.contrib import messages
+from django.db.models import Sum
 from django.urls import reverse
 
 from .models import GossipsModel, Comments
@@ -18,17 +19,22 @@ def gossips_new(request):
     if request.method == 'POST':
         title = request.POST.get('title', False)
         content = request.POST.get('content', False)
+        tags = request.POST.get('related_tags', False)
         image = request.FILES.get('image', False)
         user = request.user
 
-        if title and content and image and user:
+        
+        if title and content and user:
 
             slugs = GossipsModel.objects.filter(slug=slugify(title))
 
             if slugs:
                 messages.warning(request, 'Sorry, but a user already shared this same gossip')
             else:
-                gossip_model = GossipsModel.objects.create(title=title, author=user, content=content, image=image)
+                if image:
+                    GossipsModel.objects.create(title=title, author=user, content=content, image=image)
+                else:
+                    GossipsModel.objects.create(title=title, author=user, content=content)
                 messages.success(request, 'Well Done! You just shared a gossips!!')
             return redirect('gossips:gossips_index')
         else:

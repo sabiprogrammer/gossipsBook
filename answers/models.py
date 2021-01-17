@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 # from questions.models import Questions
-import questions.models
+# import questions.models
 
 
 class AnswersModel(models.Model):

@@ -31,7 +31,7 @@ class CheatersModel(models.Model):
     date_published = models.DateTimeField(auto_now_add=True, verbose_name='Date Published')
     date_updated = models.DateTimeField(auto_now=True, verbose_name='Date Updated')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cheater_author')
-    image = models.ImageField(upload_to=upload_location, default='', help_text='Add image (Mandatory)', null=False, blank=False)
+    image = models.ImageField(upload_to=upload_location, default='', help_text='Add image (optional)', null=True, blank=True)
     tags = models.ManyToManyField(Tags, name='q_tags', blank=True)
     shares = models.IntegerField(default=0)
     true = models.ManyToManyField(User, related_name='cheater_true', blank=True)
@@ -48,7 +48,8 @@ class CheatersModel(models.Model):
 
     def get_total_comments(self):
             return self.comments_set.all().order_by('-date_published')
-            
+
+    @property    
     def percent_true(self):
         true_number = int(self.true.all().count())
         false_number = int(self.false.all().count())
@@ -60,6 +61,7 @@ class CheatersModel(models.Model):
             calculate = 0
         return calculate
 
+    @property
     def percent_false(self):
         true_number = int(self.true.all().count())
         false_number = int(self.false.all().count())
