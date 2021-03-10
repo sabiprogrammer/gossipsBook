@@ -1,5 +1,6 @@
-from django.contrib.auth.decorators import login_required
+from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.utils.text import slugify
 from django.contrib import messages
 
@@ -8,7 +9,16 @@ from .models import CheatersModel, Comments
 
 def cheaters_index(request):
     cheaters_all = CheatersModel.objects.all().order_by('-date_published')
-    context = {'cheaters': cheaters_all}
+    paginator = Paginator(cheaters_all, 3)
+    page = request.GET.get('page')
+
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    context = {'cheaters': posts, 'page': posts}
     return render(request, 'cheaters/index.html', context)
 
 
@@ -18,6 +28,8 @@ def cheaters_new(request):
         title = request.POST.get('title', False)
         content = request.POST.get('content', False)
         image = request.FILES.get('image', False)
+        from_question_user = request.POST.get('from_question_user')
+        from_question_answer_provider = request.POST.get('from_question_answer_provider')
         user = request.user
 
         if title and content and user:
@@ -28,9 +40,21 @@ def cheaters_new(request):
                 messages.warning(request, 'Sorry, but a user already shared this same cheater story')
             else:
                 if image:
-                    CheatersModel.objects.create(title=title, author=user, content=content, image=image)
+                    CheatersModel.objects.create(
+                        title=title, 
+                        author=user, 
+                        content=content, 
+                        image=image,
+                        from_question_user=from_question_user,
+                        from_question_answer_provider=from_question_answer_provider)
                 else:
-                    CheatersModel.objects.create(title=title, author=user, content=content)
+                    CheatersModel.objects.create(
+                        title=title, 
+                        author=user, 
+                        content=content,
+                        from_question_user=from_question_user,
+                        from_question_answer_provider=from_question_answer_provider
+                        )
                 messages.success(request, 'Well Done! You just shared a Cheater story!!')
             return redirect('cheaters:cheaters_index')
         else:

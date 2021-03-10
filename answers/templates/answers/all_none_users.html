@@ -80,9 +80,20 @@
                     </form>
                 </div>
 
+                {% static 'images/GossipsBook_logo.png' as post_image %}
                 <div class="col m-2 p-1">
-                    <a class="col d-inline" href="{% include 'share_link.html' %}" data-toggle="modal" data-target="#shareModal"> <i class="fa fa-share-alt"></i> <span class="d-none d-md-inline">Share</span></a>
-                    <a class="col d-inline"><i class="fa fa-comment"></i> Reply</a>
+                    <a href="#" 
+                        data-toggle="modal"
+                        {% if question.image %}
+                        onclick="sharePostFunc('{{question.title}}','{{question.get_absolute_url}}', '{{question.image.url}}')" 
+                        {% else %}
+                        onclick="sharePostFunc('{{question.title}}','{{question.get_absolute_url}}', '{{post_image}}')"
+                        {% endif %}
+                        data-target="#shareModal"  
+                        class="mr-3 share-button"> 
+                        <i class="fa fa-share-alt"></i> 
+                        <span class="d-none d-md-inline">Share</span> 
+                    </a>
                 </div>
             </div>
             {% empty %}
@@ -98,8 +109,9 @@
 
 {% endfor %}
 
-{% endblock content %} {% block navigation %} {% include 'navigation.html' %} {% endblock navigation %} {% block aside %} {% include 'aside.html' %} {% endblock aside %} {% block pagination %}
-<div class="mb-2 mt-3">
-    {% include 'pagination.html' %}
-</div>
-{% endblock pagination %}
+{% endblock content %} 
+{% block navigation %} 
+{% include 'navigation.html' %} 
+{% endblock navigation %} 
+{% block aside %} {% include 'aside.html' %} {% endblock aside %} 
+{% include 'social_share.html' %}

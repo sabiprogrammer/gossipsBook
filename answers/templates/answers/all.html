@@ -36,6 +36,8 @@
                 </div>
               <input type="hidden" name="title" id="gossip_title" value="">
               <input type="hidden" name="content" id="gossip_content" value="">
+              <input type="hidden" name="from_question_user" class="from_question_user" value="">
+              <input type="hidden" name="from_question_answer_provider" class="from_question_answer_provider" value="">
             </form>
 
 
@@ -47,6 +49,8 @@
               </div>
               <input type="hidden" name="title" id="cheater_title" value="">
               <input type="hidden" name="content" id="cheater_content" value="">
+              <input type="hidden" name="from_question_user" class="from_question_user" value="">
+              <input type="hidden" name="from_question_answer_provider" class="from_question_answer_provider" value="">
           </form>
       </div>
     </div>
@@ -54,7 +58,7 @@
 </div>
 {% endblock content %}
 
-
+{% block title %} Answers Section {% endblock title %}
 
 {% block navigation %}
       {% include 'navigation.html' %}
@@ -78,6 +82,13 @@
   $('.send_to_category_button').on('click', function () {
     var question_title = $(this).data('question_title');
     var answer_content = $(this).data('answer_content');
+    var from_question_answer_provider = $(this).data('from_question_answer_provider');
+    var from_question_user = $(this).data('from_question_user');
+
+    $(".from_question_answer_provider").val(from_question_answer_provider);
+    $(".from_question_user").val(from_question_user);
+
+
     $("#gossip_title").val(question_title)
     $("#gossip_content").val(answer_content)
 
@@ -85,6 +96,7 @@
     $("#cheater_content").val(answer_content)
   })
 </script>
+{% include 'social_share.html' %}
 {% endblock customJs %}
 
 

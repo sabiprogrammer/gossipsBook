@@ -25,7 +25,7 @@ class Interests(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='default_profile_pic2.png', upload_to=upload_location, blank=True)
+    image = models.ImageField(default='profile/default_profile_pic2.png', upload_to=upload_location, blank=True)
     bio = models.TextField(max_length=455, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
     designation = models.CharField(max_length=255, null=True, blank=True)
@@ -39,24 +39,16 @@ class Profile(models.Model):
     def __str__(self):
         return f"{self.user.username} profile"
 
-    # def save(self):
-    #     super().save()
-    #
-    #     img = Image.open(self.image.path)
-    #     if img.height > 200 or img.width > 200:
-    #         output = (150, 150)
-    #         img.thumbnail(output)
-    #         img.save(self.image.path)
-
-    # setting a redirect url after post/profile has been created (classed based view)
-    # def get_absolute_url(self):
-    #     return reverse('post-view', kwargs={'pk': self.pk})
-    #
-    # def get_delete_url(self):
-    #     return reverse('post-view', kwargs={'pk': self.pk})
-    #
-    # def get_update_url(self):
-    #     return reverse('post-view', kwargs={'pk': self.pk})
+    # reduce the size of the image if it's more than 1000px
+    def save(self, *args, **kwargs):
+        super().save( *args, **kwargs)
+        
+        if self.image:
+            img = Image.open(self.image.path)
+            if img.height > 1000 or img.width > 1000:
+                output = (600, 600)
+                img.thumbnail(output)
+                img.save(self.image.path)
 
 
 def user_profile(sender, instance, created, **kwargs):
@@ -70,8 +62,3 @@ post_save.connect(user_profile, sender=User)
 @receiver(post_delete, sender=Profile)
 def delete_image(sender, instance, *args, **kwargs):
     instance.image.delete(False)
-
-# @receiver(post_delete, sender=User)
-# def delete_profile(sender, instance, *args, **kwargs):
-#     print('user: ', user)
-#     user.delete(False)

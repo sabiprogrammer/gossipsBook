@@ -1,5 +1,6 @@
-from django.contrib.auth.decorators import login_required
+from django.core.paginator import EmptyPage, Paginator, PageNotAnInteger
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.utils.text import slugify
 from django.contrib import messages
 from django.db.models import Sum
@@ -10,7 +11,16 @@ from .models import GossipsModel, Comments
 
 def gossips_index(request):
     gossips_all = GossipsModel.objects.all().order_by('-date_published')
-    context = {'gossips': gossips_all}
+    paginator = Paginator(gossips_all, 3)
+    page = request.GET.get('page')
+
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    context = {'gossips': posts, 'page': posts}
     return render(request, 'gossips/index.html', context)
 
 
@@ -20,6 +30,8 @@ def gossips_new(request):
         title = request.POST.get('title', False)
         content = request.POST.get('content', False)
         tags = request.POST.get('related_tags', False)
+        from_question_user = request.POST.get('from_question_user')
+        from_question_answer_provider = request.POST.get('from_question_answer_provider')
         image = request.FILES.get('image', False)
         user = request.user
 
@@ -32,9 +44,22 @@ def gossips_new(request):
                 messages.warning(request, 'Sorry, but a user already shared this same gossip')
             else:
                 if image:
-                    GossipsModel.objects.create(title=title, author=user, content=content, image=image)
+                    GossipsModel.objects.create(
+                        title=title, 
+                        author=user, 
+                        content=content, 
+                        image=image,
+                        from_question_user=from_question_user,
+                        from_question_answer_provider=from_question_answer_provider
+                        )
                 else:
-                    GossipsModel.objects.create(title=title, author=user, content=content)
+                    GossipsModel.objects.create(
+                        title=title, 
+                        author=user, 
+                        content=content,
+                        from_question_user=from_question_user,
+                        from_question_answer_provider=from_question_answer_provider
+                        )
                 messages.success(request, 'Well Done! You just shared a gossips!!')
             return redirect('gossips:gossips_index')
         else:

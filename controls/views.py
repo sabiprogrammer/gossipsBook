@@ -1,9 +1,10 @@
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.contrib import messages
 from django.urls import reverse
 
-from .models import FalseInformation
+from .models import FalseInformation, RFRModel, FeedbackModel
 
 from users.models import Interests
 from users.forms import InterestsForm
@@ -32,6 +33,7 @@ def welcome(request):
     return render(request, 'welcome.html', context)
 
 
+@login_required()
 def rfr(request):
     if request.method == 'POST':
         section = request.POST.get('section', False)
@@ -39,13 +41,25 @@ def rfr(request):
         reason = request.POST.get('reason', False)
 
         if section == 'gossip':
-            gossip = get_object_or_404(GossipsModel, id=post_id)
-            print(f'i want to removed gossip: {gossip}')
+            post = get_object_or_404(GossipsModel, id=post_id)
         elif section == 'cheater':
-            cheater = get_object_or_404(CheatersModel, id=post_id)
-            print(f'i want to removed cheater: {cheater}')
+            post = get_object_or_404(CheatersModel, id=post_id)
+
+        post_url = request.build_absolute_uri(post.get_absolute_url())
+        subject = f"Request For Removal for {section} - {post.title}"
+        message = f"Request came from user: {request.user.username} \n \nPost Id: {post.id} \n \nPost Title: {post.title} \n \nPost link: {post_url} \n \nReason: {reason}"
+        send_mail(subject, message, 'gossipsbook.in@gmail.com', ['gossipsbook.in@gmail.com', 'emperorgold360@gmail.com'])
+
+        RFRModel.objects.create(
+            user = request.user,
+            post_id = post_id,
+            post_title = post.title,
+            section = section,
+            reason = reason
+            )
+
         messages.success(request, 'Your request has been submitted and will be reviewed')
-    return redirect('questions:questions_index')
+    return redirect('gossips:gossips_index')
 
 
 def feedback(request):
@@ -57,6 +71,18 @@ def feedback(request):
         else:
             username = "AnonymousUser"
             email = "AnonymousUser"
+
+        user = username
+        email = email
+        subject = 'Gossipsbook - New Feedback Message'
+        message = f"Feedback from '{username}'. \nEmail: {email} \n \nMessage: {feedback_message}"
+        send_mail(subject, message, 'gossipsbook.in@gmail.com', ['gossipsbook.in@gmail.com', 'emperorgold360@gmail.com'])
+
+        FeedbackModel.objects.create(
+            user = username,
+            email = email,
+            message = feedback_message,
+            )
         
         messages.success(request, 'Feedback received. Thank you!')
     return redirect('gossips:gossips_index')
@@ -64,3 +90,8 @@ def feedback(request):
 
 def false_information(request):
     return render(request, 'false_information.html', {'posts': FalseInformation.objects.all().order_by('-date_published')})
+
+
+def privacy_policy(request):
+    return render(request, 'privacy_policy.html')
+

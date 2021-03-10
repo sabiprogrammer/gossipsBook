@@ -16,7 +16,10 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
 
-    <title>Profile Settings | Gossip Books </title>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    <title>{{user.username}}'s Profile Settings | Gossip Books </title>
 </head>
 <body>
     <div class="mb-5">
@@ -28,15 +31,27 @@
     </div>
 
     <div class="container">
+      {% include 'messages.html' %}
         <div class="row">
              <!-- Aside section starts here -->
-             <div class="col-md-4 col-lg-4 col-xl-4 d-none d-md-block">
+             <div class="col-md-4 col-lg-4 col-xl-4 d-md-block">
                 <div class="card mt-5">
                   <h5 class="card-title card-header">Profile Settings</h5>
                   <div class="card-body">
                       <ul class="list-group">
-                        <li class="list-group-item"> Account   </li>
-                        <li class="list-group-item"> Privacy Policy  </li>
+                        {% if not request.user.has_usable_password %}
+                        <li class="list-group-item"> 
+                          <a href="{% url 'account_set_password' %}">Set Password </a>
+                        </li>
+                        {% else %}
+                        <li class="list-group-item"> 
+                          <a href="{% url 'account_change_password' %}">Change Password </a>
+                        </li>
+                        {% endif %}
+
+                        <li class="list-group-item"> 
+                          <a href="{% url 'controls:privacy_policy' %}">Privacy Policy</a>
+                        </li>
                         <li class="list-group-item"><a href="/accounts/email/">Email and Notification</a>      </li>
                       </ul>
                   </div>
@@ -44,7 +59,7 @@
                 </div>
 
 
-                <div class="card mt-3">
+                <div class="card mt-3 d-none d-md-block">
                   <div class="card-body">
                       <div class="row justify-content-center">
                             <div class="p-2">About | </div>
@@ -172,6 +187,5 @@
     </div>
 
 
-{% include 'scripts.html' %}
 </body>
 </html>

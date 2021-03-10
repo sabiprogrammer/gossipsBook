@@ -1,5 +1,6 @@
 {% extends 'base.html' %} 
 {% load humanize %}
+{% load static %}
 {% block content %} 
 
 <section class="ml-3">
@@ -26,12 +27,25 @@
 </section>
 {% endif %}
 
+{% static 'images/GossipsBook_logo.png' as post_image %}
+
    <div class="row">
         <div class="col-7 m-2">
         </div>
 
         <div class="col-3 text-right pr-3 m-2">
-            <a href="{% include 'share_link.html' %}" data-toggle="modal" data-target="#shareModal" ><i class="fa fa-share-alt"></i> Share</a>
+            <a href="#" 
+                data-toggle="modal"
+                {% if question.image %}
+                onclick="sharePostFunc('{{question.title}}','{{question.get_absolute_url}}', '{{question.image.url}}')" 
+                {% else %}
+                onclick="sharePostFunc('{{question.title}}','{{question.get_absolute_url}}', '{{post_image}}')"
+                {% endif %}
+                data-target="#shareModal"  
+                class="mr-3 share-button"> 
+                <i class="fa fa-share-alt"></i> 
+                <span class="d-none d-md-inline">Share</span> 
+            </a>
         </div>
     </div>
 <hr>
@@ -74,7 +88,7 @@
        <div class="form-group">
          <textarea required class="form-control" name="answer_question" rows="3" placeholder="Your answer..."></textarea>
        </div>
-       <button type="submit" class="btn btn-primary" style="background-color:#FF9933; color:white; border-color:#FF9933"><i class="fa fa-send"></i> Submit</button>
+       <button type="submit" class="btn true_reaction_button" style="background-color:#FF9933; color:white; border-color:#FF9933"><i class="fa fa-send"></i> Submit</button>
      </form>
      {% else %}
      <div class="container mt-2 p-4">
@@ -87,6 +101,7 @@
 
 {% endblock content %}
 
+{% block title %} {{question.title}} {% endblock title %}
 <section>
    {% block navigation %} {% include 'navigation.html' %} {% endblock navigation %}
 </section>
@@ -95,3 +110,6 @@
 <section>
    {% block aside %} {% include 'aside.html' %} {% endblock aside %}
 </section>
+{% block customJs %}
+{% include 'social_share.html' %}
+{% endblock %}

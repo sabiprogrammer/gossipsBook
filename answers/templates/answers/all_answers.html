@@ -22,7 +22,14 @@
                     <span class="ml-2"> {{answer.author.username}} </span>
                 </div>
                 <div class="col text-right">
-                    <button type="button" style="background-color: black; color: white; border-color: white" data-answer_content="{{answer.content}}" data-question_title="{{question.title}}" class="send_to_category_button btn btn-primary" data-toggle="modal" data-target="#send_to_category">
+                    <button type="button" style="background-color: black; color: white; border-color: white" 
+                    data-answer_content="{{answer.content}}" 
+                    data-question_title="{{question.title}} - {{answer.author.id}}" 
+                    class="send_to_category_button btn btn-primary" 
+                    data-toggle="modal" 
+                    data-from_question_answer_provider="{{answer.author.username}}"
+                    data-from_question_user="{{question.author.username}}"
+                    data-target="#send_to_category">
                     <i class="fa fa-paper-plane"></i>    Send
                     </button>
                 </div>
@@ -41,8 +48,20 @@
                     </form>
                 </div>
 
+                {% static 'images/GossipsBook_logo.png' as post_image %}
                 <div class="col m-2 p-1">
-                    <a class="col d-inline" href="{% include 'share_link.html' %}" data-toggle="modal" data-target="#shareModal"> <i class="fa fa-share-alt"></i> Share</a>
+                    <a href="#" 
+                        data-toggle="modal"
+                        {% if question.image %}
+                        onclick="sharePostFunc('{{question.title}}','{{question.get_absolute_url}}', '{{question.image.url}}')" 
+                        {% else %}
+                        onclick="sharePostFunc('{{question.title}}','{{question.get_absolute_url}}', '{{post_image}}')"
+                        {% endif %}
+                        data-target="#shareModal"  
+                        class="mr-3 share-button"> 
+                        <i class="fa fa-share-alt"></i> 
+                        <span class="d-none d-md-inline">Share</span> 
+                    </a>
                     <a class="col d-inline"><i class="fa fa-comment"></i> Reply</a>
                 </div>
             </div>

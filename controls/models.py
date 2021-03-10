@@ -1,5 +1,6 @@
-from django.db import models
 from django.db.models.signals import post_save
+from django.contrib.auth.models import User
+from django.db import models
 
 from gossips.models import GossipsModel
 from cheaters.models import CheatersModel
@@ -19,7 +20,7 @@ class FalseInformation(models.Model):
 # signal that calculates whether a gossip should be added to false information section or not
 def gossip_false_information(sender, instance, *args, **kwargs):
    total_votes = instance.true.all().count() + instance.false.all().count()
-   if total_votes >= 3:
+   if total_votes >= 100:
       percent_false = instance.percent_false
       if int(percent_false) >= 51:
          if not FalseInformation.objects.filter(gossip__title=instance.title).exists():
@@ -36,7 +37,7 @@ post_save.connect(gossip_false_information, sender=GossipsModel)
 # signal that calculates whether a cheater should be added to false information section or not
 def cheater_false_information(sender, instance, *args, **kwargs):
    total_votes = instance.true.all().count() + instance.false.all().count()
-   if total_votes >= 3:
+   if total_votes >= 100:
       percent_false = instance.percent_false
       if int(percent_false) >= 51:
          if not FalseInformation.objects.filter(cheater__title=instance.title).exists():
@@ -51,3 +52,23 @@ post_save.connect(cheater_false_information, sender=CheatersModel)
 
 
 
+class RFRModel(models.Model):
+   user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+   reason = models.CharField(max_length=955)
+   section = models.CharField(max_length=255)
+   post_id = models.CharField(max_length=9255)
+   post_title = models.CharField(max_length=255)
+   date_submitted = models.DateTimeField(auto_now_add=True)
+
+   def __str__(self):
+      return self.reason
+
+
+class FeedbackModel(models.Model):
+   user = models.CharField(max_length=255) # because non logged in users can give feedback
+   email = models.CharField(max_length=255) # because non logged in users can give feedback
+   message = models.CharField(max_length=955)
+   date_submitted = models.DateTimeField(auto_now_add=True)
+
+   def __str__(self):
+      return self.message

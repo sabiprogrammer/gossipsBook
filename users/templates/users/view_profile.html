@@ -14,8 +14,6 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
 
     <title>{{user.username}}'s Profile | Gossip Books </title>
     <style>
@@ -62,9 +60,11 @@
 </head>
 
 <body>
-    <div class="mb-5">
+     <div class="mb-5">
         <!-- Navigation -->
-        {% include 'navigation.html' %} 
+          {% block navigation %}
+            {% include 'navigation.html' %}
+          {% endblock navigation %}
         <!-- End Navigation -->
     </div>
     <div class="container image-container">
@@ -85,12 +85,10 @@
                         <a href="{% url 'users:follow_user' user_profile.username %}" class="btn btn-outline-light btn-sm btn-block follow-button mb-3"><i class="fa fa-user-plus"></i> Follow</a>
                         {% endif %}
                         {% endif %}
-                        <p class="card-text">Followers: {{followers.count}}</p>
-                        <p class="card-text">Following: {{following.count}}</p>
+                        <p class="card-text">Meet {{request.user.username}}: {{user_profile.profile.bio}}</p>
                         <p class="card-text">Designation: {{user_profile.profile.designation}}</p>
                         <p class="card-text">Location: {{user_profile.profile.location}}</p>
                         <p class="card-text">Languages: {{user_profile.profile.languages}}</p>
-                        <p class="card-text">Meet {{request.user.username}}: {{user_profile.profile.bio}}</p>
                         <p>Interests: 
                             {% for interest in user_profile.profile.interests.all %}
                             {{ interest.title }} {% if not forloop.last %}, {% endif %}
@@ -117,11 +115,19 @@
                             <br>
                             <i class="fa fa-map-marker"></i> {{user_profile.profile.location}}
                         </div>
+                        {% if request.user.username != user_profile.username %}
                         <div class="col-4">
                             <a href="#" class="btn btn-outline-dark"><i class="fa fa-send"></i> Send Message</a>
                         </div>
+                        {% endif %}
                         <div class="col-4">
-                            <a href="{% include 'share_link.html' %}" data-toggle="modal" data-target="#shareModal" class="btn btn-outline-dark"><i class="fa fa-share-alt"></i> Share Profile</a>
+                            <a href="#" 
+                                data-toggle="modal" 
+                                data-target="#shareModal"
+                                onclick="sharePostFunc('{{user_profile.username}}','/', '{{user_profile.profile.image.url}}')" 
+                                class="btn btn-outline-dark">
+                                <i class="fa fa-share-alt"></i> Share Profile
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -134,11 +140,19 @@
                             <br>
                             <i class="fa fa-map-marker"></i> {{user_profile.profile.location}}
                         </div>
+                        {% if not request.user.is_authenticated %}
                         <div class="col-2">
                             <a href="#"><i class="fa fa-send"></i></a>
                         </div>
+                        {% endif %}
                         <div class="col-2">
-                            <a href="{% include 'share_link.html' %}" data-toggle="modal" data-target="#shareModal"><i class="fa fa-share-alt"></i></a>
+                            <a href="#" 
+                                data-toggle="modal" 
+                                data-target="#shareModal"
+                                onclick="sharePostFunc('{{user_profile.username}}','/', '{{user_profile.profile.image.url}}')" 
+                                class="btn btn-outline-dark">
+                                <i class="fa fa-share-alt"></i> Share Profile
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -163,13 +177,36 @@
                             Answers
                         </div>
 
+                        {% if request.user.username == user_profile.username %}
                         <div class="btn btn-outline-dark btn-sm m-2">
-                           Following
+                            Followers ({{followers.count}})
                         </div>
 
                         <div class="btn btn-outline-dark btn-sm m-2">
-                            Follwers
+                           Following ({{following.count}})
                         </div>
+                        {% endif %}
+
+                        {% if request.user.username != user_profile.username %}
+                        <div class="btn btn-outline-dark btn-sm m-2">
+                            <a href="{% url 'users:follow_user' user_profile.username %}" class="text-dark">
+
+                                {% if request.user in followers.all %}
+                                    UnFollow
+                                {% else %}
+                                    <i class="fa fa-user-plus"></i> Follow
+                                {% endif %} 
+
+                                ({{followers.count}})
+
+                            </a>
+                        </div>
+
+                        <div class="btn btn-outline-dark btn-sm m-2">
+                           Following ({{following.count}})
+                        </div>
+                        {% endif %}
+
                     </div>
                 </section>
 
@@ -260,6 +297,49 @@
         </div>
     </div>
 
+    <!-- Share Modal -->
+    <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                  <div class="container">
+                  <h6>Share on:</h6>
+                    <div class="row justify-content-center share-button-container">
+                      <!-- <img style="height:50px; width:50px;" class="img-fluid rounded-circle mr-4" src="{% static 'images/default_profile_pic.png' %}"> -->
+
+                      <a href="" class="facebook-button">
+                        <i class="fa fa-facebook-f"></i>
+                      </a>
+
+                      <a href="#" class="twitter-button">
+                        <i class="fa fa-twitter"></i>
+                      </a>
+
+                      <a href="#" class="pinterest-button">
+                        <i class="fa fa-pinterest-p"></i>
+                      </a>
+
+                      <a href="#" class="linkedin-button">
+                        <i class="fa fa-linkedin"></i>
+                      </a>
+
+                      <a href="#" class="whatsapp-button">
+                        <i class="fa fa-whatsapp"></i>
+                      </a>
+                    </div>
+                  </div>
+                  </br>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-outline-dark" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End share Modal -->
+
+
+    {% include 'scripts.html' %}
 
 <script>
     // logic to hide sections on page load, then display only the gossips section
@@ -305,5 +385,6 @@
         $('#answersList').show();     
     });
 </script>
+{% include 'social_share.html' %}
 </body>
 </html>

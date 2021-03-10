@@ -10,6 +10,7 @@
 
 {% endblock content %}
 
+{% block title %} {{cheater.title}} {% endblock title %}
 <section>
    {% block navigation %} {% include 'navigation.html' %} {% endblock navigation %}
 </section>
@@ -18,3 +19,22 @@
 <section>
    {% block aside %} {% include 'aside.html' %} {% endblock aside %}
 </section>
+
+{% block customJs %}
+<script>
+   function reactionFunction(id, action) {
+      var id = id;
+      var action = action;
+      var boldAction = "<strong class='text-uppercase'>"+ action +"</strong>"
+      var message = 'You are about to vote "'+ boldAction +'" for this post'
+
+      $("#action").val(action)
+      $("#cheater_id").val(id)
+
+      $(".appendReaction").remove()
+      $("<p class='appendReaction'>" + message + "</p>").insertAfter('#reactionSection');
+
+   }
+</script>
+{% include 'social_share.html' %}
+{% endblock %}

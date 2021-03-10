@@ -99,7 +99,7 @@ def user_view_profile(request, username):
 
 @login_required()
 def follow_user(request, username):
-    logged_in_user = request.user
+    logged_in_user = request.user.username
 
     try:
         user_to_follow = User.objects.get(username=username)

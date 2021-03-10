@@ -1,17 +1,21 @@
 {% extends 'base.html' %} {% load static %} {% load humanize %} {% block content %} {% for question in questions %}
 <div class="card mb-4">
     <div class="card-body">
-        <p class="card-title d-inline" style="font-size: 19px;">
-            
-            <a class="text-dark" href="{% url 'users:user_view_profile' question.author.username %}">
-                <img style="height:35px; width:35px; float: left;" class="img-fluid rounded-circle mr-1" src="{{question.author.profile.image.url}}" alt="{{question.author}} profile image">
-                <h5 class="d-inline">
-                    <small>{{question.author.username}}</small>
-                </h5>
-            </a>
-
-            <small class="text-muted ml-2">{{question.date_published|naturaltime}}</small>
-        </p>
+        <div class="mb-3 row ml-1">
+            <div>
+               <img class="img-fluid rounded-circle" src="{{question.author.profile.image.url}}" alt="{{question.author.username}} image" style="width: 35px; height: 35px;">
+            </div>
+      
+            <div class="col-8">
+               <strong><a href="{% url 'users:user_view_profile' question.author.username %}" class="text-dark">{{question.author.username}}</a>  </strong>
+               <small class="text-muted ml-1">{{question.date_published|naturaltime}}</small>
+               {% if question.author.profile.designation %}
+               <div class="text-muted mt-2 mr-3">
+                   {{question.author.profile.designation}}
+               </div>
+               {% endif %}
+            </div>
+        </div>
         <section class="text-left">
             <h5>
                 <strong>
@@ -48,8 +52,20 @@
 
         </div>
 
+        {% static 'images/GossipsBook_logo.png' as post_image %}
         <div class="col-3 text-right pr-3 m-2">
-            <a href="{% include 'share_link.html' %}" data-toggle="modal" data-target="#shareModal"><i class="fa fa-share-alt"></i> Share</a>
+            <a href="#" 
+                data-toggle="modal"
+                {% if question.image %}
+                onclick="sharePostFunc('{{question.title}}','{{question.get_absolute_url}}', '{{question.image.url}}')" 
+                {% else %}
+                onclick="sharePostFunc('{{question.title}}','{{question.get_absolute_url}}', '{{post_image}}')"
+                {% endif %}
+                data-target="#shareModal"  
+                class="mr-3 share-button"> 
+                <i class="fa fa-share-alt"></i> 
+                <span class="d-none d-md-inline">Share</span> 
+            </a>
         </div>
     </div>
 </div>
@@ -171,7 +187,7 @@
 <!-- End oppose question done Modal -->
 {% endblock content %}
 
-
+{% block title %} Questions Section {% endblock title %}
 <section>{% block navigation %} {% include 'navigation.html' %} {% endblock navigation %}</section>
 <section>{% block startwriting %} {% include 'startwriting.html' %} {% endblock startwriting %} </section>
 <section>{% block aside %} {% include 'aside.html' %} {% endblock aside %}</section>
@@ -202,18 +218,18 @@
 
 <script>
     $('.opposeQuestion').on('click', function() {
-        var id = $(this).data('id')
-        var title = $(this).data('title')
-        var image = $(this).data('image')
-        var username = $(this).data('username')
+        var id = $(this).data('id');
+        var title = $(this).data('title');
+        var image = $(this).data('image');
+        var username = $(this).data('username');
 
         var name = $('#questionAuthorUsername');
 
-        $("#opposeQuestionId").val(id)
+        $("#opposeQuestionId").val(id);
 
-        $(".appendQuestion").remove()
-        $(".appendUsername").remove()
-        $(".appendImage").remove()
+        $(".appendQuestion").remove();
+        $(".appendUsername").remove();
+        $(".appendImage").remove();
         $("<span class='appendUsername mb-0 pb-0'>" + username + "</span>").insertAfter('#questionAuthorUsername');
         $("<q class='appendQuestion lead'>" + title + "</q>").insertAfter('#questionToOppose');
         $("<img  style='height:30px; width:30px;' class='img-fluid rounded-circle appendImage'>").attr('src', image).insertAfter('#questionToOpposeAuthorImage');
@@ -221,5 +237,6 @@
     });
 </script>
 
+{% include 'social_share.html' %}
 {% endblock customJs %}
 <!-- End customJs -->

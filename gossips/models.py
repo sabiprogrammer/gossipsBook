@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from PIL import Image
 from django.db.models.signals import post_delete, pre_save, post_save
 from django.dispatch import receiver
 from django.urls import reverse
@@ -38,6 +39,8 @@ class GossipsModel(models.Model):
     shares = models.IntegerField(default=0)
     true = models.ManyToManyField(User, related_name='true', blank=True)
     false = models.ManyToManyField(User, related_name='false', blank=True)
+    from_question_user = models.CharField(max_length=255, blank=True, null=True)
+    from_question_answer_provider = models.CharField(max_length=255, blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse('gossips:gossip_detail', kwargs={'gossip_slug': self.slug})
@@ -82,6 +85,17 @@ class GossipsModel(models.Model):
 
     def __str__(self):
         return self.title
+    
+    # reduce the size of the image if it's more than 1200px
+    def save(self, *args, **kwargs):
+        super().save( *args, **kwargs)
+    
+        if self.image:
+            img = Image.open(self.image.path)
+            if img.height > 500 or img.width > 1000:
+                output = (500, 1200)
+                img.thumbnail(output)
+                img.save(self.image.path)
 
     class Meta:
         verbose_name_plural = 'Gossips'
@@ -109,6 +123,7 @@ def save_gossip_slug(sender, instance, *args, **kwargs):
 pre_save.connect(save_gossip_slug, sender=GossipsModel)
 
 
+# signal that creates and saves tag's slug upon creation of a tag
 def save_tag_slug(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = slugify(instance.title)

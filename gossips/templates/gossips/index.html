@@ -1,5 +1,8 @@
-{% extends 'base.html' %} {% load humanize %} {% load static %} {% block content %} {% for gossip in gossips %}
-<div class="card mb-4">
+{% extends 'base.html' %} {% load humanize %} {% load static %} 
+{% block content %} 
+
+{% for gossip in gossips %}
+<div class="card mb-4 infinite-item">
     <div class="card-body">
         <h6 class="card-title">
             <div class="mb-3 row ml-1">
@@ -8,11 +11,17 @@
                 </div>
           
                 <div class="col-8">
-                   <strong><a href="{% url 'users:user_view_profile' gossip.author.username %}" class="text-dark">{{gossip.author.username}}</a>  </strong>
+                   <strong><a href="{% url 'users:user_view_profile' gossip.author.username %}" class="text-dark">{{gossip.author.username}}</a> 
+                   </strong>
+
                    <small class="text-muted ml-1">{{gossip.date_published|naturaltime}}</small>
+
+                   {% if gossip.author.profile.designation %}
                     <div class="text-muted mt-2 mr-3">
                         {{gossip.author.profile.designation}}
                     </div>
+                    {% endif %}
+
                 </div>
             </div>
          
@@ -23,8 +32,8 @@
 
                 <div class="col">
                     <div class="progress">
-                        <div class="progress-bar progress-bar-striped bg-primary" role="progressbar" style="width: {{gossip.percent_true}}%" aria-valuenow="{{gossip.percent_true}}" aria-valuemin="0" aria-valuemax="100">{{gossip.percent_true | floatformat:1}}%</div>
-                        <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: {{gossip.percent_false}}%" aria-valuenow="{{gossip.percent_false}}" aria-valuemin="0" aria-valuemax="100">{{gossip.percent_false | floatformat:1}}%</div>
+                        <div class="true_reaction_button progress-bar progress-bar-striped" role="progressbar" style="width: {{gossip.percent_true}}%" aria-valuenow="{{gossip.percent_true}}" aria-valuemin="0" aria-valuemax="100">{{gossip.percent_true | floatformat:1}}%</div>
+                        <div class="false_reaction_button progress-bar progress-bar-striped" role="progressbar" style="width: {{gossip.percent_false}}%" aria-valuenow="{{gossip.percent_false}}" aria-valuemin="0" aria-valuemax="100">{{gossip.percent_false | floatformat:1}}%</div>
                     </div>
                     <div class="text-right">{{gossip.get_total_voters}} person{{gossip.get_total_voters|pluralize}} voted</div>
                 </div>
@@ -33,13 +42,25 @@
 
         </h6>
         <a href="{% url 'gossips:gossip_detail' gossip.slug %}" class="text-dark">
-            <h6> <strong>{{gossip.title|truncatewords:30}} </strong> </h6>
-            <p> {{gossip.content | linebreaks | truncatewords:255}} </p>
+            <h6>
+                {% if gossip.from_question_user %}
+                <small>question by: {{gossip.from_question_user}} - </small>
+                {% endif %}
+             <strong>{{gossip.title|truncatewords:30}}</strong> 
+            </h6>
+
+
+            <p> 
+                {% if gossip.from_question_answer_provider %}
+                <small>{{gossip.from_question_answer_provider}} answered: </small> 
+                {% endif %}
+                {{gossip.content | linebreaks | truncatewords:155}}
+            </p>
         </a>
     </div>
 
     {% if gossip.image %}
-    <img class="card-img-bottom" style="max-height:420px;" src="{{gossip.image.url}}" alt="Card image cap">
+    <img class="card-img-bottom" style="max-height:420px;" src="{{gossip.image.url}}" alt="{{gossip.title}} image">
     {% endif %}
 
     <div class="row">
@@ -55,7 +76,8 @@
                             data-toggle="modal" 
                             data-id="{{gossip.id}}" 
                             data-action="true" 
-                            data-target="#reactionModal"  
+                            data-target="#reactionModal" 
+                            onclick="reactionFunction('{{gossip.id}}', 'true')"  
                             class="true_reaction_button reaction btn btn-sm btn-primary"> 
                             <i class="fa fa-check"></i> 
                             True
@@ -73,7 +95,8 @@
                         data-toggle="modal" 
                         data-id="{{gossip.id}}" 
                         data-action="false" 
-                        data-target="#reactionModal" 
+                        data-target="#reactionModal"
+                        onclick="reactionFunction('{{gossip.id}}', 'false')" 
                         class="false_reaction_button reaction btn btn-sm btn-danger"> 
                         <i class="fa fa-times"></i> 
                         False
@@ -92,8 +115,20 @@
             </div>
             {% endif %}
         </div>
+        {% static 'images/GossipsBook_logo.png' as post_image %}
         <div class="col m-2 p-1 d-inline text-right mr-4">
-            <a href="{% include 'share_link.html' %}" data-toggle="modal" data-target="#shareModal"  class="mr-3"> <i class="fa fa-share-alt"></i> <span class="d-none d-md-inline">Share</span> </a>
+            <a href="#" 
+                data-toggle="modal"
+                {% if gossip.image %}
+                onclick="sharePostFunc('{{gossip.title}}','{{gossip.get_absolute_url}}', '{{gossip.image.url}}')" 
+                {% else %}
+                onclick="sharePostFunc('{{gossip.title}}','{{gossip.get_absolute_url}}', '{{post_image}}')"
+                {% endif %}
+                data-target="#shareModal"  
+                class="mr-3 share-button"> 
+                <i class="fa fa-share-alt"></i> 
+                <span class="d-none d-md-inline">Share</span> 
+            </a>
             <a href="#" class="comment" data-toggle="modal" data-id="{{gossip.id}}" data-title="{{gossip.title}}" data-target="#commentModal">
                 <i class="fa fa-comment"></i> <span class="d-none d-md-inline">Comment </span>  ({{gossip.get_total_comments.count}})
             </a>
@@ -101,6 +136,21 @@
     </div>
 </div>
 {% endfor %}
+
+<div id="feed_loading_spinner" class="d-flex d-none position-fixed" style="top: 35vh; left: 35vw;">
+    
+</div>
+
+<div id="page_bottom" class="d-flex" style="top: 35vh; left: 35vw;">
+    
+</div>
+
+<!-- Infinite scroll Pagination -->
+<div>
+    {% if page.has_next %}
+    <a class="infinite-more-link" href="?page={{page.next_page_number}}"></a>
+    {% endif %}
+</div>
 
 
 <!-- comment Modal -->
@@ -175,6 +225,8 @@
 <!-- End reaction Modal -->
 
 {% endblock content %}
+
+{% block title %} Gossips Section {% endblock title %}
 <section>
     {% block navigation %} {% include 'navigation.html' %} {% endblock navigation %}
 </section>
@@ -192,6 +244,8 @@
 {% block customJs %}
 
 <script>
+
+    //for comment functionality
     $('.comment').on('click', function() {
         var id = $(this).data('id');
         var title = $(this).data('title');
@@ -202,7 +256,26 @@
         $("<h5 class='appendTitle'>" + title + "</h5>").insertAfter('#gossipToComment');
 
     });
+
+    // For true false reaction
+    function reactionFunction(id, action) {
+        var id = id;
+        var action = action;
+        var boldAction = "<strong class='text-uppercase'>"+ action +"</strong>";
+        var message = 'You are about to vote "'+ boldAction +'" for this post';
+
+        $("#gossip_id").val(id);
+        $("#action").val(action);
+
+        $(".appendReaction").remove();
+        $("<p class='appendReaction'>" + message + "</p>").insertAfter('#reactionSection');
+
+    }
+
+    
 </script>
 
+{% include 'social_share.html' %}
+ 
 {% endblock customJs %}
 <!-- End customJs -->

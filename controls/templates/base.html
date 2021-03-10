@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
 
-    <title>Gossip Books </title>
+    <title>{% block title %} Gossip Books {% endblock title %} | GossipsBook</title>
 </head>
 <body>
     <div class="mb-5">
@@ -27,7 +27,7 @@
           {% endblock navigation %}
         <!-- End Navigation -->
     </div>
-
+    
     <div class="container">
         <div class="row">
               <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
@@ -50,7 +50,7 @@
 
 
               <!-- Feed section starts here -->
-                  <div class="mt-4">
+                  <div class="mt-4 infinite-container">
                         {% block content %}
                         {% endblock content%}
                   </div>
@@ -89,11 +89,28 @@
             <div class="modal-body">
               <div class="container">
               <h6>Share on:</h6>
-                <div class="row justify-content-center">
-                  <img style="height:50px; width:50px;" class="img-fluid rounded-circle mr-4" src="{% static 'images/default_profile_pic.png' %}">
-                  <img style="height:50px; width:50px;" class="img-fluid rounded-circle mr-4" src="{% static 'images/default_profile_pic.png' %}">
-                  <img style="height:50px; width:50px;" class="img-fluid rounded-circle mr-4" src="{% static 'images/default_profile_pic.png' %}">
-                  <img style="height:50px; width:50px;" class="img-fluid rounded-circle" src="{% static 'images/default_profile_pic.png' %}">
+                <div class="row justify-content-center share-button-container">
+                  <!-- <img style="height:50px; width:50px;" class="img-fluid rounded-circle mr-4" src="{% static 'images/default_profile_pic.png' %}"> -->
+
+                  <a href="" class="facebook-button">
+                    <i class="fa fa-facebook-f"></i>
+                  </a>
+
+                  <a href="#" class="twitter-button">
+                    <i class="fa fa-twitter"></i>
+                  </a>
+
+                  <a href="#" class="pinterest-button">
+                    <i class="fa fa-pinterest-p"></i>
+                  </a>
+
+                  <a href="#" class="linkedin-button">
+                    <i class="fa fa-linkedin"></i>
+                  </a>
+
+                  <a href="#" class="whatsapp-button">
+                    <i class="fa fa-whatsapp"></i>
+                  </a>
                 </div>
               </div>
               </br>
