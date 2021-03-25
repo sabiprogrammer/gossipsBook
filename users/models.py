@@ -25,7 +25,7 @@ class Interests(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='profile/default_profile_pic2.png', upload_to=upload_location, blank=True)
+    image = models.ImageField(upload_to=upload_location, blank=True, null=True)
     bio = models.TextField(max_length=455, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
     designation = models.CharField(max_length=255, null=True, blank=True)

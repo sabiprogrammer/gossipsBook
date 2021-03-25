@@ -83,7 +83,11 @@
 
                     <li class="nav-item dropdown pr-4 pl-4">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {% if request.user.profile.image %}
                             <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{% if request.user.is_authenticated %} {{request.user.profile.image.url}} {% else %} {% static 'images/default_profile_pic2.png' %} {% endif %}">
+                            {% else %}
+                            <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{% static 'images/default_profile_pic2.png' %}">
+                            {% endif %}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">                        
                             {% if request.user.is_authenticated %}
@@ -138,8 +142,10 @@
 
 
                     {% if request.user.is_authenticated %}
-                    <img style="height:30px; width:30px;" class="img-fluid rounded-circle" src="{{user.profile.image.url}}"> {{user.username}} {% else %}
-                    <img style="height:30px; width:30px;" class="img-fluid rounded-circle" src="{% static 'images/default_profile_pic2.png' %}"> Anonymous User? {% endif %}
+                    <img style="height:30px; width:30px;" class="img-fluid rounded-circle" src="{% if request.user.profile.image %} {{user.profile.image.url}} {% else %} {% static 'images/default_profile_pic2.png' %} {% endif %}"> {{user.username}} 
+                    {% else %}
+                    <img style="height:30px; width:30px;" class="img-fluid rounded-circle" src="{% static 'images/default_profile_pic2.png' %}"> Anonymous User? 
+                    {% endif %}
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>

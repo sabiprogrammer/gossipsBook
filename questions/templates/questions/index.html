@@ -3,7 +3,11 @@
     <div class="card-body">
         <div class="mb-3 row ml-1">
             <div>
+                {% if question.author.profile.image %}
                <img class="img-fluid rounded-circle" src="{{question.author.profile.image.url}}" alt="{{question.author.username}} image" style="width: 35px; height: 35px;">
+               {% else %}
+               <img class="img-fluid rounded-circle" src="{% static 'images/default_profile_pic2.png' %}" alt="{{question.author.username}} image" style="width: 35px; height: 35px;">
+                {% endif %}
             </div>
       
             <div class="col-8">

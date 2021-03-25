@@ -47,8 +47,11 @@
     <div class="card w-100">
         <div class="card-body">
             <h6 class="card-title">
+                {% if question.author.profile.image %}
                 <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{{question.author.profile.image.url}}"> {{question.author.username}}
-
+                {% else %}
+                <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{% static 'images/default_profile_pic2.png' %}"> {{question.author.username}}
+                {% endif %}
                 <small class="text-muted ml-2">{{question.date_published|naturaltime}}</small>
             </h6>
             <h5>
@@ -62,7 +65,11 @@
             <hr>
             <div class="row">
                 <div class="col text-left">
+                    {% if answer.author.profile.image %}
                     <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{{answer.author.profile.image.url}}">
+                    {% else %}
+                    <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{% static 'images/default_profile_pic2.png' %}">
+                    {% endif %}
                     <span class="ml-2"> {{answer.author.username}} </span>
                 </div>
                 <div class="col text-right">

@@ -6,8 +6,11 @@
 <section class="ml-3">
 
 <section class="row">
+   {% if question.author.profile.image %}
    <img class="rounded-circle" src="{{question.author.profile.image.url}}" alt="{{question.author.username}} image" style="width: 35px; height: 35px;">
-
+   {% else %}
+   <img class="rounded-circle" src="{% static 'images/default_profile_pic2.png' %}" alt="{{question.author.username}} image" style="width: 35px; height: 35px;">
+   {% endif %}
    <small class="pl-1">
       
    <span> <a href="{% url 'users:user_view_profile' question.author.username %}" class="text-dark">{{question.author.username}} </a> </span> | 
@@ -55,7 +58,11 @@
    {% for answer in question.get_answers.all %}
   <div class="mb-3 row">
       <div>
+         {% if answer.author.profile.image %}
          <img class="rounded-circle" src="{{answer.author.profile.image.url}}" alt="{{answer.author.username}} image" style="width: 35px; height: 35px;">
+         {% else %}
+         <img class="rounded-circle" src="{% static 'images/default_profile_pic2.png' %}" alt="{{answer.author.username}} image" style="width: 35px; height: 35px;">
+         {% endif %}
       </div>
 
       <div class="col-8">

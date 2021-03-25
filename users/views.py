@@ -13,39 +13,6 @@ from answers.models import AnswersModel
 from .forms import UserUpdateForm, ProfileUpdateForm
 
 
-def login_user(request):
-    print('i am here')
-    form = CreateUserForm()
-    if request.method == 'POST':
-        # username = request.POST.get('username')
-        # password = request.POST.get('password1')
-        # user = authenticate(request, username=username, password=password)
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            user = authenticate(request, username=cd['username'], password=cd['password'])
-
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return redirect('controls:welcome')
-            else:
-                messages.warning(request, 'Disabled Account')
-                # return HttpResponse('Disabled Account')
-        else:
-            messages.warning(request, 'Incorrect Details Provided!')
-            return redirect('login')
-
-    context = {'form': form, 'title': 'Log In'}
-    return render(request, 'users/login.html', context)
-
-
-def user_logout(request):
-    logout(request)
-    messages.info(request, 'Log Out Successful')
-    return redirect('/questions')
-
-
 @login_required()
 def user_profile(request):
     email = request.user.email
@@ -99,7 +66,7 @@ def user_view_profile(request, username):
 
 @login_required()
 def follow_user(request, username):
-    logged_in_user = request.user.username
+    logged_in_user = request.user
 
     try:
         user_to_follow = User.objects.get(username=username)

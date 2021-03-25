@@ -46,7 +46,7 @@
 
             {% if user.is_authenticated %}
             <a class="text-dark" href="{% url 'users:user_view_profile' user.username %}">
-                <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{{ user.profile.image.url }}"> {{ user.username }} 
+                <img style="height:35px; width:35px;" class="img-fluid rounded-circle" src="{% if request.user.profile.image %} {{user.profile.image.url}} {% else %} {% static 'images/default_profile_pic2.png' %} {% endif %}"> {{ user.username }} 
             </a>
             {% else %}
 
@@ -70,7 +70,7 @@
                 <h5 class="modal-title" id="exampleModalLongTitle">
 
                     {% if user.is_authenticated %}
-                    <img style="height:30px; width:30px;" class="img-fluid rounded-circle" src="{{user.profile.image.url}}"> {{user.username}} {% else %}
+                    <img style="height:30px; width:30px;" class="img-fluid rounded-circle" src="{% if request.user.profile.image %} {{user.profile.image.url}} {% else %} {% static 'images/default_profile_pic2.png' %} {% endif %}"> {{user.username}} {% else %}
                     <img style="height:30px; width:30px;" class="img-fluid rounded-circle" src="{% static 'images/default_profile_pic2.png' %}"> Anonymous User? <a href="/accounts/login">login</a> {% endif %}
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

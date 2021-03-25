@@ -7,7 +7,11 @@
         <h6 class="card-title">
             <div class="mb-3 row ml-1">
                 <div>
+                    {% if cheater.author.profile.image %}
                    <img class="img-fluid rounded-circle" src="{{cheater.author.profile.image.url}}" alt="{{cheater.author.username}} image" style="width: 35px; height: 35px;">
+                   {% else %}
+                   <img class="img-fluid rounded-circle" src="{% static 'images/default_profile_pic2.png' %}" alt="{{cheater.author.username}} image" style="width: 35px; height: 35px;">
+                    {% endif %}
                 </div>
           
                 <div class="col-8">
