@@ -84,14 +84,14 @@ def follow_user(request, username):
 
             logged_in_user.profile.following.remove(user_to_follow)
             logged_in_user.save()
-            messages.success(request, f"You unfollowed {user_to_follow.username}")
+            # messages.success(request, f"You unfollowed {user_to_follow.username}")
         else:
             user_to_follow.profile.followers.add(logged_in_user)
             user_to_follow.save()
 
             logged_in_user.profile.following.add(user_to_follow)
             logged_in_user.save()
-            messages.success(request, f"You followed {user_to_follow.username}")
+            # messages.success(request, f"You followed {user_to_follow.username}")
 
     return redirect(reverse('users:user_view_profile', kwargs={'username': user_to_follow.username}))
     

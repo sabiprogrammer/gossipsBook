@@ -131,7 +131,11 @@
                             <a href="#" 
                                 data-toggle="modal" 
                                 data-target="#shareModal"
+                                {% if user_profile.profile.image %}
                                 onclick="sharePostFunc('{{user_profile.username}}','/', '{{user_profile.profile.image.url}}')" 
+                                {% else %}
+                                onclick="sharePostFunc('{{user_profile.username}}','/', '')" 
+                                {% endif %}
                                 class="btn btn-outline-dark">
                                 <i class="fa fa-share-alt"></i> Share Profile
                             </a>
@@ -156,7 +160,11 @@
                             <a href="#" 
                                 data-toggle="modal" 
                                 data-target="#shareModal"
+                                {% if user_profile.profile.image %}
                                 onclick="sharePostFunc('{{user_profile.username}}','/', '{{user_profile.profile.image.url}}')" 
+                                {% else %}
+                                onclick="sharePostFunc('{{user_profile.username}}','/', '')" 
+                                {% endif %}
                                 class="btn btn-outline-dark">
                                 <i class="fa fa-share-alt"></i> Share Profile
                             </a>
@@ -330,9 +338,9 @@
                         <i class="fa fa-linkedin"></i>
                       </a>
 
-                      <a href="#" class="whatsapp-button">
+                      <!-- <a href="#" class="whatsapp-button">
                         <i class="fa fa-whatsapp"></i>
-                      </a>
+                      </a> -->
                     </div>
                   </div>
                   </br>
