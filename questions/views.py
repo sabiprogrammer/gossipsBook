@@ -20,6 +20,13 @@ def questions_new(request):
         image = request.FILES.get('image', False)
         user = request.user
 
+        slug_title = slugify(title)
+
+        if not slug_title:
+            messages.warning(request, 'Please enter a proper title')
+            return redirect('questions:questions_index')
+
+
         slugs = QuestionsModel.objects.filter(slug=slugify(title))
 
         if slugs:

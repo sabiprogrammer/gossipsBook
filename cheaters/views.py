@@ -32,6 +32,12 @@ def cheaters_new(request):
         from_question_answer_provider = request.POST.get('from_question_answer_provider')
         user = request.user
 
+        slug_title = slugify(title)
+
+        if not slug_title:
+            messages.warning(request, 'Please enter a proper title')
+            return redirect('cheaters:cheaters_index')
+
         if title and content and user:
 
             slugs = CheatersModel.objects.filter(slug=slugify(title))

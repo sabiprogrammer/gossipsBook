@@ -35,7 +35,12 @@ def gossips_new(request):
         image = request.FILES.get('image', False)
         user = request.user
 
-        
+        slug_title = slugify(title)
+
+        if not slug_title:
+            messages.warning(request, 'Please enter a proper title')
+            return redirect('gossips:gossips_index')
+
         if title and content and user:
 
             slugs = GossipsModel.objects.filter(slug=slugify(title))

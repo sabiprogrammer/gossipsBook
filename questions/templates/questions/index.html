@@ -36,7 +36,7 @@
     <div class="row">
         <div class="col-7 m-2">
             <button title="answer this questions" {% if user == question.author %} disabled {% endif %} class="btn btn-sm btn-primary answerQuestion" style="background-color: #FF9933; color: white; border-color: white;" data-toggle="modal" data-target="#answerQuestionModal"
-                data-id="{{question.id}}" data-image="{{question.author.profile.image.url}}" data-username="{{question.author.username}}" data-title="{{question.title}}">
+                data-id="{{question.id}}" data-image="{% static 'images/default_profile_pic2.png' %}" data-username="{{question.author.username}}" data-title="{{question.title}}">
                     <i class="fa fa-edit"></i> 
                 <span> Answer </span> ({{question.get_answers.count}})       
             </button> 
@@ -47,7 +47,7 @@
             </button> 
             
             {% else %}
-            <button class="btn btn-sm btn-dark text-white opposeQuestion" title="oppose this answer" data-id="{{question.id}}" data-username="{{question.author.username}}" data-image="{{question.author.profile.image.url}}" data-title="{{question.title}}" data-toggle="modal"
+            <button class="btn btn-sm btn-dark text-white opposeQuestion" title="oppose this answer" data-id="{{question.id}}" data-username="{{question.author.username}}" data-image="{% static 'images/default_profile_pic2.png' %}" data-title="{{question.title}}" data-toggle="modal"
                 data-target="#opposeQuestionModal"> 
               <i class="fa fa-thumbs-down"></i>
               <span class="d-none d-md-inline"> Oppose </span> ({{question.get_oppose_count}})
